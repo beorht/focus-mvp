@@ -1,0 +1,165 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useLogStore } from '@/store/useLogStore'
+import { Brain, Sparkles, Zap, Target } from 'lucide-react'
+
+export default function AnalyzePage() {
+  const router = useRouter()
+  const addLog = useLogStore((state) => state.addLog)
+  const [stage, setStage] = useState(0)
+
+  const stages = [
+    { icon: Brain, text: 'Анализируем психотип...', duration: 2000 },
+    { icon: Sparkles, text: 'Обрабатываем интересы...', duration: 2000 },
+    { icon: Target, text: 'Подбираем профессию...', duration: 2000 },
+    { icon: Zap, text: 'Генерируем roadmap...', duration: 2000 }
+  ]
+
+  useEffect(() => {
+    const performAnalysis = async () => {
+      try {
+        // Get user answers from sessionStorage
+        const answersStr = sessionStorage.getItem('userAnswers')
+        if (!answersStr) {
+          addLog('ERROR', 'No user answers found')
+          router.push('/test')
+          return
+        }
+
+        const answers = JSON.parse(answersStr)
+        addLog('SYSTEM', 'Starting AI analysis...')
+
+        // Animate through stages
+        for (let i = 0; i < stages.length; i++) {
+          setStage(i)
+          addLog('INFO', stages[i].text)
+          await new Promise(resolve => setTimeout(resolve, stages[i].duration))
+        }
+
+        // Call AI API
+        const requestPayload = JSON.stringify(answers, null, 2)
+        addLog('API_REQ', `POST /api/generate\nContent-Type: application/json\n\n${requestPayload}`)
+
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(answers)
+        })
+
+        const result = await response.json()
+
+        if (result.success) {
+          // Log debug info from API
+          result.debugInfo?.forEach((info: string) => {
+            if (info.startsWith('POST') || info.includes('Payload')) {
+              addLog('API_REQ', info)
+            } else if (info.includes('Response') || info.includes('received')) {
+              addLog('API_RES', info)
+            } else if (info.includes('ERROR')) {
+              addLog('ERROR', info)
+            } else {
+              addLog('INFO', info)
+            }
+          })
+
+          // Log professional API response with metadata
+          const apiResponse = {
+            profession: result.data.profession,
+            profession_en: result.data.profession_en,
+            match_percentage: result.data.match,
+            salary_range: result.data.salary_uz_sum,
+            roadmap_stages: result.data.roadmap.length,
+            resources_count: result.data.resources.length,
+            meta: result.meta
+          }
+
+          addLog('API_RES', JSON.stringify(apiResponse))
+          addLog('SYSTEM', 'Analysis completed successfully')
+
+          // Store results
+          sessionStorage.setItem('analysisResults', JSON.stringify(result.data))
+
+          // Navigate to results
+          setTimeout(() => {
+            router.push('/results')
+          }, 1000)
+        } else {
+          addLog('ERROR', `API Error: ${result.error}`)
+          // Still try to navigate after error
+          setTimeout(() => {
+            router.push('/results')
+          }, 2000)
+        }
+
+      } catch (error: any) {
+        addLog('ERROR', `Analysis failed: ${error.message}`)
+        console.error('Analysis error:', error)
+
+        // Navigate to results even on error (for demo purposes)
+        setTimeout(() => {
+          router.push('/results')
+        }, 2000)
+      }
+    }
+
+    performAnalysis()
+  }, [])
+
+  const CurrentIcon = stages[stage]?.icon || Brain
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#191919' }}>
+      <div className="text-center">
+        {/* Animated Brain/Icon */}
+        <div className="relative mb-8">
+          {/* Outer pulse rings */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-48 h-48 bg-blue-500/20 rounded-full animate-ping" />
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-40 h-40 bg-purple-500/20 rounded-full animate-ping animation-delay-300" />
+          </div>
+
+          {/* Main icon */}
+          <div className="relative flex items-center justify-center">
+            <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+              <CurrentIcon className="w-16 h-16 text-white animate-pulse" />
+            </div>
+          </div>
+        </div>
+
+        {/* Status Text */}
+        <h2 className="text-3xl font-bold text-white mb-4">
+          Анализируем данные
+        </h2>
+        <p className="text-xl text-gray-300 mb-8">
+          {stages[stage]?.text || 'Подготовка...'}
+        </p>
+
+        {/* Progress Dots */}
+        <div className="flex justify-center gap-2">
+          {stages.map((_, index) => (
+            <div
+              key={index}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index <= stage
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 scale-110'
+                  : 'bg-gray-700'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Tech info */}
+        <div className="mt-12 inline-flex items-center gap-2 backdrop-blur-sm px-6 py-3 rounded-full border border-gray-700 shadow-sm" style={{ background: '#1d1d1d' }}>
+          <Zap className="w-4 h-4 text-yellow-500 animate-pulse" />
+          <span className="text-sm text-gray-300 font-medium">
+            Powered by Gemini 2.5 Flash
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
