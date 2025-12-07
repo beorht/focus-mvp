@@ -82,9 +82,15 @@ Landing → Test Page → Analyze Page → Results Page
 ## Important Implementation Notes
 
 ### Environment Variables
-- **GEMINI_API_KEY**: Required for AI features
+- **GEMINI_API_KEY**: Single API key (backward compatibility)
+- **GEMINI_API_KEYS**: Multiple API keys for rotation (recommended)
+  - Format: `key1,key2,key3,key4`
+  - System automatically rotates on quota errors (429)
+  - Free tier: 20 requests/day per key
+  - With 5 keys = 100 requests/day
   - Set in `.env.local` (not committed to git)
   - Used by both `/api/generate` and `/api/chat` routes
+  - See `API_KEYS_SETUP.md` for detailed instructions
 
 ### Path Aliases
 - `@/*` maps to project root (configured in `tsconfig.json`)

@@ -3,36 +3,54 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
-import { Sparkles, TrendingUp, BookOpen, ExternalLink, MessageCircle } from 'lucide-react'
+import { Sparkles, TrendingUp, BookOpen, ExternalLink, CheckCircle2, Target, Clock, Lightbulb, MessageCircle } from 'lucide-react'
 import Lenis from 'lenis'
 import { motion } from 'framer-motion'
 
-interface RoadmapStage {
-  stage: string
-  duration: string
-  topics: string[]
+interface Task {
+  title: string
+  description: string
 }
 
-interface Resource {
+interface Topic {
+  title: string
+  summary: string
+  examples: string[]
+  tasks: Task[]
+  questions: string[]
+}
+
+interface ResourceItem {
   title: string
   url: string
   type: string
 }
 
-interface AnalysisData {
+interface ResourceGroup {
+  topic: string
+  items: ResourceItem[]
+}
+
+interface LearningModule {
   profession: string
-  profession_en: string
   match: number
   salary_uz_sum: string
-  description: string
-  roadmap: RoadmapStage[]
-  resources: Resource[]
+  introduction: string
+  topics: Topic[]
+  skill_gaps: string[]
+  learning_plan: {
+    order: string[]
+    time_estimates: Record<string, string>
+  }
+  resources: ResourceGroup[]
+  motivation: string
 }
 
 export default function ResultsPage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
-  const [data, setData] = useState<AnalysisData | null>(null)
+  const [data, setData] = useState<LearningModule | null>(null)
+  const [userName, setUserName] = useState('Пользователь')
   const [showChat, setShowChat] = useState(false)
 
   useEffect(() => {
@@ -54,6 +72,8 @@ export default function ResultsPage() {
     requestAnimationFrame(raf)
 
     const resultsStr = sessionStorage.getItem('analysisResults')
+    const answersStr = sessionStorage.getItem('userAnswers')
+
     if (!resultsStr) {
       addLog('ERROR', 'No results found, redirecting to test')
       router.push('/test')
@@ -62,8 +82,15 @@ export default function ResultsPage() {
 
     const results = JSON.parse(resultsStr)
     setData(results)
-    addLog('DATA', 'Rendering results page')
+
+    if (answersStr) {
+      const answers = JSON.parse(answersStr)
+      setUserName(answers.userName || 'Пользователь')
+    }
+
+    addLog('DATA', 'Rendering learning module')
     addLog('DATA', `Profession: ${results.profession}`)
+    addLog('DATA', `Topics: ${results.topics?.length || 0}`)
 
     // Cleanup function
     return () => {
@@ -81,8 +108,8 @@ export default function ResultsPage() {
 
   return (
     <div className="min-h-screen py-12 px-4" style={{ background: '#191919' }}>
-      <div className="max-w-4xl mx-auto">
-        {/* Success Header */}
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
         <div className="text-center mb-8">
           <motion.div
             initial={{ opacity: 0, filter: "blur(10px)", scale: 0.9 }}
@@ -91,7 +118,7 @@ export default function ResultsPage() {
             className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4"
           >
             <Sparkles className="w-4 h-4" />
-            Анализ завершен
+            Учебный модуль готов
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
@@ -99,15 +126,15 @@ export default function ResultsPage() {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="text-4xl font-bold text-white mb-2"
           >
-            Ваша идеальная профессия
+            Учебный модуль: {data.profession}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            className="text-gray-300"
+            className="text-xl text-gray-300"
           >
-            На основе ИИ-анализа ваших интересов и способностей
+            Персональная программа для {userName}
           </motion.p>
         </div>
 
@@ -116,7 +143,6 @@ export default function ResultsPage() {
           initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-          whileHover={{ scale: 1.02, y: -5 }}
           className="rounded-2xl shadow-xl p-8 mb-8 border-2 border-blue-900"
           style={{ background: '#1d1d1d' }}
         >
@@ -125,17 +151,15 @@ export default function ResultsPage() {
               <h2 className="text-3xl font-bold text-white mb-2">
                 {data.profession}
               </h2>
-              <p className="text-gray-400">{data.profession_en}</p>
+              <p className="text-gray-300 leading-relaxed mt-4">
+                {data.introduction}
+              </p>
             </div>
-            <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl text-center">
+            <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl text-center ml-4">
               <div className="text-3xl font-bold">{data.match}%</div>
               <div className="text-xs opacity-90">совпадение</div>
             </div>
           </div>
-
-          <p className="text-gray-300 mb-6 leading-relaxed">
-            {data.description}
-          </p>
 
           <div className="bg-gradient-to-r from-green-900/20 to-emerald-900/20 rounded-xl p-4 border border-green-700">
             <div className="flex items-center gap-2 mb-1">
@@ -146,124 +170,218 @@ export default function ResultsPage() {
           </div>
         </motion.div>
 
-        {/* Roadmap */}
+        {/* Skill Gaps */}
         <motion.div
           initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-          transition={{ duration: 1, delay: 0.9, ease: "easeOut" }}
+          transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
           className="rounded-2xl shadow-xl p-8 mb-8"
-          style={{ background: '#1d1d1d' }}
+          style={{ background: '#F4C430' }}
         >
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
-            className="text-2xl font-bold text-white mb-8 text-center"
-          >
-            {data.roadmap.length} ШАГОВ К ОСВОЕНИЮ ПРОФЕССИИ
-          </motion.h3>
-
-          <div className="space-y-6">
-            {data.roadmap.map((stage, index) => (
+          <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
+            <Target className="w-6 h-6 text-black" />
+            Навыки для развития
+          </h3>
+          <div className="space-y-3">
+            {data.skill_gaps.map((skill, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, filter: "blur(8px)", x: -20 }}
-                animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
-                transition={{ duration: 0.8, delay: 1.3 + index * 0.1, ease: "easeOut" }}
-                whileHover={{ scale: 1.02, x: 5 }}
-                className="rounded-2xl p-6 shadow-lg"
-                style={{ background: '#F4C430' }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
+                className="flex items-start gap-3 p-4 rounded-xl bg-black/10 border border-black/20"
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
-                      <span className="text-xl font-bold text-yellow-400">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex-1">
-                    <h4 className="text-xl font-bold text-black mb-2">
-                      {stage.stage}
-                    </h4>
-
-                    <p className="text-sm text-gray-800 mb-4 font-medium">
-                      Длительность: {stage.duration}
-                    </p>
-
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-800 font-semibold">Навыки для изучения:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {stage.topics.map((topic, topicIndex) => (
-                          <span
-                            key={topicIndex}
-                            className="bg-black text-yellow-400 px-3 py-1.5 rounded-full text-sm font-medium"
-                          >
-                            {topic}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex-shrink-0 w-8 h-8 bg-black rounded-full flex items-center justify-center text-yellow-400 font-bold text-sm">
+                  {index + 1}
                 </div>
+                <p className="text-black flex-1 pt-1 font-medium">{skill}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Learning Resources */}
+        {/* Topics */}
         <motion.div
           initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-          transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
+          transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
+          className="mb-8"
+        >
+          <h3 className="text-3xl font-bold text-white mb-6 text-center">
+            Учебные темы
+          </h3>
+
+          <div className="space-y-6">
+            {data.topics.map((topic, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, filter: "blur(8px)", y: 30 }}
+                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                transition={{ duration: 0.8, delay: 1.4 + index * 0.2 }}
+                className="rounded-2xl p-8 shadow-xl"
+                style={{ background: '#F7F6E4' }}
+              >
+                {/* Topic Header */}
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center">
+                      <span className="text-2xl font-bold text-yellow-400">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-2xl font-bold text-black mb-3">{topic.title}</h4>
+                    <p className="text-gray-800 leading-relaxed">{topic.summary}</p>
+                  </div>
+                </div>
+
+                {/* Examples */}
+                {topic.examples && topic.examples.length > 0 && (
+                  <div className="mb-6 p-4 bg-black/10 rounded-xl">
+                    <h5 className="text-sm font-bold text-black mb-3 flex items-center gap-2">
+                      <Lightbulb className="w-4 h-4" />
+                      Примеры:
+                    </h5>
+                    <ul className="space-y-2">
+                      {topic.examples.map((example, exIdx) => (
+                        <li key={exIdx} className="text-gray-800 flex items-start gap-2">
+                          <span className="text-black font-bold">•</span>
+                          <span>{example}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Tasks */}
+                {topic.tasks && topic.tasks.length > 0 && (
+                  <div className="mb-6">
+                    <h5 className="text-sm font-bold text-black mb-3">Практические задания:</h5>
+                    <div className="space-y-3">
+                      {topic.tasks.map((task, taskIdx) => (
+                        <div key={taskIdx} className="p-4 bg-black text-yellow-400 rounded-xl">
+                          <p className="font-semibold mb-2">{task.title}</p>
+                          <p className="text-sm text-yellow-200">{task.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Questions */}
+                {topic.questions && topic.questions.length > 0 && (
+                  <div className="p-4 bg-white/20 rounded-xl">
+                    <h5 className="text-sm font-bold text-black mb-3">Контрольные вопросы:</h5>
+                    <ul className="space-y-2">
+                      {topic.questions.map((question, qIdx) => (
+                        <li key={qIdx} className="text-gray-900 flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-black" />
+                          <span className="text-sm">{question}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Learning Plan */}
+        <motion.div
+          initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{ duration: 1, delay: 2.0, ease: "easeOut" }}
           className="rounded-2xl shadow-xl p-8 mb-8"
           style={{ background: '#1d1d1d' }}
         >
-          <motion.h3
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 2.0, ease: "easeOut" }}
-            className="text-2xl font-bold text-white mb-6 flex items-center gap-2"
-          >
-            <BookOpen className="w-6 h-6 text-purple-600" />
-            Рекомендуемые ресурсы
-          </motion.h3>
-
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <Clock className="w-6 h-6 text-blue-500" />
+            Рекомендуемый порядок обучения
+          </h3>
           <div className="space-y-3">
-            {data.resources.map((resource, index) => (
-              <motion.a
+            {data.learning_plan.order.map((topicName, index) => (
+              <div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 2.2 + index * 0.1, ease: "easeOut" }}
-                whileHover={{ scale: 1.02, x: 5 }}
-                href={resource.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => addLog('USER_ACTION', `Opened resource: ${resource.title}`)}
-                className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-700 hover:border-purple-500 hover:bg-purple-900/20 transition-all group"
+                className="flex items-center justify-between p-4 rounded-xl bg-blue-900/20 border border-blue-900/30"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-900/30 rounded-lg flex items-center justify-center group-hover:bg-purple-800/40 transition-colors">
-                    📚
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    {index + 1}
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-white">{resource.title}</h4>
-                    <p className="text-sm text-gray-400">{resource.type}</p>
-                  </div>
+                  <span className="text-gray-200 font-medium">{topicName}</span>
                 </div>
-                <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-purple-400" />
-              </motion.a>
+                <span className="text-blue-400 font-semibold">
+                  {data.learning_plan.time_estimates[topicName] || 'N/A'}
+                </span>
+              </div>
             ))}
           </div>
+        </motion.div>
+
+        {/* Resources */}
+        <motion.div
+          initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
+          className="rounded-2xl shadow-xl p-8 mb-8"
+          style={{ background: '#1d1d1d' }}
+        >
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <BookOpen className="w-6 h-6 text-purple-600" />
+            Рекомендуемые ресурсы
+          </h3>
+
+          <div className="space-y-6">
+            {data.resources.map((resourceGroup, groupIdx) => (
+              <div key={groupIdx}>
+                <h4 className="text-lg font-semibold text-purple-300 mb-3">{resourceGroup.topic}</h4>
+                <div className="space-y-3">
+                  {resourceGroup.items.map((resource, resIdx) => (
+                    <a
+                      key={resIdx}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => addLog('USER_ACTION', `Opened resource: ${resource.title}`)}
+                      className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-700 hover:border-purple-500 hover:bg-purple-900/20 transition-all group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-purple-900/30 rounded-lg flex items-center justify-center group-hover:bg-purple-800/40 transition-colors">
+                          📚
+                        </div>
+                        <div>
+                          <h5 className="font-semibold text-white">{resource.title}</h5>
+                          <p className="text-sm text-gray-400">{resource.type}</p>
+                        </div>
+                      </div>
+                      <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-purple-400" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Motivation */}
+        <motion.div
+          initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{ duration: 1, delay: 2.4, ease: "easeOut" }}
+          className="rounded-2xl shadow-xl p-8 mb-8 border-2 border-yellow-600"
+          style={{ background: 'linear-gradient(135deg, #1d1d1d 0%, #2d2d1d 100%)' }}
+        >
+          <h3 className="text-2xl font-bold text-yellow-400 mb-4">Совет для мотивации</h3>
+          <p className="text-gray-200 leading-relaxed text-lg">{data.motivation}</p>
         </motion.div>
 
         {/* Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 2.6, ease: "easeOut" }}
           className="flex flex-col sm:flex-row gap-4"
         >
           <motion.button
@@ -294,8 +412,6 @@ export default function ResultsPage() {
           </motion.button>
         </motion.div>
       </div>
-
-      {/* Chat button will be implemented next */}
     </div>
   )
 }

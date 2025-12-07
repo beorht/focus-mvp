@@ -61,6 +61,17 @@ const questions = [
       { value: 'emotion', label: 'Эмоции и эмпатия' },
       { value: 'both', label: 'Баланс логики и эмоций' }
     ]
+  },
+  {
+    id: 6,
+    question: 'Как ты лучше всего усваиваешь новую информацию?',
+    type: 'single',
+    options: [
+      { value: 'visual', label: 'Визуально (схемы, видео, диаграммы)' },
+      { value: 'practical', label: 'Практикой (делать своими руками)' },
+      { value: 'textual', label: 'Чтением (книги, статьи, документация)' },
+      { value: 'mixed', label: 'Смешанный подход' }
+    ]
   }
 ]
 
@@ -69,6 +80,7 @@ export default function TestPage() {
   const addLog = useLogStore((state) => state.addLog)
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string[]>>({})
+  const [userName, setUserName] = useState('')
 
   const currentQuestion = questions[currentStep]
   const progress = ((currentStep + 1) / questions.length) * 100
@@ -119,14 +131,51 @@ export default function TestPage() {
     const level = answers[2]?.[0] || 'beginner'
     const priority = answers[3]?.[0] || 'growth'
     const workStyle = answers[4]?.[0] || 'flexible'
+    const thinking = answers[5]?.[0] || 'both'
+    const learningStyle = answers[6]?.[0] || 'mixed'
+
+    // Determine psychotype based on work style and thinking preference
+    let psychotype = ''
+    if (workStyle === 'alone' && thinking === 'logic') {
+      psychotype = 'INTJ (аналитический, независимый)'
+    } else if (workStyle === 'team' && thinking === 'emotion') {
+      psychotype = 'ESFJ (коммуникабельный, эмпатичный)'
+    } else if (workStyle === 'alone' && thinking === 'emotion') {
+      psychotype = 'INFP (творческий, вдумчивый)'
+    } else if (workStyle === 'team' && thinking === 'logic') {
+      psychotype = 'ENTJ (лидерский, стратегический)'
+    } else {
+      psychotype = 'ENFP (гибкий, адаптивный)'
+    }
+
+    // Map level to knowledge_level format
+    const knowledgeLevelMap: Record<string, string> = {
+      'beginner': 'начинающий',
+      'student': 'базовый',
+      'junior': 'средний',
+      'experienced': 'продвинутый'
+    }
+
+    // Map learning style to Russian
+    const learningStyleMap: Record<string, string> = {
+      'visual': 'визуальный',
+      'practical': 'практический',
+      'textual': 'текстовый',
+      'mixed': 'смешанный'
+    }
 
     // Store in sessionStorage for results page
     sessionStorage.setItem('userAnswers', JSON.stringify({
+      userName: userName || 'Пользователь',
       interests,
       level,
+      knowledge_level: knowledgeLevelMap[level] || 'начинающий',
       priority,
       workStyle,
-      thinking: answers[5]?.[0] || 'both'
+      thinking,
+      psychotype,
+      learningStyle,
+      preferred_learning_style: learningStyleMap[learningStyle] || 'смешанный'
     }))
 
     addLog('SYSTEM', 'Navigating to AI analysis...')
@@ -177,9 +226,20 @@ export default function TestPage() {
             className="rounded-2xl shadow-lg p-8 mb-6"
             style={{ background: '#1d1d1d' }}
           >
-          <h2 className="text-2xl font-bold text-white mb-6">
+          <h2 className="text-2xl font-bold text-white mb-2">
             {currentQuestion.question}
           </h2>
+
+          {currentQuestion.type === 'multiple' && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-6 text-sm text-white"
+            >
+              Можно выбрать несколько вариантов
+            </motion.p>
+          )}
 
           {/* Options */}
           <div className="space-y-3">
@@ -197,9 +257,27 @@ export default function TestPage() {
                   onClick={() => handleSelect(option.value)}
                   className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                     isSelected
-                      ? 'border-blue-500 bg-blue-900/20'
-                      : 'border-gray-700 hover:border-gray-600 hover:bg-gray-800'
+                      ? 'bg-blue-900/20'
+                      : 'border-gray-700 hover:border-gray-600'
                   }`}
+                  style={isSelected ? { borderColor: '#2e2e2e' } : {
+                    '--hover-bg': '#F7F6E4',
+                    '--hover-color': '#4c4c4c'
+                  } as React.CSSProperties}
+                  onMouseEnter={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.backgroundColor = '#F7F6E4'
+                      const span = e.currentTarget.querySelector('span')
+                      if (span) span.style.color = '#4c4c4c'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.backgroundColor = ''
+                      const span = e.currentTarget.querySelector('span')
+                      if (span) span.style.color = ''
+                    }
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <span className={`font-medium ${isSelected ? 'text-blue-300' : 'text-gray-300'}`}>
@@ -215,17 +293,6 @@ export default function TestPage() {
               )
             })}
           </div>
-
-          {currentQuestion.type === 'multiple' && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-4 text-sm text-gray-400"
-            >
-              Можно выбрать несколько вариантов
-            </motion.p>
-          )}
         </motion.div>
         </AnimatePresence>
 

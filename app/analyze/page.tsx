@@ -67,11 +67,11 @@ export default function AnalyzePage() {
           // Log professional API response with metadata
           const apiResponse = {
             profession: result.data.profession,
-            profession_en: result.data.profession_en,
             match_percentage: result.data.match,
             salary_range: result.data.salary_uz_sum,
-            roadmap_stages: result.data.roadmap.length,
-            resources_count: result.data.resources.length,
+            topics_count: result.data.topics?.length || 0,
+            resources_count: result.data.resources?.length || 0,
+            skill_gaps_count: result.data.skill_gaps?.length || 0,
             meta: result.meta
           }
 
