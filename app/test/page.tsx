@@ -188,7 +188,7 @@ export default function TestPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4" style={{ background: '#191919' }}>
+    <div className="min-h-screen py-12 px-4 test-background">
       <div className="max-w-3xl mx-auto">
         {/* Progress Bar */}
         <motion.div

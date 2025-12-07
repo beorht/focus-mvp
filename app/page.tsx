@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
 import { ArrowRight, Sparkles, Brain, Target, Rocket } from 'lucide-react'
@@ -18,7 +19,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#191919' }}>
+    <div className="min-h-screen main-background">
       {/* Hero Section */}
       <div className="container mx-auto px-6 py-20">
         {/* Header */}
@@ -32,14 +33,20 @@ export default function Home() {
             <Sparkles className="w-4 h-4" />
             AI-Powered Career Guidance
           </motion.div>
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+            className="flex justify-center mb-6"
           >
-            F.O.C.U.S
-          </motion.h1>
+            <Image
+              src="/images/intro-salat.png"
+              alt="F.O.C.U.S Logo"
+              width={550}
+              height={140}
+              priority
+            />
+          </motion.div>
           <motion.p
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}

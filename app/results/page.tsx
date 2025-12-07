@@ -100,14 +100,14 @@ export default function ResultsPage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#191919' }}>
+      <div className="min-h-screen flex items-center justify-center results-background">
         <div className="text-gray-300">Загрузка результатов...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen py-12 px-4" style={{ background: '#191919' }}>
+    <div className="min-h-screen py-12 px-4 results-background">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

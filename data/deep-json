@@ -1,0 +1,1049 @@
+[
+    {
+        "id": 1,
+        "direction": "Python-разработчик",
+        "title": "Python для начинающих. Полный курс",
+        "url": "https://itproger.com/course/python",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": "10-15",
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "интенсив"
+        ],
+        "description": "Подробный курс, охватывающий основы Python: синтаксис, структуры данных, функции и ООП. Включает множество практических задач."
+    },
+    {
+        "id": 2,
+        "direction": "Python-разработчик",
+        "title": "Асинхронное программирование в Python: asyncio",
+        "url": "https://sky.pro/wiki/python/asinhronnoe-programmirovanie-na-python-osnovy-i-primery/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 45,
+        "tags": [
+            "сухая теория",
+            "требует концентрации"
+        ],
+        "description": "Глубокое погружение в asyncio с объяснением событийного цикла, корутин и конкурентности на практических примерах."
+    },
+    {
+        "id": 3,
+        "direction": "Python-разработчик",
+        "title": "Python. Книга рецептов",
+        "url": "https://unilibrary.uz/literature/158600",
+        "content_type": "book",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 1200,
+        "tags": [
+            "много практики",
+            "справочный материал"
+        ],
+        "description": "Коллекция проверенных решений и практических примеров для решения повседневных задач на Python."
+    },
+    {
+        "id": 4,
+        "direction": "Python-разработчик",
+        "title": "Программирование на Python",
+        "url": "https://practicum.yandex.com/backend-developer/?utm_source=google&utm_medium=cpc&utm_campaign=Gog_Sch_UZ_Common_Unde_b2c_Dynamic_Regular_1&utm_content=nt_g%3Apl_%3Acid_22186491985%3Agid_182731141188%3Akw_%3Atid_dsa-2333269401281%3Acrid_786460289753%3Aadp_%3Ad_c%3Adm_%3Alim_%3Alpm_9075977&utm_term=&gad_source=1&gad_campaignid=22186491985&gbraid=0AAAAAqA9dPFqGzoX1Zl4dmlD4BZEzxQzj&gclid=Cj0KCQiA6NTJBhDEARIsAB7QHD1wzB7gLRrX4ygLIgAFHIRlug0LnXMOrfihPlWs24Gzxcu_wtzD2soaAl4_EALw_wcB",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 1800,
+        "tags": [
+            "много практики",
+            "интерактивный",
+            "теория"
+        ],
+        "description": "Бесплатный интерактивный курс от Института биоинформатики, охватывающий основы языка с большим количеством задач."
+    },
+    {
+        "id": 5,
+        "direction": "Python-разработчик",
+        "title": "Web на Python: Flask и Django для начинающих",
+        "url": "https://itproger.com/course/django",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": "10-15",
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "проектный"
+        ],
+        "description": "Создание веб-приложений на двух самых популярных фреймворках, от основ до развертывания."
+    },
+    {
+        "id": 6,
+        "direction": "Frontend-разработчик",
+        "title": "JavaScript. Полный курс для начинающих",
+        "url": "https://itproger.com/course/javascript",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": "10-15",
+        "tags": [
+            "много практики",
+            "структурированный",
+            "простое объяснение"
+        ],
+        "description": "Фундаментальный курс по современному JavaScript, от основ до работы с DOM, асинхронности и прототипов."
+    },
+    {
+        "id": 7,
+        "direction": "Frontend-разработчик",
+        "title": "Вы не знаете JS (серия книг)",
+        "url": "https://github.com/azat-io/you-dont-know-js-ru",
+        "content_type": "book",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 3000,
+        "tags": [
+            "углубленное",
+            "требует концентрации",
+            "фундаментальный"
+        ],
+        "description": "Подробнейшая серия книг, раскрывающая внутренние механизмы JavaScript. Незаменима для глубокого понимания языка."
+    },
+    {
+        "id": 8,
+        "direction": "Frontend-разработчик",
+        "title": "Вёрстка для начинающих: HTML & CSS",
+        "url": "https://itproger.com/course/css3-html5",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": "10-15",
+        "tags": [
+            "интерактивный",
+            "много практики",
+            "пошаговый"
+        ],
+        "description": "Интерактивный курс с заданиями в браузере, обучающий семантической верстке и современному CSS, включая Flexbox и Grid."
+    },
+    {
+        "id": 9,
+        "direction": "Frontend-разработчик",
+        "title": "TypeScript: Руководство для начинающих",
+        "url": "https://habr.com/ru/companies/ruvds/articles/721306/",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 60,
+        "tags": [
+            "практическое руководство",
+            "теория",
+            "введение"
+        ],
+        "description": "Понятное введение в TypeScript: базовые типы, интерфейсы, дженерики и интеграция с React."
+    },
+    {
+        "id": 10,
+        "direction": "Frontend-разработчик",
+        "title": "CSS Grid и Flexbox: полное руководство",
+        "url": "https://habr.com/ru/articles/467049/",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 90,
+        "tags": [
+            "наглядное",
+            "справочный материал",
+            "практическое руководство"
+        ],
+        "description": "Исчерпывающие интерактивные руководства по двум ключевым технологиям современной верстки с примерами."
+    },
+    {
+        "id": 11,
+        "direction": "Data Analyst",
+        "title": "Анализ данных на Python: pandas и numpy",
+        "url": "https://stepik.org/course/233567/promo",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 600,
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "ключевые библиотеки"
+        ],
+        "description": "Практический курс по основам анализа данных с использованием главных библиотек экосистемы Python."
+    },
+    {
+        "id": 12,
+        "direction": "Data Analyst",
+        "title": "SQL для анализа данных",
+        "url": "https://stepik.org/course/116332/promo",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 1200,
+        "tags": [
+            "интерактивный",
+            "много практики",
+            "структурированный"
+        ],
+        "description": "Бесплатный курс с упором на запросы, необходимые аналитику: JOIN, оконные функции, агрегация."
+    },
+    {
+        "id": 13,
+        "direction": "Data Analyst",
+        "title": "Искусство визуализации данных",
+        "url": "https://evidence-impact.org/storage/364/Tools-for-data-visualizations_rus.pdf",
+        "content_type": "book",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 900,
+        "tags": [
+            "фундаментальный",
+            "теория",
+            "наглядное"
+        ],
+        "description": "Классическая книга о принципах создания понятных, информативных и этичных визуализаций."
+    },
+    {
+        "id": 14,
+        "direction": "Data Analyst",
+        "title": "Статистика для анализа данных",
+        "url": "https://habr.com/ru/companies/stepic/articles/250527/",
+        "content_type": "course",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 1800,
+        "tags": [
+            "академический стиль",
+            "требует концентрации",
+            "теория"
+        ],
+        "description": "Курс, дающий математическую базу: проверка гипотез, A/B-тесты, регрессионный анализ."
+    },
+    {
+        "id": 15,
+        "direction": "Data Analyst",
+        "title": "Продуктовая аналитика: метрики и воронки",
+        "url": "https://habr.com/ru/companies/yandex/articles/723640/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 40,
+        "tags": [
+            "практическое руководство",
+            "прикладное",
+            "опыт компании"
+        ],
+        "description": "Статья о ключевых метриках продуктовых команд, построении воронок и когортном анализе от экспертов Яндекс."
+    },
+    {
+        "id": 16,
+        "direction": "QA-инженер",
+        "title": "Основы тестирования ПО для начинающих",
+        "url": "https://stepik.org/course/171826/promo",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 720,
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "структурированный"
+        ],
+        "description": "Полный курс по основам тестирования: виды тестирования, техники тест-дизайна, баг-репорты и документация."
+    },
+    {
+        "id": 17,
+        "direction": "QA-инженер",
+        "title": "Руководство по тестированию от Google",
+        "url": "https://mybook.ru/author/dzheff-karollo/kak-testiruyut-v-google/read/",
+        "content_type": "book",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 240,
+        "tags": [
+            "практическое руководство",
+            "опыт компании",
+            "фундаментальный"
+        ],
+        "description": "Блог команды тестирования Google с лучшими практиками, методологиями и кейсами из реальных проектов."
+    },
+    {
+        "id": 18,
+        "direction": "QA-инженер",
+        "title": "Тест-аналитика: сбор и анализ метрик качества",
+        "url": "https://habr.com/ru/companies/yandex/articles/786978/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 45,
+        "tags": [
+            "метрики",
+            "аналитика",
+            "опыт компании"
+        ],
+        "description": "Как собирать и анализировать метрики качества ПО для принятия решений о релизе. Опыт команды тестирования Яндекса."
+    },
+    {
+        "id": 19,
+        "direction": "QA-инженер",
+        "title": "Тестирование в условиях неопределенности: Heuristic Test Strategy Model",
+        "url": "https://www.satisfice.com/download/heuristic-test-strategy-model",
+        "content_type": "article",
+        "difficulty_level": "advanced",
+        "duration_minutes": 120,
+        "tags": [
+            "стратегия",
+            "модели",
+            "требует концентрации"
+        ],
+        "description": "Фундаментальная модель для разработки стратегии тестирования в сложных проектах. Руководство от Джеймса Баха."
+    },
+    {
+        "id": 20,
+        "direction": "QA-инженер",
+        "title": "Как объяснять проблемы разработчикам: мастерство коммуникации",
+        "url": "https://vc.ru/services/185283-uluchshaem-kommunikaciyu-mezhdu-razrabotchikami-i-menedzherami",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 20,
+        "tags": [
+            "soft skills",
+            "коммуникация",
+            "практическое руководство"
+        ],
+        "description": "Практические советы по эффективному описанию дефектов, ведению конструктивного диалога с разработчиками и командой."
+    },
+    {
+        "id": 21,
+        "direction": "UI/UX Designer",
+        "title": "Figma с нуля до PRO",
+        "url": "https://youtu.be/Wt6V_23TDow?si=eJ3irrXTUl07EcXn",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 540,
+        "tags": [
+            "Figma",
+            "много практики",
+            "практическое руководство"
+        ],
+        "description": "Полный курс по Figma: от основных инструментов до продвинутых техник, компонентов и автоматизации."
+    },
+    {
+        "id": 22,
+        "direction": "UI/UX Designer",
+        "title": "Дизайн-системы: создание и внедрение",
+        "url": "https://productstar.ru/blog/dizajn-sistema-elementy-primery-i-sozdanie-s-nulya",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 180,
+        "tags": [
+            "дизайн-системы",
+            "практическое руководство",
+            "масштабирование"
+        ],
+        "description": "Практическое руководство по созданию, документированию и внедрению дизайн-систем в продуктах."
+    },
+    {
+        "id": 23,
+        "direction": "UI/UX Designer",
+        "title": "Книга \"Не заставляйте меня думать\"",
+        "url": "https://raferalston.github.io/assets/krug.pdf",
+        "content_type": "book",
+        "difficulty_level": "beginner",
+        "duration_minutes": 400,
+        "tags": [
+            "юзабилити",
+            "классика",
+            "практическое руководство"
+        ],
+        "description": "Классическая книга по веб-юзабилити, объясняющая принципы интуитивно понятного дизайна."
+    },
+    {
+        "id": 24,
+        "direction": "UI/UX Designer",
+        "title": "UX-исследования: методы и инструменты",
+        "url": "https://practicum.yandex.ru/blog/kak-provodit-ux-issledovaniya/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 60,
+        "tags": [
+            "UX исследования",
+            "методологии",
+            "практическое руководство"
+        ],
+        "description": "Обзор методов UX-исследований от Nielsen Norman Group: когда и какие методы применять."
+    },
+    {
+        "id": 25,
+        "direction": "UI/UX Designer",
+        "title": "Дизайн для доступности (Accessibility)",
+        "url": "https://habr.com/ru/companies/arcadia/articles/498476/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 120,
+        "tags": [
+            "accessibility",
+            "практическое руководство",
+            "стандарты"
+        ],
+        "description": "Рекомендации W3C по созданию доступных интерфейсов для людей с ограниченными возможностями."
+    },
+    {
+        "id": 26,
+        "direction": "Prompt Engineer",
+        "title": "Искусство промптинга: от основ до продвинутых техник",
+        "url": "https://stepik.org/course/234137/promo",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 240,
+        "tags": [
+            "практическое руководство",
+            "простое объяснение",
+            "актуальный"
+        ],
+        "description": "Наглядные примеры построения эффективных промптов для текстовых и мультимодальных моделей, разбор ошибок."
+    },
+    {
+        "id": 27,
+        "direction": "Prompt Engineer",
+        "title": "Prompt Engineering Guide",
+        "url": "https://www.promptingguide.ai/ru",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 180,
+        "tags": [
+            "структурированный",
+            "фундаментальный",
+            "каталог техник"
+        ],
+        "description": "Всеобъемлющее открытое руководство, охватывающее базовые и продвинутые техники (Chain-of-Thought, Few-Shot)."
+    },
+    {
+        "id": 28,
+        "direction": "Prompt Engineer",
+        "title": "Курс от DeepLearning.AI: ChatGPT Prompt Engineering",
+        "url": "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 90,
+        "tags": [
+            "краткий",
+            "практическое руководство",
+            "от создателей"
+        ],
+        "description": "Короткий бесплатный курс от Эндрю Ына, посвященный эффективному промптингу для разработчиков через API."
+    },
+    {
+        "id": 29,
+        "direction": "Prompt Engineer",
+        "title": "Шаблоны промптов для маркетинга, поддержки, аналитики",
+        "url": "https://github.com/f/awesome-chatgpt-prompts",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 60,
+        "tags": [
+            "каталог шаблонов",
+            "практическое руководство",
+            "ready-to-use"
+        ],
+        "description": "Огромная коллекция готовых шаблонов промптов для сотен конкретных задач и ролей."
+    },
+    {
+        "id": 30,
+        "direction": "Prompt Engineer",
+        "title": "Этика и безопасность в промпт-инженерии",
+        "url": "https://promptengineering.guide/article/The_ethics_of_prompt_engineering_and_its_potential_implications.html?utm_source=chatgpt.com",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 35,
+        "tags": [
+            "академический стиль",
+            "теория",
+            "социальный аспект"
+        ],
+        "description": "Материал о bias, jailbreak-атаках, конфиденциальности и ответственной работе с ИИ от экспертов ВШЭ."
+    },
+    {
+        "id": 31,
+        "direction": "DevOps Engineer",
+        "title": "Дорожная карта DevOps инженера 2024",
+        "url": "https://roadmap.sh/devops",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 60,
+        "tags": [
+            "структурированный",
+            "дорожная карта",
+            "актуальный"
+        ],
+        "description": "Наглядная пошаговая карта развития DevOps инженера с перечнем необходимых технологий и инструментов."
+    },
+    {
+        "id": 32,
+        "direction": "DevOps Engineer",
+        "title": "Docker для начинающих: полный курс",
+        "url": "https://youtu.be/wgA3yntF_ek?si=3BW-EUxr9nKQB2LT",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 480,
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "практическое руководство"
+        ],
+        "description": "Фундаментальный курс по Docker: от основ контейнеризации до создания multi-контейнерных приложений."
+    },
+    {
+        "id": 33,
+        "direction": "DevOps Engineer",
+        "title": "Kubernetes на практике",
+        "url": "https://youtube.com/playlist?list=PL5BUU9mMwX6lVh8pK5sMomYWw7SvBnEKc&si=n-Uov91IoKuT9fZv",
+        "content_type": "video",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 75,
+        "tags": [
+            "практическое руководство",
+            "опыт компании",
+            "требует концентрации"
+        ],
+        "description": "Практическое руководство по развертыванию и управлению кластерами Kubernetes от опытных инженеров."
+    },
+    {
+        "id": 34,
+        "direction": "DevOps Engineer",
+        "title": "Site Reliability Engineering (SRE)",
+        "url": "https://youtube.com/playlist?list=PLpbP0aq5pFIdVnbHaWySHE0WHUDe22Bix&si=G5g0hqsb0ImV-9QX",
+        "content_type": "video",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 1200,
+        "tags": [
+            "фундаментальный",
+            "от Google",
+            "требует концентрации"
+        ],
+        "description": "Бесплатная книга от Google о принципах надежности и эксплуатации крупномасштабных систем."
+    },
+    {
+        "id": 35,
+        "direction": "DevOps Engineer",
+        "title": "Безопасность DevOps (DevSecOps)",
+        "url": "https://youtube.com/playlist?list=PLIXz60RPjYTuK84Ta5unBwINVkCx38xIQ&si=sc3mmJ2m0BOsDUnD",
+        "content_type": "video",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 50,
+        "tags": [
+            "безопасность",
+            "практическое руководство",
+            "актуальный"
+        ],
+        "description": "Интеграция практик безопасности в процесс разработки и эксплуатации от специалистов VK."
+    },
+    {
+        "id": 36,
+        "direction": "Mobile Developer (Kotlin)",
+        "title": "Android разработка на Kotlin с нуля",
+        "url": "https://itproger.com/course/kotlin-android",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 960,
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "проектный"
+        ],
+        "description": "Полный курс по созданию Android приложений на Kotlin с использованием современных архитектурных паттернов."
+    },
+    {
+        "id": 37,
+        "direction": "Mobile Developer (Kotlin)",
+        "title": "Официальная документация Kotlin",
+        "url": "https://itproger.com/course/kotlin",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 600,
+        "tags": [
+            "официальная документация",
+            "структурированный",
+            "справочный материал"
+        ],
+        "description": "Полное и актуальное руководство по языку Kotlin с примерами и интерактивными упражнениями."
+    },
+    {
+        "id": 38,
+        "direction": "Mobile Developer (Kotlin)",
+        "title": "Jetpack Compose: современный UI",
+        "url": "https://developer.android.com/courses/pathways/compose",
+        "content_type": "course",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 1200,
+        "tags": [
+            "официальный",
+            "практическое руководство",
+            "современный стек"
+        ],
+        "description": "Официальный курс от Google по созданию интерфейсов с помощью декларативного фреймворка Jetpack Compose."
+    },
+    {
+        "id": 39,
+        "direction": "Mobile Developer (Kotlin)",
+        "title": "Kotlin Coroutines и Flow",
+        "url": "https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 240,
+        "tags": [
+            "асинхронность",
+            "практическое руководство",
+            "требует концентрации"
+        ],
+        "description": "Глубокое погружение в асинхронное программирование с корутинами и реактивными потоками в Kotlin."
+    },
+    {
+        "id": 40,
+        "direction": "Mobile Developer (Kotlin)",
+        "title": "Публикация приложения в Google Play",
+        "url": "https://youtu.be/ta9pXZxxK04?si=y8Zln7uWa1Br6mQH",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 180,
+        "tags": [
+            "практическое руководство",
+            "релиз",
+            "пошаговый"
+        ],
+        "description": "Пошаговое руководство по подготовке, настройке и публикации приложения в Google Play Store."
+    },
+    {
+        "id": 41,
+        "direction": "Game Developer (Unity/C#)",
+        "title": "Разработка игр на Unity для начинающих",
+        "url": "https://youtube.com/playlist?list=PLDyJYA6aTY1k_-3fFiMVoYY04jCr-QY55&si=vXaEKiYyMmaPnE1O",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 720,
+        "tags": [
+            "много практики",
+            "простое объяснение",
+            "проектный"
+        ],
+        "description": "Полный курс по созданию 2D и 3D игр на Unity с нуля, включая физику, анимацию и UI."
+    },
+    {
+        "id": 42,
+        "direction": "Game Developer (Unity/C#)",
+        "title": "C# для начинающих",
+        "url": "https://itproger.com/course/csharp",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 1500,
+        "tags": [
+            "структурированный",
+            "подробный",
+            "много примеров"
+        ],
+        "description": "Полное и структурированное руководство по языку C# с акцентом на применение в разработке игр."
+    },
+    {
+        "id": 43,
+        "direction": "Game Developer (Unity/C#)",
+        "title": "Game Design Patterns",
+        "url": "https://youtube.com/playlist?list=PLnJJ5frTPwRMCCDVE_wFIt3WIj163Q81V&si=OVONdm_Yz6uvLoYw",
+        "content_type": "book",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 900,
+        "tags": [
+            "паттерны",
+            "архитектура",
+            "бесплатная книга"
+        ],
+        "description": "Бесплатная книга о ключевых архитектурных паттернах, используемых в разработке игр, с примерами."
+    },
+    {
+        "id": 44,
+        "direction": "Game Developer (Unity/C#)",
+        "title": "Шейдеры и графика в Unity",
+        "url": "https://habr.com/ru/articles/473638/",
+        "content_type": "article",
+        "difficulty_level": "advanced",
+        "duration_minutes": 1200,
+        "tags": [
+            "графика",
+            "шейдеры",
+            "практическое руководство"
+        ],
+        "description": "Практические туториалы по созданию сложных визуальных эффектов и пониманию графического конвейера Unity."
+    },
+    {
+        "id": 45,
+        "direction": "Game Developer (Unity/C#)",
+        "title": "Unity Best Practices",
+        "url": "https://unity.com/how-to",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 240,
+        "tags": [
+            "best practices",
+            "оптимизация",
+            "официальный"
+        ],
+        "description": "Официальные рекомендации и лучшие практики от команды Unity по производительности и архитектуре."
+    },
+    {
+        "id": 46,
+        "direction": "System Architect",
+        "title": "Проектирование высоконагруженных систем",
+        "url": "https://youtube.com/playlist?list=PLy-ASFphcwIihTFjxlSzlHUhCNu6UasOL&si=HsiShJn4io0x5gth",
+        "content_type": "video",
+        "difficulty_level": "advanced",
+        "duration_minutes": 600,
+        "tags": [
+            "архитектура",
+            "масштабирование",
+            "требует концентрации"
+        ],
+        "description": "Принципы проектирования систем, способных обрабатывать миллионы запросов, с разбором кейсов."
+    },
+    {
+        "id": 47,
+        "direction": "System Architect",
+        "title": "Микросервисная архитектура",
+        "url": "https://habr.com/ru/companies/piter/articles/746376/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 300,
+        "tags": [
+            "архитектура",
+            "микросервисы",
+            "справочный материал"
+        ],
+        "description": "Исчерпывающий ресурс о принципах, паттернах и антипаттернах микросервисной архитектуры."
+    },
+    {
+        "id": 48,
+        "direction": "System Architect",
+        "title": "Шаблоны интеграции предприятий",
+        "url": "https://share.google/4FaiH04BOAE8NTPCb",
+        "content_type": "book",
+        "difficulty_level": "advanced",
+        "duration_minutes": 1500,
+        "tags": [
+            "паттерны",
+            "интеграция",
+            "фундаментальный"
+        ],
+        "description": "Классическая книга о шаблонах проектирования для интеграции сложных распределенных систем."
+    },
+    {
+        "id": 49,
+        "direction": "System Architect",
+        "title": "Domain-Driven Design",
+        "url": "https://habr.com/ru/articles/334126/",
+        "content_type": "book",
+        "difficulty_level": "advanced",
+        "duration_minutes": 1800,
+        "tags": [
+            "DDD",
+            "архитектура",
+            "фундаментальный"
+        ],
+        "description": "Классическая книга Эрика Эванса о подходе к проектированию сложных систем через предметную область."
+    },
+    {
+        "id": 50,
+        "direction": "System Architect",
+        "title": "Архитектурные антипаттерны",
+        "url": "https://cyberleninka.ru/article/n/antipatterny-postroeniya-mikroservisnyh-prilozheniy-v-vysokonagruzhennyh-proektah",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 45,
+        "tags": [
+            "антипаттерны",
+            "ошибки",
+            "практическое руководство"
+        ],
+        "description": "Распространенные архитектурные ошибки и антипаттерны, которых следует избегать при проектировании."
+    },
+    {
+        "id": 51,
+        "direction": "Fullstack-разработчик",
+        "title": "Полный путь Fullstack разработчика: MERN стек",
+        "url": "https://youtu.be/GQ_pTmcXNrQ?si=CNLPVxlcS21dAyed",
+        "content_type": "video",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 1500,
+        "tags": [
+            "полный стек",
+            "много практики",
+            "проектный"
+        ],
+        "description": "Создание полноценных веб-приложений на MongoDB, Express, React и Node.js (MERN стек) от идеи до деплоя."
+    },
+    {
+        "id": 52,
+        "direction": "Fullstack-разработчик",
+        "title": "Fullstack-разработка: курс от Meta (Coursera)",
+        "url": "https://www.coursera.org/professional-certificates/meta-front-end-developer/paidmedia?utm_medium=sem&utm_source=gg&utm_campaign=b2c_apac_x_multi_ftcof_career-academy_cx_dr_bau_gg_pmax_pr_s4_en_m_hyb_25-08_desktop&campaignid=22908721878&adgroupid=&device=c&keyword=&matchtype=&network=x&devicemodel=&creativeid=&assetgroupid=6603292914&targetid=&extensionid=&placement=&gad_source=1&gad_campaignid=22908752121&gbraid=0AAAAADdKX6YGb7xUraBTW2TiWDO9mVWLG&gclid=Cj0KCQiA6NTJBhDEARIsAB7QHD2jP4S-KdFoDxzM0DxexYGDM52btapXWTAcyLvdceZCozZ-tq-sywsaAnI3EALw_wcB",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 3600,
+        "tags": [
+            "структурированный",
+            "сертификация",
+            "практическое руководство"
+        ],
+        "description": "Профессиональная сертификация от Meta, охватывающая фронтенд, бэкенд, базы данных и DevOps для fullstack."
+    },
+    {
+        "id": 53,
+        "direction": "Fullstack-разработчик",
+        "title": "Базы данных для fullstack-разработчиков",
+        "url": "https://itproger.com/news/chto-dolzhen-znat-kazhdiy-full-stack-razrabotchik",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 180,
+        "tags": [
+            "базы данных",
+            "практическое руководство",
+            "фундаментальный"
+        ],
+        "description": "Фундаментальные принципы работы с реляционными и NoSQL базами данных в контексте fullstack-разработки."
+    },
+    {
+        "id": 54,
+        "direction": "Fullstack-разработчик",
+        "title": "Деплой fullstack-приложений",
+        "url": "https://youtu.be/ZJIdtm3EbiU?si=v05i0Lo8HBXBzOhk",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 120,
+        "tags": [
+            "деплой",
+            "официальная документация",
+            "практическое руководство"
+        ],
+        "description": "Официальная документация Vercel по развертыванию fullstack-приложений с фронтендом и серверными функциями."
+    },
+    {
+        "id": 55,
+        "direction": "Fullstack-разработчик",
+        "title": "Аутентификация и авторизация в полном стеке",
+        "url": "https://auth0.com/docs/quickstarts/",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 240,
+        "tags": [
+            "безопасность",
+            "аутентификация",
+            "практическое руководство"
+        ],
+        "description": "Быстрые старты от Auth0 по реализации безопасной аутентификации и авторизации в fullstack-приложениях."
+    },
+    {
+        "id": 56,
+        "direction": "Blockchain Developer",
+        "title": "Основы блокчейна и смарт-контрактов",
+        "url": "https://cyberleninka.ru/article/n/tehnologiya-smart-kontraktov-na-osnove-blokcheyn-dlya-minimizatsii-transaktsionnyh-izderzhek-v-regionalnyh-innovatsionnyh-sistemah",
+        "content_type": "article",
+        "difficulty_level": "beginner",
+        "duration_minutes": 480,
+        "tags": [
+            "блокчейн",
+            "простое объяснение",
+            "практическое руководство"
+        ],
+        "description": "Фундаментальные принципы блокчейна, криптографии и создания смарт-контрактов на примере Ethereum."
+    },
+    {
+        "id": 57,
+        "direction": "Blockchain Developer",
+        "title": "Solidity с нуля",
+        "url": "https://itproger.com/news/izuchaem-solidity-na-praktike-sozdanie-svoego-kripto-kontrakta",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 1200,
+        "tags": [
+            "Solidity",
+            "интерактивный",
+            "игровое обучение"
+        ],
+        "description": "Интерактивный курс по языку Solidity через создание игры на блокчейне: от основ до продвинутых концепций."
+    },
+    {
+        "id": 58,
+        "direction": "Blockchain Developer",
+        "title": "Web3.js и Ethers.js",
+        "url": "https://youtube.com/playlist?list=PLS5SEs8ZftgXlCGXNfzKdq7nGBcIaVOdN&si=yo7wZLLP1FoxDbuY",
+        "content_type": "video",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 360,
+        "tags": [
+            "Web3",
+            "практическое руководство",
+            "много практики"
+        ],
+        "description": "Взаимодействие фронтенда со смарт-контрактами через библиотеки Web3.js и Ethers.js."
+    },
+    {
+        "id": 59,
+        "direction": "Blockchain Developer",
+        "title": "Безопасность смарт-контрактов",
+        "url": "https://youtu.be/Urm26skuYGw?si=c06zvXbpqGiNjCxs",
+        "content_type": "video",
+        "difficulty_level": "advanced",
+        "duration_minutes": 300,
+        "tags": [
+            "безопасность",
+            "практическое руководство",
+            "антипаттерны"
+        ],
+        "description": "Лучшие практики и распространенные уязвимости смарт-контрактов от ConsenSys (reentrancy, overflow и др.)."
+    },
+    {
+        "id": 60,
+        "direction": "Blockchain Developer",
+        "title": "Децентрализованные финансы (DeFi)",
+        "url": "https://cyberleninka.ru/article/n/detsentralizovannye-finansy-defi-riski-perspektivy-i-regulirovanie",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 240,
+        "tags": [
+            "DeFi",
+            "практическое руководство",
+            "финансы"
+        ],
+        "description": "Архитектура и разработка DeFi-приложений: DEX, лендинг, стейкинг и другие финансовые примитивы."
+    },
+    {
+        "id": 61,
+        "direction": "Machine Learning Engineer",
+        "title": "Математика для машинного обучения",
+        "url": "https://cyberleninka.ru/article/n/osnovy-matematiki-dlya-mashinnogo-obucheniya-ot-osnov-k-primeneniyu",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 2400,
+        "tags": [
+            "математика",
+            "структурированный",
+            "фундаментальный"
+        ],
+        "description": "Фундаментальный курс по линейной алгебре, математическому анализу и статистике, необходимой для ML."
+    },
+    {
+        "id": 62,
+        "direction": "Machine Learning Engineer",
+        "title": "Глубокое обучение на практике",
+        "url": "https://cyberleninka.ru/article/n/glubokoe-obuchenie-opredelenie-i-otlichitelnye-osobennosti",
+        "content_type": "course",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 1800,
+        "tags": [
+            "глубокое обучение",
+            "практическое руководство",
+            "современный подход"
+        ],
+        "description": "Практический курс по глубокому обучению от fast.ai с фокусом на достижение результатов, а не теорию."
+    },
+    {
+        "id": 63,
+        "direction": "Machine Learning Engineer",
+        "title": "Обработка естественного языка (NLP)",
+        "url": "https://youtu.be/crljNnEABKg?si=gi9HIOP0qaslrrlM",
+        "content_type": "video",
+        "difficulty_level": "advanced",
+        "duration_minutes": 720,
+        "tags": [
+            "NLP",
+            "трансформеры",
+            "практическое руководство"
+        ],
+        "description": "Современные методы NLP: от word embeddings до архитектур трансформеров (BERT, GPT) и fine-tuning."
+    },
+    {
+        "id": 64,
+        "direction": "Machine Learning Engineer",
+        "title": "MLOps: инженерия машинного обучения",
+        "url": "https://ml-ops.org/",
+        "content_type": "article",
+        "difficulty_level": "advanced",
+        "duration_minutes": 180,
+        "tags": [
+            "MLOps",
+            "практическое руководство",
+            "производство"
+        ],
+        "description": "Принципы и практики MLOps для развертывания, мониторинга и поддержки ML-моделей в production."
+    },
+    {
+        "id": 65,
+        "direction": "Machine Learning Engineer",
+        "title": "Тензорные вычисления с PyTorch",
+        "url": "https://stepik.org/course/239747/promo",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 600,
+        "tags": [
+            "PyTorch",
+            "официальные туториалы",
+            "практическое руководство"
+        ],
+        "description": "Официальные туториалы PyTorch от базовых тензорных операций до создания сложных нейросетевых архитектур."
+    },
+    {
+        "id": 66,
+        "direction": "iOS Developer (Swift)",
+        "title": "Swift для начинающих",
+        "url": "https://itproger.com/course/swift",
+        "content_type": "video",
+        "difficulty_level": "beginner",
+        "duration_minutes": 600,
+        "tags": [
+            "Swift",
+            "простое объяснение",
+            "практическое руководство"
+        ],
+        "description": "Основы языка Swift: синтаксис, опционалы, структуры, классы и протоколы для начинающих iOS разработчиков."
+    },
+    {
+        "id": 67,
+        "direction": "iOS Developer (Swift)",
+        "title": "SwiftUI: современный UI фреймворк",
+        "url": "https://www.youtube.com/live/LYKumrr5ses?si=xAnoCbAd_Ps155Bz",
+        "content_type": "course",
+        "difficulty_level": "beginner",
+        "duration_minutes": 900,
+        "tags": [
+            "SwiftUI",
+            "официальный курс",
+            "декларативный UI"
+        ],
+        "description": "Официальные туториалы Apple по созданию пользовательских интерфейсов с помощью декларативного фреймворка SwiftUI."
+    },
+    {
+        "id": 68,
+        "direction": "iOS Developer (Swift)",
+        "title": "Архитектура iOS приложений: MVVM, VIPER",
+        "url": "https://youtu.be/J53kAPKyaAE?si=_1eQ6qbfHVEb7btm",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 120,
+        "tags": [
+            "архитектура",
+            "паттерны",
+            "практическое руководство"
+        ],
+        "description": "Обзор архитектурных паттернов для iOS разработки с примерами реализации MVVM, VIPER и Clean Architecture."
+    },
+    {
+        "id": 69,
+        "direction": "iOS Developer (Swift)",
+        "title": "Работа с сетью в iOS",
+        "url": "https://youtu.be/tQMWzVvHwQE?si=jEvIN7vsqsOEnA5H",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 90,
+        "tags": [
+            "сеть",
+            "URLSession",
+            "практическое руководство"
+        ],
+        "description": "Практическое руководство по выполнению сетевых запросов, работе с REST API и обработке данных в iOS приложениях."
+    },
+    {
+        "id": 70,
+        "direction": "iOS Developer (Swift)",
+        "title": "Публикация приложения в App Store",
+        "url": "https://youtu.be/9KHOxmNLLKU?si=nmuQhTHxz0XT1Lxv",
+        "content_type": "article",
+        "difficulty_level": "intermediate",
+        "duration_minutes": 150,
+        "tags": [
+            "App Store",
+            "официальная документация",
+            "практическое руководство"
+        ],
+        "description": "Официальная документация Apple по подготовке, тестированию и публикации iOS приложений в App Store."
+    },
