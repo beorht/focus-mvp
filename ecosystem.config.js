@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'focus-mvp',
-      script: 'npm',
+      script: './node_modules/next/dist/bin/next',
       args: 'start',
       // cwd: будет автоматически определяться из текущей директории
       instances: 1,
