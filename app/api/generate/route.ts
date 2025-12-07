@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import { getResourcesForProfession } from '@/lib/resourcesHelper'
 
 // Get all API keys from environment
 function getApiKeys(): string[] {
@@ -51,9 +52,11 @@ async function generateWithKeyRotation(
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   const requestId = `req_${Math.random().toString(36).substring(2, 15)}`
+  let body: any = {}
+  const debugInfo: string[] = []
 
   try {
-    const body = await request.json()
+    body = await request.json()
     const {
       userName,
       interests,
@@ -66,7 +69,6 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Create debug info for logs
-    const debugInfo: string[] = []
     debugInfo.push('POST /api/generate')
     debugInfo.push(`Payload: ${JSON.stringify(body)}`)
     debugInfo.push('Connecting to Gemini API with key rotation...')
@@ -133,20 +135,11 @@ export async function POST(request: NextRequest) {
       "Тема 3": "4 недели"
     }
   },
-  "resources": [
-    {
-      "topic": "Тема 1",
-      "items": [
-        {
-          "title": "Название ресурса",
-          "url": "https://example.com",
-          "type": "YouTube/Udemy/Docs"
-        }
-      ]
-    }
-  ],
+  "resources": [],
   "motivation": "2-3 предложения с советом, как удерживать мотивацию"
 }
+
+ВАЖНО: Поле "resources" оставь пустым массивом [] — реальные проверенные ресурсы (курсы, статьи, видео) будут автоматически добавлены из базы данных на основе подобранной профессии.
 
 Требования к стилю и длине:
 
@@ -177,6 +170,28 @@ export async function POST(request: NextRequest) {
     debugInfo.push('Parsing JSON response...')
 
     const parsedData = JSON.parse(cleanedResponse)
+
+    // Заменяем сгенерированные ресурсы на реальные из базы данных
+    debugInfo.push('Replacing AI-generated resources with real database resources...')
+    const realResources = getResourcesForProfession(
+      parsedData.profession,
+      knowledge_level || 'начинающий',
+      parsedData.topics?.length || 3
+    )
+
+    // Обновляем ресурсы и привязываем к темам
+    if (realResources.length > 0) {
+      parsedData.resources = realResources.map((resourceGroup, index) => {
+        const topicTitle = parsedData.topics?.[index]?.title || resourceGroup.topic
+        return {
+          ...resourceGroup,
+          topic: topicTitle
+        }
+      })
+      debugInfo.push(`Loaded ${realResources.length} resource groups from database`)
+    } else {
+      debugInfo.push('Warning: No resources found in database for this profession')
+    }
 
     const processingTime = Date.now() - startTime
 
@@ -210,9 +225,27 @@ export async function POST(request: NextRequest) {
       const apiKeys = getApiKeys()
       const mockData = generateMockLearningModule(body)
 
+      // Заменяем mock ресурсы на реальные из базы
+      const realResources = getResourcesForProfession(
+        mockData.profession,
+        body.knowledge_level || 'начинающий',
+        mockData.topics?.length || 4
+      )
+
+      if (realResources.length > 0) {
+        mockData.resources = realResources.map((resourceGroup, index) => {
+          const topicTitle = mockData.topics?.[index]?.title || resourceGroup.topic
+          return {
+            ...resourceGroup,
+            topic: topicTitle
+          }
+        })
+      }
+
       debugInfo.push('MOCK MODE: All API keys quota exceeded, using fallback data')
       debugInfo.push(`Tried ${apiKeys.length} API key(s)`)
       debugInfo.push(`Generated mock module for profession: ${mockData.profession}`)
+      debugInfo.push(`Loaded ${realResources.length} real resource groups from database`)
 
       return NextResponse.json({
         success: true,
