@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import { findBestAnswer, getContextForAI } from '@/lib/knowledgeBase'
 
 // Get all API keys for chat assistant from environment
 function getChatApiKeys(): string[] {
@@ -65,6 +66,43 @@ export async function POST(request: NextRequest) {
     const debugInfo: string[] = []
     debugInfo.push('POST /api/chat')
     debugInfo.push(`Question: "${question}"`)
+
+    // Поиск в базе знаний
+    debugInfo.push('Searching in knowledge base...')
+    const knowledgeAnswer = findBestAnswer(question, 0.5) // Порог 0.5 для прямого ответа
+
+    // Если нашли точный ответ в базе знаний - возвращаем его напрямую
+    if (knowledgeAnswer) {
+      debugInfo.push('Found exact match in knowledge base')
+      debugInfo.push(`Matched tags: ${knowledgeAnswer.tags.slice(0, 3).join(', ')}`)
+
+      const processingTime = Date.now() - startTime
+
+      return NextResponse.json({
+        success: true,
+        answer: knowledgeAnswer.answer,
+        debugInfo,
+        source: 'knowledge_base',
+        meta: {
+          request_id: requestId,
+          timestamp: new Date().toISOString(),
+          processing_time_ms: processingTime,
+          ai_model: 'Knowledge Base (Direct Match)',
+          answer_length: knowledgeAnswer.answer.length
+        }
+      })
+    }
+
+    // Если точного ответа нет - получаем релевантный контекст для AI
+    debugInfo.push('No exact match, getting context for AI...')
+    const aiContext = getContextForAI(question)
+
+    if (aiContext) {
+      debugInfo.push('Found relevant context from knowledge base')
+    } else {
+      debugInfo.push('No relevant context found, using pure AI generation')
+    }
+
     debugInfo.push('Processing with Gemini AI...')
 
     const systemContext = profession
@@ -98,7 +136,7 @@ A: Для студентов, выпускников и людей, планир
 
 Q: Как это работает?
 A: Вы проходите экспресс-тестирование (5-7 вопросов), наш AI анализирует ответы через Gemini и генерирует персональные рекомендации: профессию, roadmap развития, зарплатные ожидания для Узбекистана и ссылки на обучающие материалы.
-
+${aiContext}
 Теперь ответь на вопрос пользователя:`
 
     const answer = await generateChatWithKeyRotation(prompt, debugInfo)
@@ -112,12 +150,14 @@ A: Вы проходите экспресс-тестирование (5-7 воп
       success: true,
       answer,
       debugInfo,
+      source: aiContext ? 'ai_with_knowledge_base' : 'ai_only',
       meta: {
         request_id: requestId,
         timestamp: new Date().toISOString(),
         processing_time_ms: processingTime,
-        ai_model: 'Gemini 2.5 Flash',
-        answer_length: answer.length
+        ai_model: aiContext ? 'Gemini 2.5 Flash + Knowledge Base' : 'Gemini 2.5 Flash',
+        answer_length: answer.length,
+        knowledge_base_used: !!aiContext
       }
     })
 
