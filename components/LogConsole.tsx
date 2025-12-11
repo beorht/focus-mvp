@@ -1,11 +1,13 @@
 'use client'
 
 import { useLogStore } from '@/store/useLogStore'
+import { useThemeStore } from '@/store/useThemeStore'
 import { useEffect, useRef } from 'react'
 import { Terminal, Cpu } from 'lucide-react'
 
 export default function LogConsole() {
   const logs = useLogStore((state) => state.logs)
+  const theme = useThemeStore((state) => state.theme)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function LogConsole() {
             )}
             <div className={`font-bold ${headerColor} text-sm`}>{header}</div>
             <div className="bg-gray-900 rounded p-3 mt-1 overflow-x-auto">
-              <pre className="text-gray-300 text-xs leading-relaxed">
+              <pre className="text-[#7A818F] text-xs leading-relaxed">
                 {JSON.stringify(jsonData, null, 2)}
               </pre>
             </div>
@@ -63,25 +65,35 @@ export default function LogConsole() {
     } catch (e) {
       // If parsing fails, return original message
     }
-    return <span className="text-gray-300">{message}</span>
+    return <span className="text-[#7A818F]">{message}</span>
   }
 
   const renderLogMessage = (log: any) => {
     if (log.type === 'API_REQ' || log.type === 'API_RES') {
       return formatApiLog(log.message, log.type)
     }
-    return <span className="text-gray-300">{log.message}</span>
+    return <span className="text-[#7A818F]">{log.message}</span>
   }
 
   return (
-    <div className="fixed right-0 top-0 h-screen w-full md:w-[35%] bg-black text-green-400 p-4 font-mono text-xs overflow-y-auto border-l border-gray-800 z-50">
+    <div className={`fixed right-0 top-0 h-screen w-full md:w-[35%] p-4 font-mono text-xs overflow-y-auto border-l z-50 ${
+      theme === 'dark'
+        ? 'bg-black text-green-400 border-gray-800'
+        : 'bg-[#F0EFE7] text-green-700 border-gray-300'
+    }`}>
       {/* Header */}
-      <div className="mb-4 border-b border-gray-700 pb-3">
+      <div className={`mb-4 border-b pb-3 ${
+        theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
+      }`}>
         <div className="flex items-center gap-2 mb-2">
           <Terminal className="w-5 h-5 text-green-500" />
-          <h3 className="font-bold text-white text-sm">F.O.C.U.S AI CORE</h3>
+          <h3 className={`font-bold text-sm ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>F.O.C.U.S AI CORE</h3>
         </div>
-        <div className="flex items-center gap-2 text-gray-500">
+        <div className={`flex items-center gap-2 ${
+          theme === 'dark' ? 'text-gray-500' : 'text-gray-600'
+        }`}>
           <Cpu className="w-4 h-4 animate-pulse" />
           <p className="text-xs">Live AI Terminal // Gemini 2.5 Flash</p>
         </div>
@@ -95,8 +107,10 @@ export default function LogConsole() {
       {/* Logs */}
       <div className="space-y-1">
         {logs.map((log) => (
-          <div key={log.id} className="break-words hover:bg-gray-900 px-2 py-1 rounded transition-colors">
-            <span className="text-gray-600">[{log.timestamp}]</span>{' '}
+          <div key={log.id} className={`break-words px-2 py-1 rounded transition-colors ${
+            theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-200'
+          }`}>
+            <span className={theme === 'dark' ? 'text-gray-600' : 'text-gray-500'}>[{log.timestamp}]</span>{' '}
             <span className={`font-bold ${getLogColor(log.type)}`}>
               [{log.type}]
             </span>{' '}
@@ -107,7 +121,9 @@ export default function LogConsole() {
       </div>
 
       {/* Footer */}
-      <div className="fixed bottom-4 right-4 text-[10px] text-gray-600">
+      <div className={`fixed bottom-4 right-4 text-[10px] ${
+        theme === 'dark' ? 'text-gray-600' : 'text-gray-500'
+      }`}>
         <p>AI500 Hackathon 2024 // Task 2</p>
       </div>
     </div>

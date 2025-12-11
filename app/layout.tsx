@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import LogConsole from "@/components/LogConsole";
 import ChatAssistant from "@/components/ChatAssistant";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +32,9 @@ export default function RootLayout({
           {/* AI Terminal (30-35%) - Hidden on mobile */}
           <LogConsole />
         </div>
+
+        {/* Global Theme Toggle */}
+        <ThemeToggle />
 
         {/* Global Chat Assistant (BONUS 1) */}
         <ChatAssistant />

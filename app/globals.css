@@ -2,9 +2,49 @@
 @import "lenis/dist/lenis.css";
 
 :root {
+  /* Dark theme (default) */
   --background: #191919;
   --foreground: #ededed;
   --container-bg: #1d1d1d;
+  --card-bg: #1d1d1d;
+  --border-color: #2e2e2e;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+
+  /* Gradients for dark theme */
+  --gradient-main-start: #0c0c0f;
+  --gradient-main-stop: rgba(147, 51, 234, 0.35);
+  --gradient-test-stop: rgba(192, 132, 252, 0.3);
+  --gradient-results-stop-1: rgba(52, 211, 153, 0.25);
+  --gradient-results-stop-2: rgba(96, 165, 250, 0.2);
+
+  /* Educational content */
+  --edu-bg: #F7F6E4;
+  --edu-text: #000000;
+}
+
+/* Light theme */
+[data-theme='light'] {
+  --background: #F7F6F1;
+  --foreground: #2d2d2d;
+  --container-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+
+  /* Gradients for light theme - subtle pastel radial gradients */
+  --gradient-main-start: #F7F6F1;
+  --gradient-main-stop: rgba(196, 181, 253, 0.2);
+  --gradient-test-stop: rgba(196, 181, 253, 0.15);
+  --gradient-results-stop-1: rgba(167, 243, 208, 0.2);
+  --gradient-results-stop-2: rgba(191, 219, 254, 0.15);
+
+  /* Educational content */
+  --edu-bg: #FAEBD7;
+  --edu-text: #1f2937;
 }
 
 html {
@@ -45,20 +85,20 @@ body {
 }
 
 .test-background {
-  background-color: #0c0c0f;
+  background-color: var(--gradient-main-start);
   background-image:
-    radial-gradient(ellipse 70% 60% at 50% -15%, hsla(300, 80%, 70%, 0.3), transparent);
+    radial-gradient(ellipse 70% 60% at 50% -15%, var(--gradient-test-stop), transparent);
 }
 
 .results-background {
-  background-color: #0c0c0f;
+  background-color: var(--gradient-main-start);
   background-image:
-    radial-gradient(ellipse 80% 70% at 50% -20%, hsla(160, 70%, 40%, 0.25), transparent),
-    radial-gradient(ellipse 30% 40% at 80% 100%, hsla(220, 80%, 60%, 0.2), transparent);
+    radial-gradient(ellipse 80% 70% at 50% -20%, var(--gradient-results-stop-1), transparent),
+    radial-gradient(ellipse 30% 40% at 80% 100%, var(--gradient-results-stop-2), transparent);
 }
 
 .main-background {
-  background-color: #0c0c0f;
+  background-color: var(--gradient-main-start);
   background-image:
-    radial-gradient(ellipse 90% 70% at 50% -25%, hsla(300, 80%, 80%, 0.35), transparent);
+    radial-gradient(ellipse 90% 70% at 50% -25%, var(--gradient-main-stop), transparent);
 }

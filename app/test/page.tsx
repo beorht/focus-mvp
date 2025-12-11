@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
+import { useThemeStore } from '@/store/useThemeStore'
 import { ArrowRight, ArrowLeft, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -78,6 +79,7 @@ const questions = [
 export default function TestPage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
+  const theme = useThemeStore((state) => state.theme)
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string[]>>({})
   const [userName, setUserName] = useState('')
@@ -198,14 +200,18 @@ export default function TestPage() {
           className="mb-8"
         >
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-gray-300">
+            <span className={`text-sm font-medium ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+            }`}>
               Вопрос {currentStep + 1} из {questions.length}
             </span>
             <span className="text-sm font-medium text-blue-400">
               {Math.round(progress)}%
             </span>
           </div>
-          <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+          <div className={`h-2 rounded-full overflow-hidden ${
+            theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'
+          }`}>
             <motion.div
               className="h-full bg-gradient-to-r from-blue-600 to-purple-600"
               initial={{ width: 0 }}
@@ -224,9 +230,11 @@ export default function TestPage() {
             exit={{ opacity: 0, filter: "blur(10px)", x: -50 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="rounded-2xl shadow-lg p-8 mb-6"
-            style={{ background: '#1d1d1d' }}
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EADFD7' }}
           >
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className={`text-2xl font-bold mb-2 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             {currentQuestion.question}
           </h2>
 
@@ -235,7 +243,9 @@ export default function TestPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-6 text-sm text-white"
+              className={`mb-6 text-sm ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}
             >
               Можно выбрать несколько вариантов
             </motion.p>
@@ -257,30 +267,16 @@ export default function TestPage() {
                   onClick={() => handleSelect(option.value)}
                   className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                     isSelected
-                      ? 'bg-blue-900/20'
-                      : 'border-gray-700 hover:border-gray-600'
+                      ? theme === 'dark' ? 'bg-blue-900/20 border-blue-900' : 'bg-blue-100 border-blue-400'
+                      : theme === 'dark' ? 'border-gray-700 hover:border-gray-600' : 'border-gray-300 hover:border-gray-400'
                   }`}
-                  style={isSelected ? { borderColor: '#2e2e2e' } : {
-                    '--hover-bg': '#F7F6E4',
-                    '--hover-color': '#4c4c4c'
-                  } as React.CSSProperties}
-                  onMouseEnter={(e) => {
-                    if (!isSelected) {
-                      e.currentTarget.style.backgroundColor = '#F7F6E4'
-                      const span = e.currentTarget.querySelector('span')
-                      if (span) span.style.color = '#4c4c4c'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isSelected) {
-                      e.currentTarget.style.backgroundColor = ''
-                      const span = e.currentTarget.querySelector('span')
-                      if (span) span.style.color = ''
-                    }
-                  }}
                 >
                   <div className="flex items-center justify-between">
-                    <span className={`font-medium ${isSelected ? 'text-blue-300' : 'text-gray-300'}`}>
+                    <span className={`font-medium ${
+                      isSelected
+                        ? theme === 'dark' ? 'text-blue-300' : 'text-blue-700'
+                        : theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       {option.label}
                     </span>
                     {isSelected && (
@@ -311,7 +307,7 @@ export default function TestPage() {
             className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${
               currentStep === 0
                 ? 'text-gray-600 cursor-not-allowed'
-                : 'text-gray-300 hover:bg-gray-800'
+                : theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'
             }`}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -325,7 +321,7 @@ export default function TestPage() {
             disabled={isNextDisabled()}
             className={`flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all ${
               isNextDisabled()
-                ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                ? theme === 'dark' ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:scale-105'
             }`}
           >

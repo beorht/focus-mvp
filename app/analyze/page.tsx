@@ -3,11 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
+import { useThemeStore } from '@/store/useThemeStore'
 import { Brain, Sparkles, Zap, Target } from 'lucide-react'
 
 export default function AnalyzePage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
+  const theme = useThemeStore((state) => state.theme)
   const [stage, setStage] = useState(0)
 
   const stages = [
@@ -110,16 +112,20 @@ export default function AnalyzePage() {
   const CurrentIcon = stages[stage]?.icon || Brain
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#191919' }}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: theme === 'dark' ? '#191919' : '#F7F6F1' }}>
       <div className="text-center">
         {/* Animated Brain/Icon */}
         <div className="relative mb-8">
           {/* Outer pulse rings */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-48 h-48 bg-blue-500/20 rounded-full animate-ping" />
+            <div className={`w-48 h-48 rounded-full animate-ping ${
+              theme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-300/30'
+            }`} />
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-40 h-40 bg-purple-500/20 rounded-full animate-ping animation-delay-300" />
+            <div className={`w-40 h-40 rounded-full animate-ping animation-delay-300 ${
+              theme === 'dark' ? 'bg-purple-500/20' : 'bg-purple-300/30'
+            }`} />
           </div>
 
           {/* Main icon */}
@@ -131,10 +137,14 @@ export default function AnalyzePage() {
         </div>
 
         {/* Status Text */}
-        <h2 className="text-3xl font-bold text-white mb-4">
+        <h2 className={`text-3xl font-bold mb-4 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
           Анализируем данные
         </h2>
-        <p className="text-xl text-gray-300 mb-8">
+        <p className={`text-xl mb-8 ${
+          theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+        }`}>
           {stages[stage]?.text || 'Подготовка...'}
         </p>
 
@@ -146,16 +156,23 @@ export default function AnalyzePage() {
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index <= stage
                   ? 'bg-gradient-to-r from-blue-600 to-purple-600 scale-110'
-                  : 'bg-gray-700'
+                  : theme === 'dark' ? 'bg-gray-700' : 'bg-gray-400'
               }`}
             />
           ))}
         </div>
 
         {/* Tech info */}
-        <div className="mt-12 inline-flex items-center gap-2 backdrop-blur-sm px-6 py-3 rounded-full border border-gray-700 shadow-sm" style={{ background: '#1d1d1d' }}>
+        <div
+          className={`mt-12 inline-flex items-center gap-2 backdrop-blur-sm px-6 py-3 rounded-full shadow-sm ${
+            theme === 'dark' ? 'border border-gray-700' : 'border border-gray-300'
+          }`}
+          style={{ background: theme === 'dark' ? '#1d1d1d' : '#E6E8FA' }}
+        >
           <Zap className="w-4 h-4 text-yellow-500 animate-pulse" />
-          <span className="text-sm text-gray-300 font-medium">
+          <span className={`text-sm font-medium ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+          }`}>
             Powered by Gemini 2.5 Flash
           </span>
         </div>

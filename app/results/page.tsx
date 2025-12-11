@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
+import { useThemeStore } from '@/store/useThemeStore'
 import { Sparkles, TrendingUp, BookOpen, ExternalLink, CheckCircle2, Target, Clock, Lightbulb, MessageCircle } from 'lucide-react'
 import Lenis from 'lenis'
 import { motion } from 'framer-motion'
@@ -49,6 +50,7 @@ interface LearningModule {
 export default function ResultsPage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
+  const theme = useThemeStore((state) => state.theme)
   const [data, setData] = useState<LearningModule | null>(null)
   const [userName, setUserName] = useState('Пользователь')
   const [showChat, setShowChat] = useState(false)
@@ -101,7 +103,7 @@ export default function ResultsPage() {
   if (!data) {
     return (
       <div className="min-h-screen flex items-center justify-center results-background">
-        <div className="text-gray-300">Загрузка результатов...</div>
+        <div className={theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}>Загрузка результатов...</div>
       </div>
     )
   }
@@ -115,7 +117,11 @@ export default function ResultsPage() {
             initial={{ opacity: 0, filter: "blur(10px)", scale: 0.9 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4"
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4 ${
+              theme === 'dark'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-green-200 text-green-800'
+            }`}
           >
             <Sparkles className="w-4 h-4" />
             Учебный модуль готов
@@ -124,7 +130,9 @@ export default function ResultsPage() {
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-4xl font-bold text-white mb-2"
+            className={`text-4xl font-bold mb-2 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}
           >
             Учебный модуль: {data.profession}
           </motion.h1>
@@ -132,7 +140,9 @@ export default function ResultsPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            className="text-xl text-gray-300"
+            className={`text-xl ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+            }`}
           >
             Персональная программа для {userName}
           </motion.p>
@@ -143,15 +153,21 @@ export default function ResultsPage() {
           initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-          className="rounded-2xl shadow-xl p-8 mb-8 border-2 border-blue-900"
-          style={{ background: '#1d1d1d' }}
+          className={`rounded-2xl shadow-xl p-8 mb-8 border-2 ${
+            theme === 'dark' ? 'border-blue-900' : 'border-blue-300'
+          }`}
+          style={{ background: theme === 'dark' ? '#1d1d1d' : '#FFF1E6' }}
         >
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">
+              <h2 className={`text-3xl font-bold mb-2 ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
                 {data.profession}
               </h2>
-              <p className="text-gray-300 leading-relaxed mt-4">
+              <p className={`leading-relaxed mt-4 ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 {data.introduction}
               </p>
             </div>
@@ -161,12 +177,22 @@ export default function ResultsPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-green-900/20 to-emerald-900/20 rounded-xl p-4 border border-green-700">
+          <div className={`rounded-xl p-4 border ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-green-900/20 to-emerald-900/20 border-green-700'
+              : 'bg-gradient-to-r from-green-100 to-emerald-100 border-green-400'
+          }`}>
             <div className="flex items-center gap-2 mb-1">
-              <TrendingUp className="w-5 h-5 text-green-400" />
-              <span className="font-semibold text-green-300">Зарплата в Узбекистане</span>
+              <TrendingUp className={`w-5 h-5 ${
+                theme === 'dark' ? 'text-green-400' : 'text-green-700'
+              }`} />
+              <span className={`font-semibold ${
+                theme === 'dark' ? 'text-green-300' : 'text-green-800'
+              }`}>Зарплата в Узбекистане</span>
             </div>
-            <p className="text-2xl font-bold" style={{ color: '#C1FBA4' }}>{data.salary_uz_sum}</p>
+            <p className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-[#C1FBA4]' : 'text-green-700'
+            }`}>{data.salary_uz_sum}</p>
           </div>
         </motion.div>
 
@@ -176,10 +202,14 @@ export default function ResultsPage() {
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
           className="rounded-2xl shadow-xl p-8 mb-8"
-          style={{ background: '#F4C430' }}
+          style={{ background: theme === 'dark' ? '#F4C430' : '#FFF1E6' }}
         >
-          <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
-            <Target className="w-6 h-6 text-black" />
+          <h3 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${
+            theme === 'dark' ? 'text-black' : 'text-gray-900'
+          }`}>
+            <Target className={`w-6 h-6 ${
+              theme === 'dark' ? 'text-black' : 'text-gray-900'
+            }`} />
             Навыки для развития
           </h3>
           <div className="space-y-3">
@@ -189,12 +219,22 @@ export default function ResultsPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-black/10 border border-black/20"
+                className={`flex items-start gap-3 p-4 rounded-xl border ${
+                  theme === 'dark'
+                    ? 'bg-black/10 border-black/20'
+                    : 'bg-gray-100 border-gray-300'
+                }`}
               >
-                <div className="flex-shrink-0 w-8 h-8 bg-black rounded-full flex items-center justify-center text-yellow-400 font-bold text-sm">
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                  theme === 'dark'
+                    ? 'bg-black text-yellow-400'
+                    : 'bg-gray-900 text-yellow-300'
+                }`}>
                   {index + 1}
                 </div>
-                <p className="text-black flex-1 pt-1 font-medium">{skill}</p>
+                <p className={`flex-1 pt-1 font-medium ${
+                  theme === 'dark' ? 'text-black' : 'text-gray-900'
+                }`}>{skill}</p>
               </motion.div>
             ))}
           </div>
@@ -207,7 +247,9 @@ export default function ResultsPage() {
           transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
           className="mb-8"
         >
-          <h3 className="text-3xl font-bold text-white mb-6 text-center">
+          <h3 className={`text-3xl font-bold mb-6 text-center ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             Учебные темы
           </h3>
 
@@ -219,34 +261,50 @@ export default function ResultsPage() {
                 animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                 transition={{ duration: 0.8, delay: 1.4 + index * 0.2 }}
                 className="rounded-2xl p-8 shadow-xl"
-                style={{ background: '#F7F6E4' }}
+                style={{ background: theme === 'dark' ? '#F7F6E4' : '#FAEBD7' }}
               >
                 {/* Topic Header */}
                 <div className="flex items-start gap-4 mb-6">
                   <div className="flex-shrink-0">
-                    <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center">
-                      <span className="text-2xl font-bold text-yellow-400">
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center ${
+                      theme === 'dark' ? 'bg-black' : 'bg-gray-900'
+                    }`}>
+                      <span className={`text-2xl font-bold ${
+                        theme === 'dark' ? 'text-yellow-400' : 'text-yellow-300'
+                      }`}>
                         {String(index + 1).padStart(2, '0')}
                       </span>
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-2xl font-bold text-black mb-3">{topic.title}</h4>
-                    <p className="text-gray-800 leading-relaxed">{topic.summary}</p>
+                    <h4 className={`text-2xl font-bold mb-3 ${
+                      theme === 'dark' ? 'text-black' : 'text-gray-900'
+                    }`}>{topic.title}</h4>
+                    <p className={`leading-relaxed ${
+                      theme === 'dark' ? 'text-gray-800' : 'text-gray-700'
+                    }`}>{topic.summary}</p>
                   </div>
                 </div>
 
                 {/* Examples */}
                 {topic.examples && topic.examples.length > 0 && (
-                  <div className="mb-6 p-4 bg-black/10 rounded-xl">
-                    <h5 className="text-sm font-bold text-black mb-3 flex items-center gap-2">
+                  <div className={`mb-6 p-4 rounded-xl ${
+                    theme === 'dark' ? 'bg-black/10' : 'bg-gray-200'
+                  }`}>
+                    <h5 className={`text-sm font-bold mb-3 flex items-center gap-2 ${
+                      theme === 'dark' ? 'text-black' : 'text-gray-900'
+                    }`}>
                       <Lightbulb className="w-4 h-4" />
                       Примеры:
                     </h5>
                     <ul className="space-y-2">
                       {topic.examples.map((example, exIdx) => (
-                        <li key={exIdx} className="text-gray-800 flex items-start gap-2">
-                          <span className="text-black font-bold">•</span>
+                        <li key={exIdx} className={`flex items-start gap-2 ${
+                          theme === 'dark' ? 'text-gray-800' : 'text-gray-700'
+                        }`}>
+                          <span className={`font-bold ${
+                            theme === 'dark' ? 'text-black' : 'text-gray-900'
+                          }`}>•</span>
                           <span>{example}</span>
                         </li>
                       ))}
@@ -257,12 +315,20 @@ export default function ResultsPage() {
                 {/* Tasks */}
                 {topic.tasks && topic.tasks.length > 0 && (
                   <div className="mb-6">
-                    <h5 className="text-sm font-bold text-black mb-3">Практические задания:</h5>
+                    <h5 className={`text-sm font-bold mb-3 ${
+                      theme === 'dark' ? 'text-black' : 'text-gray-900'
+                    }`}>Практические задания:</h5>
                     <div className="space-y-3">
                       {topic.tasks.map((task, taskIdx) => (
-                        <div key={taskIdx} className="p-4 bg-black text-yellow-400 rounded-xl">
+                        <div key={taskIdx} className={`p-4 rounded-xl ${
+                          theme === 'dark'
+                            ? 'bg-black text-yellow-400'
+                            : 'bg-gray-900 text-yellow-300'
+                        }`}>
                           <p className="font-semibold mb-2">{task.title}</p>
-                          <p className="text-sm text-yellow-200">{task.description}</p>
+                          <p className={`text-sm ${
+                            theme === 'dark' ? 'text-yellow-200' : 'text-yellow-100'
+                          }`}>{task.description}</p>
                         </div>
                       ))}
                     </div>
@@ -271,12 +337,20 @@ export default function ResultsPage() {
 
                 {/* Questions */}
                 {topic.questions && topic.questions.length > 0 && (
-                  <div className="p-4 bg-white/20 rounded-xl">
-                    <h5 className="text-sm font-bold text-black mb-3">Контрольные вопросы:</h5>
+                  <div className={`p-4 rounded-xl ${
+                    theme === 'dark' ? 'bg-white/20' : 'bg-gray-200'
+                  }`}>
+                    <h5 className={`text-sm font-bold mb-3 ${
+                      theme === 'dark' ? 'text-black' : 'text-gray-900'
+                    }`}>Контрольные вопросы:</h5>
                     <ul className="space-y-2">
                       {topic.questions.map((question, qIdx) => (
-                        <li key={qIdx} className="text-gray-900 flex items-start gap-2">
-                          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-black" />
+                        <li key={qIdx} className={`flex items-start gap-2 ${
+                          theme === 'dark' ? 'text-gray-900' : 'text-gray-800'
+                        }`}>
+                          <CheckCircle2 className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
+                            theme === 'dark' ? 'text-black' : 'text-gray-900'
+                          }`} />
                           <span className="text-sm">{question}</span>
                         </li>
                       ))}
@@ -294,25 +368,39 @@ export default function ResultsPage() {
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           transition={{ duration: 1, delay: 2.0, ease: "easeOut" }}
           className="rounded-2xl shadow-xl p-8 mb-8"
-          style={{ background: '#1d1d1d' }}
+          style={{ background: theme === 'dark' ? '#1d1d1d' : '#E9E7E1' }}
         >
-          <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <Clock className="w-6 h-6 text-blue-500" />
+          <h3 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            <Clock className={`w-6 h-6 ${
+              theme === 'dark' ? 'text-blue-500' : 'text-blue-600'
+            }`} />
             Рекомендуемый порядок обучения
           </h3>
           <div className="space-y-3">
             {data.learning_plan.order.map((topicName, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 rounded-xl bg-blue-900/20 border border-blue-900/30"
+                className={`flex items-center justify-between p-4 rounded-xl border ${
+                  theme === 'dark'
+                    ? 'bg-blue-900/20 border-blue-900/30'
+                    : 'bg-blue-100 border-blue-300'
+                }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                    theme === 'dark' ? 'bg-blue-600' : 'bg-blue-700'
+                  }`}>
                     {index + 1}
                   </div>
-                  <span className="text-gray-200 font-medium">{topicName}</span>
+                  <span className={`font-medium ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                  }`}>{topicName}</span>
                 </div>
-                <span className="text-blue-400 font-semibold">
+                <span className={`font-semibold ${
+                  theme === 'dark' ? 'text-blue-400' : 'text-blue-700'
+                }`}>
                   {data.learning_plan.time_estimates[topicName] || 'N/A'}
                 </span>
               </div>
@@ -326,17 +414,23 @@ export default function ResultsPage() {
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
           className="rounded-2xl shadow-xl p-8 mb-8"
-          style={{ background: '#1d1d1d' }}
+          style={{ background: theme === 'dark' ? '#1d1d1d' : '#E9E7E1' }}
         >
-          <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <BookOpen className="w-6 h-6 text-purple-600" />
+          <h3 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            <BookOpen className={`w-6 h-6 ${
+              theme === 'dark' ? 'text-purple-600' : 'text-purple-700'
+            }`} />
             Рекомендуемые ресурсы
           </h3>
 
           <div className="space-y-6">
             {data.resources.map((resourceGroup, groupIdx) => (
               <div key={groupIdx}>
-                <h4 className="text-lg font-semibold text-purple-300 mb-3">{resourceGroup.topic}</h4>
+                <h4 className={`text-lg font-semibold mb-3 ${
+                  theme === 'dark' ? 'text-purple-300' : 'text-purple-700'
+                }`}>{resourceGroup.topic}</h4>
                 <div className="space-y-3">
                   {resourceGroup.items.map((resource, resIdx) => (
                     <a
@@ -345,18 +439,34 @@ export default function ResultsPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => addLog('USER_ACTION', `Opened resource: ${resource.title}`)}
-                      className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-700 hover:border-purple-500 hover:bg-purple-900/20 transition-all group"
+                      className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all group ${
+                        theme === 'dark'
+                          ? 'border-gray-700 hover:border-purple-500 hover:bg-purple-900/20'
+                          : 'border-gray-300 hover:border-purple-400 hover:bg-purple-100'
+                      }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-purple-900/30 rounded-lg flex items-center justify-center group-hover:bg-purple-800/40 transition-colors">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                          theme === 'dark'
+                            ? 'bg-purple-900/30 group-hover:bg-purple-800/40'
+                            : 'bg-purple-200 group-hover:bg-purple-300'
+                        }`}>
                           📚
                         </div>
                         <div>
-                          <h5 className="font-semibold text-white">{resource.title}</h5>
-                          <p className="text-sm text-gray-400">{resource.type}</p>
+                          <h5 className={`font-semibold ${
+                            theme === 'dark' ? 'text-white' : 'text-gray-900'
+                          }`}>{resource.title}</h5>
+                          <p className={`text-sm ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`}>{resource.type}</p>
                         </div>
                       </div>
-                      <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-purple-400" />
+                      <ExternalLink className={`w-5 h-5 transition-colors ${
+                        theme === 'dark'
+                          ? 'text-gray-400 group-hover:text-purple-400'
+                          : 'text-gray-600 group-hover:text-purple-600'
+                      }`} />
                     </a>
                   ))}
                 </div>
@@ -370,11 +480,21 @@ export default function ResultsPage() {
           initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           transition={{ duration: 1, delay: 2.4, ease: "easeOut" }}
-          className="rounded-2xl shadow-xl p-8 mb-8 border-2 border-yellow-600"
-          style={{ background: 'linear-gradient(135deg, #1d1d1d 0%, #2d2d1d 100%)' }}
+          className={`rounded-2xl shadow-xl p-8 mb-8 border-2 ${
+            theme === 'dark' ? 'border-yellow-600' : 'border-yellow-500'
+          }`}
+          style={{
+            background: theme === 'dark'
+              ? 'linear-gradient(135deg, #1d1d1d 0%, #2d2d1d 100%)'
+              : 'linear-gradient(135deg, #FFFDD1 0%, #FFF1E6 100%)'
+          }}
         >
-          <h3 className="text-2xl font-bold text-yellow-400 mb-4">Совет для мотивации</h3>
-          <p className="text-gray-200 leading-relaxed text-lg">{data.motivation}</p>
+          <h3 className={`text-2xl font-bold mb-4 ${
+            theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700'
+          }`}>Совет для мотивации</h3>
+          <p className={`leading-relaxed text-lg ${
+            theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+          }`}>{data.motivation}</p>
         </motion.div>
 
         {/* Action Buttons */}

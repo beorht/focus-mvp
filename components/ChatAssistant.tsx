@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useLogStore } from '@/store/useLogStore'
+import { useThemeStore } from '@/store/useThemeStore'
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react'
 
 interface Message {
@@ -11,6 +12,7 @@ interface Message {
 }
 
 export default function ChatAssistant() {
+  const theme = useThemeStore((state) => state.theme)
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -135,7 +137,12 @@ export default function ChatAssistant() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 md:right-[37%] w-96 max-w-[calc(100vw-3rem)] h-[500px] rounded-2xl shadow-2xl flex flex-col z-40 border border-gray-700" style={{ background: '#1d1d1d' }}>
+        <div
+          className={`fixed bottom-6 right-6 md:right-[37%] w-96 max-w-[calc(100vw-3rem)] h-[500px] rounded-2xl shadow-2xl flex flex-col z-40 border ${
+            theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
+          }`}
+          style={{ background: theme === 'dark' ? '#1d1d1d' : '#ffffff' }}
+        >
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -169,7 +176,7 @@ export default function ChatAssistant() {
                   className={`max-w-[80%] p-3 rounded-2xl ${
                     message.role === 'user'
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                      : 'bg-gray-800 text-gray-100'
+                      : theme === 'dark' ? 'bg-gray-800 text-gray-100' : 'bg-gray-200 text-gray-900'
                   }`}
                 >
                   <p className="text-sm leading-relaxed">{message.content}</p>
@@ -179,8 +186,10 @@ export default function ChatAssistant() {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-800 p-3 rounded-2xl">
-                  <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
+                <div className={theme === 'dark' ? 'bg-gray-800 p-3 rounded-2xl' : 'bg-gray-200 p-3 rounded-2xl'}>
+                  <Loader2 className={`w-5 h-5 animate-spin ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`} />
                 </div>
               </div>
             )}
@@ -189,7 +198,9 @@ export default function ChatAssistant() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-gray-700 p-4">
+          <div className={`border-t p-4 ${
+            theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
+          }`}>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -198,7 +209,11 @@ export default function ChatAssistant() {
                 onKeyPress={handleKeyPress}
                 placeholder="Задайте вопрос..."
                 disabled={isLoading}
-                className="flex-1 px-4 py-2 border border-gray-700 rounded-full focus:outline-none focus:border-blue-500 disabled:bg-gray-800 bg-gray-800 text-gray-100 placeholder-gray-500"
+                className={`flex-1 px-4 py-2 border rounded-full focus:outline-none focus:border-blue-500 ${
+                  theme === 'dark'
+                    ? 'border-gray-700 disabled:bg-gray-800 bg-gray-800 text-gray-100 placeholder-gray-500'
+                    : 'border-gray-300 disabled:bg-gray-200 bg-white text-gray-900 placeholder-gray-400'
+                }`}
               />
               <button
                 onClick={handleSend}
@@ -208,7 +223,9 @@ export default function ChatAssistant() {
                 <Send className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2 text-center">
+            <p className={`text-xs mt-2 text-center ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
               Powered by Gemini AI
             </p>
           </div>

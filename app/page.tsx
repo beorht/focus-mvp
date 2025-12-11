@@ -3,12 +3,14 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
+import { useThemeStore } from '@/store/useThemeStore'
 import { ArrowRight, Sparkles, Brain, Target, Rocket } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function Home() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
+  const theme = useThemeStore((state) => state.theme)
 
   const handleStartJourney = () => {
     addLog('USER_ACTION', 'User clicked "Start Journey" button')
@@ -28,7 +30,11 @@ export default function Home() {
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6"
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6 ${
+              theme === 'dark'
+                ? 'bg-blue-100 text-blue-700'
+                : 'bg-blue-200 text-blue-900'
+            }`}
           >
             <Sparkles className="w-4 h-4" />
             AI-Powered Career Guidance
@@ -51,7 +57,9 @@ export default function Home() {
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            className="text-xl text-gray-300 mb-4"
+            className={`text-xl mb-4 ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+            }`}
           >
             Find Optimal Career Using Science
           </motion.p>
@@ -59,7 +67,9 @@ export default function Home() {
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-            className="text-lg text-gray-400 max-w-2xl mx-auto"
+            className={`text-lg max-w-2xl mx-auto ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}
           >
             AI-навигатор профессий для рынка Узбекистана. Персональный roadmap карьерного роста на основе анализа ваших интересов и способностей.
           </motion.p>
@@ -70,46 +80,58 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05, y: -5 }}
-            style={{ background: '#1d1d1d' }}
-            className="p-6 rounded-xl shadow-sm border border-gray-800 cursor-pointer"
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EFF4D8' }}
+            className={`p-6 rounded-xl shadow-sm cursor-pointer ${
+              theme === 'dark' ? 'border border-gray-800' : 'border border-gray-300'
+            }`}
           >
-            <div className="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
-              <Brain className="w-6 h-6 text-blue-400" />
+            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
+              theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-200'
+            }`}>
+              <Brain className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`} />
             </div>
-            <h3 className="font-semibold text-white mb-2">AI-Анализ</h3>
-            <p className="text-gray-400 text-sm">Gemini 2.5 Flash анализирует ваш психотип и интересы</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI-Анализ</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Gemini 2.5 Flash анализирует ваш психотип и интересы</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ duration: 1, delay: 1.0, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05, y: -5 }}
-            style={{ background: '#1d1d1d' }}
-            className="p-6 rounded-xl shadow-sm border border-gray-800 cursor-pointer"
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EFF4D8' }}
+            className={`p-6 rounded-xl shadow-sm cursor-pointer ${
+              theme === 'dark' ? 'border border-gray-800' : 'border border-gray-300'
+            }`}
           >
-            <div className="w-12 h-12 bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
-              <Target className="w-6 h-6 text-purple-400" />
+            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
+              theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-200'
+            }`}>
+              <Target className={`w-6 h-6 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-700'}`} />
             </div>
-            <h3 className="font-semibold text-white mb-2">Персональный Roadmap</h3>
-            <p className="text-gray-400 text-sm">Junior → Middle → Senior с конкретными навыками</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Персональный Roadmap</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Junior → Middle → Senior с конкретными навыками</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, filter: "blur(10px)", y: 30 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05, y: -5 }}
-            style={{ background: '#1d1d1d' }}
-            className="p-6 rounded-xl shadow-sm border border-gray-800 cursor-pointer"
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EFF4D8' }}
+            className={`p-6 rounded-xl shadow-sm cursor-pointer ${
+              theme === 'dark' ? 'border border-gray-800' : 'border border-gray-300'
+            }`}
           >
-            <div className="w-12 h-12 bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
-              <Rocket className="w-6 h-6 text-green-400" />
+            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
+              theme === 'dark' ? 'bg-green-900/30' : 'bg-green-200'
+            }`}>
+              <Rocket className={`w-6 h-6 ${theme === 'dark' ? 'text-green-400' : 'text-green-700'}`} />
             </div>
-            <h3 className="font-semibold text-white mb-2">Рынок Узбекистана</h3>
-            <p className="text-gray-400 text-sm">Зарплаты, курсы и вакансии актуальные для UZ</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Рынок Узбекистана</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Зарплаты, курсы и вакансии актуальные для UZ</p>
           </motion.div>
         </div>
 
@@ -138,12 +160,14 @@ export default function Home() {
           transition={{ duration: 0.8, delay: 1.6, ease: "easeOut" }}
           className="mt-16 text-center"
         >
-          <p className="text-sm text-gray-400 mb-3">Powered by</p>
-          <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-300">
-            <span className="bg-gray-800 px-3 py-1 rounded-full">Next.js 14</span>
-            <span className="bg-gray-800 px-3 py-1 rounded-full">Gemini 2.5 Flash</span>
-            <span className="bg-gray-800 px-3 py-1 rounded-full">Tailwind CSS</span>
-            <span className="bg-gray-800 px-3 py-1 rounded-full">TypeScript</span>
+          <p className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Powered by</p>
+          <div className={`flex flex-wrap justify-center gap-4 text-xs ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+          }`}>
+            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>Next.js 14</span>
+            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>Gemini 2.5 Flash</span>
+            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>Tailwind CSS</span>
+            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>TypeScript</span>
           </div>
         </motion.div>
       </div>
