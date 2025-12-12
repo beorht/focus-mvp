@@ -4,19 +4,21 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
 import { useThemeStore } from '@/store/useThemeStore'
+import { useTranslation } from '@/hooks/useTranslation'
 import { Brain, Sparkles, Zap, Target } from 'lucide-react'
 
 export default function AnalyzePage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
   const theme = useThemeStore((state) => state.theme)
+  const { t } = useTranslation()
   const [stage, setStage] = useState(0)
 
   const stages = [
-    { icon: Brain, text: 'Анализируем психотип...', duration: 2000 },
-    { icon: Sparkles, text: 'Обрабатываем интересы...', duration: 2000 },
-    { icon: Target, text: 'Подбираем профессию...', duration: 2000 },
-    { icon: Zap, text: 'Генерируем roadmap...', duration: 2000 }
+    { icon: Brain, textKey: 'analyze.step2', duration: 2000 },
+    { icon: Sparkles, textKey: 'analyze.step1', duration: 2000 },
+    { icon: Target, textKey: 'analyze.step3', duration: 2000 },
+    { icon: Zap, textKey: 'analyze.step4', duration: 2000 }
   ]
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function AnalyzePage() {
         // Animate through stages
         for (let i = 0; i < stages.length; i++) {
           setStage(i)
-          addLog('INFO', stages[i].text)
+          addLog('INFO', `Stage ${i + 1}/${stages.length}`)
           await new Promise(resolve => setTimeout(resolve, stages[i].duration))
         }
 
@@ -140,12 +142,12 @@ export default function AnalyzePage() {
         <h2 className={`text-3xl font-bold mb-4 ${
           theme === 'dark' ? 'text-white' : 'text-gray-900'
         }`}>
-          Анализируем данные
+          {t('analyze.title')}
         </h2>
         <p className={`text-xl mb-8 ${
           theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
         }`}>
-          {stages[stage]?.text || 'Подготовка...'}
+          {t(stages[stage]?.textKey || 'analyze.step1')}
         </p>
 
         {/* Progress Dots */}

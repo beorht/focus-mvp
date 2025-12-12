@@ -4,6 +4,7 @@ import "./globals.css";
 import LogConsole from "@/components/LogConsole";
 import ChatAssistant from "@/components/ChatAssistant";
 import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,8 +34,11 @@ export default function RootLayout({
           <LogConsole />
         </div>
 
-        {/* Global Theme Toggle */}
-        <ThemeToggle />
+        {/* Global Controls */}
+        <div className="fixed top-4 right-4 flex items-center gap-3 z-50">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
 
         {/* Global Chat Assistant (BONUS 1) */}
         <ChatAssistant />

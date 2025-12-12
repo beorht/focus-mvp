@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
 import { useThemeStore } from '@/store/useThemeStore'
+import { useTranslation } from '@/hooks/useTranslation'
 import { ArrowRight, Sparkles, Brain, Target, Rocket } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -11,6 +12,7 @@ export default function Home() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
   const theme = useThemeStore((state) => state.theme)
+  const { t } = useTranslation()
 
   const handleStartJourney = () => {
     addLog('USER_ACTION', 'User clicked "Start Journey" button')
@@ -37,7 +39,7 @@ export default function Home() {
             }`}
           >
             <Sparkles className="w-4 h-4" />
-            AI-Powered Career Guidance
+            {t('home.badge')}
           </motion.div>
           <motion.div
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
@@ -61,7 +63,7 @@ export default function Home() {
               theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
             }`}
           >
-            Find Optimal Career Using Science
+            {t('home.tagline')}
           </motion.p>
           <motion.p
             initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
@@ -71,7 +73,7 @@ export default function Home() {
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
-            AI-навигатор профессий для рынка Узбекистана. Персональный roadmap карьерного роста на основе анализа ваших интересов и способностей.
+            {t('home.description')}
           </motion.p>
         </div>
 
@@ -92,8 +94,8 @@ export default function Home() {
             }`}>
               <Brain className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`} />
             </div>
-            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI-Анализ</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Gemini 2.5 Flash анализирует ваш психотип и интересы</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('home.feature1Title')}</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.feature1Description')}</p>
           </motion.div>
 
           <motion.div
@@ -111,8 +113,8 @@ export default function Home() {
             }`}>
               <Target className={`w-6 h-6 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-700'}`} />
             </div>
-            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Персональный Roadmap</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Junior → Middle → Senior с конкретными навыками</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('home.feature2Title')}</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.feature2Description')}</p>
           </motion.div>
 
           <motion.div
@@ -130,8 +132,8 @@ export default function Home() {
             }`}>
               <Rocket className={`w-6 h-6 ${theme === 'dark' ? 'text-green-400' : 'text-green-700'}`} />
             </div>
-            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Рынок Узбекистана</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Зарплаты, курсы и вакансии актуальные для UZ</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('home.feature3Title')}</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.feature3Description')}</p>
           </motion.div>
         </div>
 
@@ -148,7 +150,7 @@ export default function Home() {
             whileTap={{ scale: 0.98 }}
             className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg flex items-center gap-2"
           >
-            Start Journey
+            {t('home.startButton')}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.button>
         </motion.div>
@@ -160,7 +162,7 @@ export default function Home() {
           transition={{ duration: 0.8, delay: 1.6, ease: "easeOut" }}
           className="mt-16 text-center"
         >
-          <p className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Powered by</p>
+          <p className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.poweredBy')}</p>
           <div className={`flex flex-wrap justify-center gap-4 text-xs ${
             theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
           }`}>

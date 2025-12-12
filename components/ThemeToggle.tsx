@@ -28,7 +28,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed top-6 right-6 md:right-[37%] z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all"
+      className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all"
       style={{
         background: theme === 'dark'
           ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'

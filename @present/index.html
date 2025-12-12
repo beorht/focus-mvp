@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.O.C.U.S - Find Optimal Career Using Science</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css">
+    <style>
+        :root {
+            --focus-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --focus-blue: #667eea;
+            --focus-purple: #764ba2;
+        }
+
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            background: var(--focus-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            text-transform: none;
+        }
+
+        .reveal h1 {
+            font-size: 3em;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal h2 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal h3 {
+            font-size: 2em;
+        }
+
+        .reveal section {
+            text-align: left;
+            padding: 20px;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        .reveal .subtitle {
+            color: #999;
+            font-size: 1.5em;
+            margin-top: -20px;
+        }
+
+        .reveal ul {
+            margin-left: 0;
+        }
+
+        .reveal li {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .reveal strong {
+            color: var(--focus-blue);
+        }
+
+        .stats-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid var(--focus-blue);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .feature-box {
+            background: rgba(118, 75, 162, 0.1);
+            border: 2px solid var(--focus-purple);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .checkmark {
+            color: #4ade80;
+            margin-right: 10px;
+        }
+
+        .cross {
+            color: #f87171;
+            margin-right: 10px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--focus-gradient);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .roadmap-phase {
+            background: rgba(118, 75, 162, 0.15);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid var(--focus-purple);
+        }
+
+        .reveal .slide-number {
+            background: var(--focus-gradient);
+            color: white;
+        }
+
+        .demo-highlight {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .metric {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: var(--focus-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tech-item {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .fragment.fade-in-then-semi-out.visible:not(.current-fragment) {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- СЛАЙД 1: Титульный -->
+            <section class="title-slide" data-transition="zoom">
+                <h1>F.O.C.U.S</h1>
+                <p class="subtitle">Find Optimal Career Using Science</p>
+                <p style="margin-top: 60px; font-size: 1.3em;">Персональный карьерный навигатор<br>с искусственным интеллектом</p>
+                <p style="margin-top: 40px; color: #666;">Для рынка труда Узбекистана</p>
+            </section>
+
+            <!-- СЛАЙД 2: Проблема -->
+            <section data-transition="slide">
+                <h2>Проблема</h2>
+                <div class="fragment fade-in">
+                    <p><strong>Давайте честно:</strong></p>
+                    <p>Каждый год тысячи выпускников в Узбекистане выбирают профессию наугад. Родители настаивают на одном, друзья советуют другое, а в итоге молодой человек тратит годы на обучение специальности, которая ему не подходит.</p>
+                </div>
+
+                <div class="stats-box fragment fade-up">
+                    <p><strong>Цифры:</strong></p>
+                    <ul>
+                        <li><span class="metric">60%</span> студентов жалеют о выборе специальности</li>
+                        <li><span class="metric">40%</span> работают не по профессии после выпуска</li>
+                        <li>Средний человек меняет профессию <span class="metric">3-4</span> раза в жизни</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 3: Почему так? -->
+            <section data-transition="slide">
+                <h2>Почему так происходит?</h2>
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>Потому что у нас нет персональной профориентации:</strong></p>
+                        <ul>
+                            <li>❌ Тесты в школах устарели</li>
+                            <li>❌ Карьерные консультанты дороги и редки</li>
+                            <li>❌ Общие советы в интернете не учитывают вашу личность</li>
+                            <li>❌ Нет связи с реальным рынком труда Узбекистана</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 4: Решение -->
+            <section data-transition="convex">
+                <h2>Решение: F.O.C.U.S</h2>
+                <p class="fragment fade-in"><strong>Ваш личный карьерный навигатор с искусственным интеллектом</strong></p>
+
+                <div class="fragment fade-up">
+                    <p>Вы отвечаете на несколько вопросов о себе, и через <strong>5 минут</strong> получаете:</p>
+                    <ol>
+                        <li class="fragment fade-in-then-semi-out">✨ <strong>Подходящую профессию</strong> — на основе научного анализа</li>
+                        <li class="fragment fade-in-then-semi-out">💰 <strong>Реальные зарплаты</strong> — сколько платят в Узбекистане</li>
+                        <li class="fragment fade-in-then-semi-out">🗺️ <strong>План развития</strong> — что учить, где учиться, в каком порядке</li>
+                        <li class="fragment fade-in-then-semi-out">📚 <strong>Учебные материалы</strong> — курсы, статьи, видео</li>
+                        <li class="fragment fade-in-then-semi-out">💼 <strong>Актуальные вакансии</strong> — где искать первую работу</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 5: Как это работает -->
+            <section data-transition="slide">
+                <h2>Как это работает?</h2>
+                <div class="fragment fade-in">
+                    <p>Мы используем <strong>искусственный интеллект от Google — Gemini 2.5 Flash</strong></p>
+                    <p>Он анализирует ваши ответы, сравнивает с психологическими моделями <strong>Big Five</strong> и <strong>RIASEC</strong>, и подбирает профессию, которая подходит именно вам.</p>
+                </div>
+
+                <div class="feature-box fragment fade-up">
+                    <p><strong>Простыми словами:</strong></p>
+                    <p>Это как опытный карьерный консультант, который знает тысячи профессий, понимает психологию и следит за рынком труда — но доступен <strong>бесплатно, 24/7, на вашем телефоне.</strong></p>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 6: Три шага -->
+            <section data-transition="slide">
+                <h2>Три простых шага</h2>
+
+                <div class="fragment fade-right" style="margin: 30px 0;">
+                    <span class="step-number">1</span>
+                    <strong>Тест</strong><br>
+                    <p style="margin-left: 55px;">Отвечаете на 15-20 вопросов о ваших интересах и способностях. Это займет 5-7 минут.</p>
+                </div>
+
+                <div class="fragment fade-right" style="margin: 30px 0;">
+                    <span class="step-number">2</span>
+                    <strong>Анализ</strong><br>
+                    <p style="margin-left: 55px;">Искусственный интеллект обрабатывает ваши ответы и подбирает профессию из сотен вариантов.</p>
+                </div>
+
+                <div class="fragment fade-right" style="margin: 30px 0;">
+                    <span class="step-number">3</span>
+                    <strong>Результаты</strong><br>
+                    <p style="margin-left: 55px;">Вы получаете персональную дорожную карту: от новичка до профессионала.</p>
+                </div>
+
+                <p class="fragment fade-in" style="margin-top: 40px; text-align: center;">
+                    <strong>Бонус:</strong> AI-ассистент ответит на все ваши вопросы о профессии
+                </p>
+            </section>
+
+            <!-- СЛАЙД 7: Что особенного -->
+            <section data-transition="slide">
+                <h2>Почему F.O.C.U.S лучше?</h2>
+
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>1. Заточен под Узбекистан</strong></p>
+                        <p>"Стань Backend-разработчиком со знанием PHP, потому что в Ташкенте <strong>200 открытых вакансий</strong> с зарплатой <strong>8-15 млн сум</strong>"</p>
+                    </div>
+                </div>
+
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>2. Основан на науке</strong></p>
+                        <p>Психологические модели Big Five и RIASEC — те же, что в западных университетах</p>
+                    </div>
+                </div>
+
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>3. Персональный подход</strong></p>
+                        <p>Учитываем ваш стиль обучения, темперамент и предпочтения</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 8: Прозрачность -->
+            <section data-transition="slide">
+                <h2>Прозрачность и обновления</h2>
+
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>4. Прозрачность</strong></p>
+                        <p>Вы видите реальные запросы к AI. Это не "чёрная магия", а понятная технология.</p>
+                    </div>
+                </div>
+
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>5. Постоянное обновление</strong></p>
+                        <p>Рынок труда меняется. Наш AI отслеживает тренды и обновляет рекомендации.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 9: Для кого это -->
+            <section data-transition="slide">
+                <h2>Для кого это?</h2>
+
+                <div class="fragment fade-in">
+                    <ul>
+                        <li>👨‍🎓 <strong>Школьники 9-11 классов</strong> — выбирают, в какой вуз поступать</li>
+                        <li>📖 <strong>Студенты 1-2 курсов</strong> — сомневаются в выборе</li>
+                        <li>🎯 <strong>Выпускники без опыта</strong> — не знают, с чего начать</li>
+                        <li>🔄 <strong>Люди, планирующие смену профессии</strong> — боятся ошибиться снова</li>
+                    </ul>
+                </div>
+
+                <p class="fragment fade-up" style="margin-top: 40px; text-align: center; font-size: 1.3em;">
+                    <strong>Итого:</strong> Миллионы людей в Узбекистане, которым нужна помощь с выбором карьеры
+                </p>
+            </section>
+
+            <!-- СЛАЙД 10: Демонстрация -->
+            <section data-transition="slide">
+                <h2>Демонстрация</h2>
+
+                <div class="demo-highlight fragment fade-in">
+                    <p><strong>Сейчас я покажу, как это работает вживую</strong></p>
+                </div>
+
+                <div class="fragment fade-in" style="margin-top: 30px;">
+                    <ol>
+                        <li>Главная страница → "Начать путешествие"</li>
+                        <li>Простые вопросы: "Что тебя интересует?", "Как ты любишь работать?"</li>
+                        <li><strong>Терминал справа</strong> — показывает технические процессы в реальном времени</li>
+                        <li>Анализ с красивой анимацией</li>
+                        <li>Результаты: профессия, процент совпадения, зарплата, дорожная карта</li>
+                    </ol>
+                </div>
+
+                <p class="fragment fade-up" style="margin-top: 30px; text-align: center;">
+                    <strong>Пример результата:</strong> Frontend-разработчик | 95% совпадение | 5-15 млн сум/месяц
+                </p>
+            </section>
+
+            <!-- СЛАЙД 11: Технологии -->
+            <section data-transition="slide">
+                <h2>Что под капотом?</h2>
+
+                <div class="tech-stack fragment fade-in">
+                    <div class="tech-item">
+                        <strong>AI</strong><br>
+                        Google Gemini 2.5 Flash
+                    </div>
+                    <div class="tech-item">
+                        <strong>Frontend</strong><br>
+                        Next.js 16 + TypeScript
+                    </div>
+                    <div class="tech-item">
+                        <strong>Дизайн</strong><br>
+                        Адаптивный (mobile-first)
+                    </div>
+                    <div class="tech-item">
+                        <strong>База</strong><br>
+                        500+ профессий
+                    </div>
+                    <div class="tech-item">
+                        <strong>Интеграции</strong><br>
+                        hh.uz, YouTube
+                    </div>
+                    <div class="tech-item">
+                        <strong>Инновация</strong><br>
+                        Ротация API ключей
+                    </div>
+                </div>
+
+                <p class="fragment fade-up" style="margin-top: 30px; text-align: center;">
+                    <strong>Результат:</strong> Бесперебойная работа без лимитов
+                </p>
+            </section>
+
+            <!-- СЛАЙД 12: Бизнес-модель -->
+            <section data-transition="slide">
+                <h2>Бизнес-модель</h2>
+
+                <div class="roadmap-phase fragment fade-in">
+                    <p><strong>Этап 1: Бесплатная база (0-6 месяцев)</strong></p>
+                    <p>Базовый тест и рекомендации бесплатны. Цель — 10,000 пользователей</p>
+                </div>
+
+                <div class="roadmap-phase fragment fade-in">
+                    <p><strong>Этап 2: Премиум (6-12 месяцев)</strong></p>
+                    <ul>
+                        <li>Расширенный тест (60 вопросов)</li>
+                        <li>Персональные консультации с AI</li>
+                        <li>Трекинг прогресса</li>
+                        <li><strong>Цена: 50,000 - 100,000 сум/месяц</strong></li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase fragment fade-in">
+                    <p><strong>Этап 3: B2B (12+ месяцев)</strong></p>
+                    <p>Лицензии для школ, корпоративные тесты, партнерства, реклама вакансий</p>
+                </div>
+
+                <p class="fragment fade-up" style="margin-top: 30px; text-align: center; font-size: 1.3em;">
+                    <strong>Прогноз:</strong> При 50,000 пользователей → <span class="metric">$100,000+</span> годовой выручки
+                </p>
+            </section>
+
+            <!-- СЛАЙД 13: Конкурентные преимущества -->
+            <section data-transition="slide">
+                <h2>Конкурентные преимущества</h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="fragment fade-in">
+                        <h3 style="font-size: 1.3em;">Зарубежные платформы</h3>
+                        <ul>
+                            <li><span class="cross">❌</span> Не учитывают Узбекистан</li>
+                            <li><span class="cross">❌</span> Дорогие ($20-50/мес)</li>
+                            <li><span class="cross">❌</span> Только английский</li>
+                        </ul>
+
+                        <h3 style="font-size: 1.3em; margin-top: 30px;">Местные решения</h3>
+                        <ul>
+                            <li><span class="cross">❌</span> Устаревшие тесты</li>
+                            <li><span class="cross">❌</span> Нет персонализации</li>
+                            <li><span class="cross">❌</span> Нет связи с рынком</li>
+                        </ul>
+                    </div>
+
+                    <div class="fragment fade-in">
+                        <h3 style="font-size: 1.3em;">F.O.C.U.S</h3>
+                        <ul>
+                            <li><span class="checkmark">✅</span> Для Узбекистана</li>
+                            <li><span class="checkmark">✅</span> Бесплатная база</li>
+                            <li><span class="checkmark">✅</span> Русский + узбекский</li>
+                            <li><span class="checkmark">✅</span> Актуальные данные</li>
+                            <li><span class="checkmark">✅</span> Современный AI</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 14: Дорожная карта -->
+            <section data-transition="slide">
+                <h2>Дорожная карта</h2>
+
+                <div class="roadmap-phase fragment fade-right">
+                    <p><strong>Ближайшие 3 месяца</strong></p>
+                    <ul>
+                        <li>Запуск MVP для публики</li>
+                        <li>Сбор обратной связи от 1,000 пользователей</li>
+                        <li>Telegram-бот</li>
+                        <li>Узбекский язык</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase fragment fade-right">
+                    <p><strong>6 месяцев</strong></p>
+                    <ul>
+                        <li>Расширенный тест (60 вопросов)</li>
+                        <li>Мобильное приложение (iOS/Android)</li>
+                        <li>Партнерство с 3-5 университетами</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase fragment fade-right">
+                    <p><strong>12 месяцев</strong></p>
+                    <ul>
+                        <li>50,000+ активных пользователей</li>
+                        <li>Запуск премиум-подписки</li>
+                        <li>B2B продукт</li>
+                        <li>Экспансия в Казахстан и Кыргызстан</li>
+                    </ul>
+                </div>
+
+                <p class="fragment fade-up" style="margin-top: 30px; text-align: center; font-size: 1.3em;">
+                    <strong>Видение:</strong> Главная платформа профориентации в Центральной Азии
+                </p>
+            </section>
+
+            <!-- СЛАЙД 15: Социальное влияние -->
+            <section data-transition="slide">
+                <h2>Социальное влияние</h2>
+
+                <div class="fragment fade-in">
+                    <p><strong>Почему это важно для Узбекистана?</strong></p>
+
+                    <div class="stats-box">
+                        <p><strong>Проблема:</strong> Безработица среди молодежи из-за неправильного выбора профессии</p>
+                    </div>
+                </div>
+
+                <div class="fragment fade-in">
+                    <div class="feature-box">
+                        <p><strong>Решение:</strong> F.O.C.U.S помогает выбрать востребованную профессию ДО того, как потрачены годы на обучение</p>
+                    </div>
+                </div>
+
+                <div class="fragment fade-up">
+                    <p><strong>Влияние:</strong></p>
+                    <ul>
+                        <li>✨ Меньше разочарованных выпускников</li>
+                        <li>🎯 Больше квалифицированных специалистов</li>
+                        <li>📈 Рост экономики через правильное распределение талантов</li>
+                    </ul>
+                </div>
+
+                <p class="fragment fade-in" style="margin-top: 40px; text-align: center; font-size: 1.3em; font-style: italic;">
+                    "Каждый заслуживает профессию, которая приносит радость и достойный доход"
+                </p>
+            </section>
+
+            <!-- СЛАЙД 16: Призыв к действию -->
+            <section data-transition="zoom">
+                <h2>Призыв к действию</h2>
+
+                <div class="fragment fade-in">
+                    <p><strong>Что мы просим у вас сегодня?</strong></p>
+
+                    <ul style="margin-top: 30px;">
+                        <li>🏆 <strong>Жюри хакатона:</strong> Поддержите нас в финале</li>
+                        <li>💼 <strong>Инвесторы:</strong> Давайте обсудим партнерство</li>
+                        <li>🎓 <strong>Университеты:</strong> Запустим пилотный проект</li>
+                        <li>👥 <strong>Всем остальным:</strong> Попробуйте и поделитесь с друзьями</li>
+                    </ul>
+                </div>
+
+                <div class="contact-info fragment fade-up">
+                    <p><strong>Контакты:</strong></p>
+                    <p>Email: team@focus.uz</p>
+                    <p>Telegram: @focus_career</p>
+                    <p>Сайт: focus.uz</p>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 17: Ключевые метрики -->
+            <section data-transition="slide">
+                <h2>Ключевые метрики</h2>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 40px;">
+                    <div class="stats-box fragment fade-in">
+                        <p class="metric">5-7 мин</p>
+                        <p>Время прохождения теста</p>
+                    </div>
+                    <div class="stats-box fragment fade-in">
+                        <p class="metric">500+</p>
+                        <p>Профессий в базе</p>
+                    </div>
+                    <div class="stats-box fragment fade-in">
+                        <p class="metric">95%</p>
+                        <p>Точность совпадения</p>
+                    </div>
+                    <div class="stats-box fragment fade-in">
+                        <p class="metric">0 сум</p>
+                        <p>Базовая версия</p>
+                    </div>
+                    <div class="stats-box fragment fade-in">
+                        <p class="metric">50,000</p>
+                        <p>Пользователей за год</p>
+                    </div>
+                    <div class="stats-box fragment fade-in">
+                        <p class="metric">3 страны</p>
+                        <p>Планы экспансии</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- СЛАЙД 18: Вопросы -->
+            <section class="title-slide" data-transition="zoom">
+                <h1>Спасибо за внимание!</h1>
+                <p style="margin-top: 60px; font-size: 1.5em;">Готов ответить на ваши вопросы</p>
+                <p style="margin-top: 40px; font-size: 1.2em; color: #667eea;">
+                    F.O.C.U.S — Find Optimal Career Using Science
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            // Формат 16:9
+            width: 1920,
+            height: 1080,
+
+            // Отступы
+            margin: 0.04,
+
+            // Минимальный и максимальный масштаб
+            minScale: 0.2,
+            maxScale: 2.0,
+
+            // Переходы
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+            transitionSpeed: 'default', // default/fast/slow
+
+            // Параллакс фон
+            parallaxBackgroundImage: '',
+            parallaxBackgroundSize: '',
+
+            // Включить хэш в URL
+            hash: true,
+
+            // Показывать номера слайдов
+            slideNumber: true,
+
+            // Центрировать слайды
+            center: true,
+
+            // Включить управление клавиатурой
+            keyboard: true,
+
+            // Включить управление касанием
+            touch: true,
+
+            // Зациклить презентацию
+            loop: false,
+
+            // Автоматическое воспроизведение
+            autoSlide: 0,
+
+            // Показывать стрелки навигации
+            controls: true,
+
+            // Показывать индикатор прогресса
+            progress: true,
+
+            // Включить фрагменты (анимации)
+            fragments: true,
+
+            // Включить обзорный режим (ESC)
+            overview: true,
+
+            // Вертикальное центрирование
+            center: true,
+
+            // Включить режим презентации (S)
+            showNotes: false,
+
+            // Автоматическая анимация
+            autoAnimate: true,
+            autoAnimateDuration: 1.0,
+
+            // Плагины
+            plugins: []
+        });
+    </script>
+</body>
+</html>

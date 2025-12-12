@@ -35,12 +35,15 @@ async function generateWithKeyRotation(
     const result = await model.generateContent(prompt)
     return result.response.text()
   } catch (error: any) {
-    const isQuotaError = error.message?.includes('quota') ||
-                         error.message?.includes('429') ||
-                         error.status === 429
+    const isRetryableError = error.message?.includes('quota') ||
+                             error.message?.includes('429') ||
+                             error.message?.includes('503') ||
+                             error.message?.includes('overloaded') ||
+                             error.status === 429 ||
+                             error.status === 503
 
-    if (isQuotaError && attemptNumber < apiKeys.length - 1) {
-      debugInfo.push(`Key #${currentKeyIndex + 1} quota exceeded, trying next key...`)
+    if (isRetryableError && attemptNumber < apiKeys.length - 1) {
+      debugInfo.push(`Key #${currentKeyIndex + 1} failed (${error.status || 'unknown'}), trying next key...`)
       return generateWithKeyRotation(prompt, debugInfo, attemptNumber + 1)
     }
 
@@ -65,7 +68,10 @@ export async function POST(request: NextRequest) {
       priority,
       workStyle,
       psychotype,
-      preferred_learning_style
+      preferred_learning_style,
+      riasec_scores,
+      riasec_percentages,
+      holland_code
     } = body
 
     // Create debug info for logs
@@ -75,8 +81,21 @@ export async function POST(request: NextRequest) {
 
     const interestsString = interests.join(', ')
 
-    // Generate the learning module (profession determination is done within the same prompt)
-    const prompt = `Ты — профессиональный преподаватель, карьерный консультант и инженер ИИ для рынка Узбекистана. Проанализируй данные пользователя, подбери идеальную профессию и сгенерируй персонализированный учебный модуль.
+    // Format RIASEC data for prompt
+    const riasecInfo = riasec_scores ? `
+* RIASEC профиль (код Холланда):
+  - Holland Code: ${holland_code}
+  - Realistic (Реалистичный): ${riasec_scores.R}/40 (${riasec_percentages.R}%)
+  - Investigative (Исследовательский): ${riasec_scores.I}/40 (${riasec_percentages.I}%)
+  - Artistic (Артистический): ${riasec_scores.A}/40 (${riasec_percentages.A}%)
+  - Social (Социальный): ${riasec_scores.S}/40 (${riasec_percentages.S}%)
+  - Enterprising (Предприимчивый): ${riasec_scores.E}/30 (${riasec_percentages.E}%)
+  - Conventional (Стандартный): ${riasec_scores.C}/35 (${riasec_percentages.C}%)
+
+ВАЖНО: Используй RIASEC профиль как ГЛАВНЫЙ фактор при подборе профессии. Код Холланда показывает наиболее подходящие типы профессий для человека.` : ''
+
+    // Generate multiple profession recommendations
+    const prompt = `Ты — профессиональный преподаватель, карьерный консультант и инженер ИИ для рынка Узбекистана. Проанализируй данные пользователя, используя RIASEC психометрический тест (код Холланда), подбери 3-5 наиболее подходящих профессий и сгенерируй краткую информацию для каждой.
 
 Входные данные пользователя:
 
@@ -86,72 +105,60 @@ export async function POST(request: NextRequest) {
 * Приоритет: ${priority}
 * Стиль работы: ${workStyle}
 * Психотип: ${psychotype}
-* Стиль обучения: ${preferred_learning_style || 'смешанный'} — «визуальный», «практический», «текстовый», «смешанный»
+* Стиль обучения: ${preferred_learning_style || 'смешанный'} — «визуальный», «практический», «текстовый», «смешанный»${riasecInfo}
 
 ЗАДАЧИ:
-1. Проанализируй интересы, уровень, приоритеты и психотип пользователя
-2. Подбери наиболее подходящую профессию для рынка Узбекистана
-3. Сгенерируй персонализированный учебный модуль
+1. ГЛАВНОЕ: Проанализируй RIASEC профиль (Holland Code) - это САМЫЙ ВАЖНЫЙ критерий для подбора профессий
+   - Используй топ-3 категории (Holland Code) для определения подходящих профессий
+   - Realistic (R) → технические, практические профессии (инженер, программист, механик)
+   - Investigative (I) → научные, аналитические профессии (аналитик данных, исследователь, ученый)
+   - Artistic (A) → творческие профессии (дизайнер, художник, контент-креатор)
+   - Social (S) → работа с людьми (учитель, HR, психолог, менеджер по работе с клиентами)
+   - Enterprising (E) → бизнес, лидерство (предприниматель, менеджер, продажи)
+   - Conventional (C) → организация, администрирование (бухгалтер, администратор, аналитик)
+2. Учти уровень знаний, приоритеты и стиль обучения для персонализации
+3. Подбери 3-5 наиболее подходящих профессий для рынка Узбекистана
+4. Для каждой профессии сгенерируй краткую roadmap с указанием времени в ЧАСАХ
 
 Требование к выходу — простой, структурированный JSON. Формат выдачи:
 
 {
-  "profession": "Название подобранной профессии на русском",
-  "match": 95,
-  "salary_uz_sum": "5,000,000 - 15,000,000 сум/месяц",
-  "introduction": "2-3 предложения — почему эта профессия подходит, связать с psychotype и interests",
-  "topics": [
+  "professions": [
     {
-      "title": "Название темы",
-      "summary": "Краткий конспект (3-6 предложений)",
-      "examples": ["Пример 1", "Пример 2"],
-      "tasks": [
+      "profession": "Название профессии на русском",
+      "match": 95,
+      "salary_uz_sum": "5,000,000 - 15,000,000 сум/месяц",
+      "introduction": "2-3 предложения — почему эта профессия подходит, ОБЯЗАТЕЛЬНО упомяни Holland Code и топ RIASEC категории",
+      "topics": [
         {
-          "title": "Базовое задание",
-          "description": "Описание задания с шагами"
-        },
-        {
-          "title": "Продвинутое задание",
-          "description": "Более сложное задание"
+          "title": "Название темы",
+          "summary": "Краткий конспект (2-3 предложения)",
+          "hours": 20,
+          "examples": ["Пример 1", "Пример 2"],
+          "tasks": [
+            {
+              "title": "Задание",
+              "description": "Описание"
+            }
+          ]
         }
       ],
-      "questions": [
-        "Контрольный вопрос 1?",
-        "Контрольный вопрос 2?",
-        "Контрольный вопрос 3?"
-      ]
+      "totalHours": 120
     }
-  ],
-  "skill_gaps": [
-    "Навык 1 (самый важный)",
-    "Навык 2",
-    "Навык 3"
-  ],
-  "learning_plan": {
-    "order": ["Тема 1", "Тема 2", "Тема 3"],
-    "time_estimates": {
-      "Тема 1": "2 недели",
-      "Тема 2": "3 недели",
-      "Тема 3": "4 недели"
-    }
-  },
-  "resources": [],
-  "motivation": "2-3 предложения с советом, как удерживать мотивацию"
+  ]
 }
 
-ВАЖНО: Поле "resources" оставь пустым массивом [] — реальные проверенные ресурсы (курсы, статьи, видео) будут автоматически добавлены из базы данных на основе подобранной профессии.
-
-Требования к стилю и длине:
-
-* Язык простой и дружелюбный, без академического жаргона.
-* Каждый конспект не более 6 предложений.
-* Практические задания чёткие, короткие инструкции (3–6 шагов).
-* Максимум лаконичности: весь модуль для уровня «начинающий» — ~600–900 слов; для «средний/продвинутый» — до 1200 слов.
-* Учитывай психотип: если психотип интроверт/аналитик — предлагай больше самостоятельных практик и чтения; если экстраверт/практик — включай коллаборативные задания и проекты.
-* Генерируй 3-8 тем в зависимости от уровня знаний.
-* Учитывай реалии рынка труда Узбекистана.
-
-Доп. условие: если в входных данных нет interests или psychotype, действуй разумно — используй типичный профиль для выбранной профессии и пометь это в introduction: «(профиль сгенерирован на основе типичных характеристик для профессии)».
+ВАЖНЫЕ ТРЕБОВАНИЯ:
+* Генерируй 3-5 профессий, отсортированных по убыванию match (самая подходящая первая)
+* Каждое поле "hours" должно содержать ЧИСЛО (не строку!) - количество часов на изучение темы
+* Поле "totalHours" - ЧИСЛО, сумма всех hours для всех topics
+* НЕ используй слова "недели", "месяцы" - только ЧАСЫ в числовом формате
+* Для начинающих: 80-150 часов общее время, 10-25 часов на тему
+* Для среднего уровня: 150-250 часов общее время, 20-40 часов на тему
+* Для продвинутых: 250-400 часов общее время, 30-60 часов на тему
+* Генерируй 4-6 тем в зависимости от уровня знаний
+* Учитывай реалии рынка труда Узбекистана
+* Язык простой и дружелюбный
 
 Выдай результат ТОЛЬКО в виде валидного JSON, без дополнительного текста, кода или markdown разметки.`
 
@@ -171,32 +178,41 @@ export async function POST(request: NextRequest) {
 
     const parsedData = JSON.parse(cleanedResponse)
 
-    // Заменяем сгенерированные ресурсы на реальные из базы данных
-    debugInfo.push('Replacing AI-generated resources with real database resources...')
-    const realResources = getResourcesForProfession(
-      parsedData.profession,
-      knowledge_level || 'начинающий',
-      parsedData.topics?.length || 3
-    )
+    // Process each profession and add real resources
+    debugInfo.push('Processing multiple profession recommendations...')
 
-    // Обновляем ресурсы и привязываем к темам
-    if (realResources.length > 0) {
-      parsedData.resources = realResources.map((resourceGroup, index) => {
-        const topicTitle = parsedData.topics?.[index]?.title || resourceGroup.topic
-        return {
-          ...resourceGroup,
-          topic: topicTitle
+    if (parsedData.professions && Array.isArray(parsedData.professions)) {
+      parsedData.professions = parsedData.professions.map((profession: any, index: number) => {
+        debugInfo.push(`Processing profession ${index + 1}: ${profession.profession}`)
+
+        // Add real resources from database
+        const realResources = getResourcesForProfession(
+          profession.profession,
+          knowledge_level || 'начинающий',
+          profession.topics?.length || 4
+        )
+
+        if (realResources.length > 0) {
+          profession.resources = realResources.map((resourceGroup: any, idx: number) => {
+            const topicTitle = profession.topics?.[idx]?.title || resourceGroup.topic
+            return {
+              ...resourceGroup,
+              topic: topicTitle
+            }
+          })
+          debugInfo.push(`  - Loaded ${realResources.length} resource groups`)
+        } else {
+          profession.resources = []
+          debugInfo.push(`  - Warning: No resources found for ${profession.profession}`)
         }
+
+        return profession
       })
-      debugInfo.push(`Loaded ${realResources.length} resource groups from database`)
-    } else {
-      debugInfo.push('Warning: No resources found in database for this profession')
     }
 
     const processingTime = Date.now() - startTime
 
-    debugInfo.push(`Learning module generated for: ${parsedData.profession}`)
-    debugInfo.push(`Topics count: ${parsedData.topics?.length || 0}`)
+    debugInfo.push(`Generated ${parsedData.professions?.length || 0} profession recommendations`)
     debugInfo.push('Analysis completed successfully')
 
     const apiKeys = getApiKeys()
@@ -220,32 +236,46 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('API Error:', error)
 
-    // If quota exceeded or API error, return mock data for testing
-    if (error.message?.includes('quota') || error.message?.includes('429')) {
+    // If quota exceeded, overloaded, or any API error, return mock data for testing
+    const shouldUseMock = error.message?.includes('quota') ||
+                          error.message?.includes('429') ||
+                          error.message?.includes('503') ||
+                          error.message?.includes('overloaded') ||
+                          error.message?.includes('Service Unavailable')
+
+    if (shouldUseMock) {
       const apiKeys = getApiKeys()
       const mockData = generateMockLearningModule(body)
 
-      // Заменяем mock ресурсы на реальные из базы
-      const realResources = getResourcesForProfession(
-        mockData.profession,
-        body.knowledge_level || 'начинающий',
-        mockData.topics?.length || 4
-      )
+      // Process each profession and add real resources
+      if (mockData.professions && Array.isArray(mockData.professions)) {
+        mockData.professions = mockData.professions.map((profession: any) => {
+          const realResources = getResourcesForProfession(
+            profession.profession,
+            body.knowledge_level || 'начинающий',
+            profession.topics?.length || 4
+          )
 
-      if (realResources.length > 0) {
-        mockData.resources = realResources.map((resourceGroup, index) => {
-          const topicTitle = mockData.topics?.[index]?.title || resourceGroup.topic
-          return {
-            ...resourceGroup,
-            topic: topicTitle
+          if (realResources.length > 0) {
+            profession.resources = realResources.map((resourceGroup: any, idx: number) => {
+              const topicTitle = profession.topics?.[idx]?.title || resourceGroup.topic
+              return {
+                ...resourceGroup,
+                topic: topicTitle
+              }
+            })
+          } else {
+            profession.resources = []
           }
+
+          return profession
         })
       }
 
-      debugInfo.push('MOCK MODE: All API keys quota exceeded, using fallback data')
+      debugInfo.push('MOCK MODE: API unavailable or quota exceeded, using fallback data')
+      debugInfo.push(`Error: ${error.message}`)
       debugInfo.push(`Tried ${apiKeys.length} API key(s)`)
-      debugInfo.push(`Generated mock module for profession: ${mockData.profession}`)
-      debugInfo.push(`Loaded ${realResources.length} real resource groups from database`)
+      debugInfo.push(`Generated ${mockData.professions?.length || 0} mock profession recommendations`)
 
       return NextResponse.json({
         success: true,
@@ -255,7 +285,7 @@ export async function POST(request: NextRequest) {
           request_id: requestId,
           timestamp: new Date().toISOString(),
           processing_time_ms: Date.now() - startTime,
-          ai_model: `Mock Data (All ${apiKeys.length} API keys exhausted)`,
+          ai_model: `Mock Data (API Error: ${error.message?.substring(0, 50) || 'Unknown'})`,
           api_keys_available: apiKeys.length,
           user_name: body.userName || 'Пользователь',
           psychotype: body.psychotype,
@@ -273,190 +303,125 @@ export async function POST(request: NextRequest) {
 }
 
 function generateMockLearningModule(userData: any) {
-  const interests = userData.interests || []
   const userName = userData.userName || 'Пользователь'
   const psychotype = userData.psychotype || 'ENFP (гибкий, адаптивный)'
-  const knowledgeLevel = userData.knowledge_level || 'начинающий'
-
-  // Determine profession based on interests
-  let profession = 'Frontend-разработчик'
-  if (interests.includes('design')) {
-    profession = 'UI/UX дизайнер'
-  } else if (interests.includes('data')) {
-    profession = 'Аналитик данных'
-  } else if (interests.includes('business')) {
-    profession = 'Продакт-менеджер'
-  } else if (interests.includes('creative')) {
-    profession = 'Контент-креатор'
-  }
 
   return {
-    profession: profession,
-    match: 92,
-    salary_uz_sum: '5,000,000 - 12,000,000 сум/месяц',
-    introduction: `Профессия ${profession} отлично подходит для вас, ${userName}! Ваш психотип ${psychotype} позволяет эффективно работать в этой области. Выбранные интересы (${interests.join(', ')}) идеально совпадают с требованиями профессии.`,
-    topics: [
+    professions: [
       {
-        title: 'Основы профессии',
-        summary: 'Введение в профессию. Изучение базовых концепций и терминологии. Понимание роли специалиста в команде. Знакомство с инструментами и технологиями. Первые шаги в практике.',
-        examples: [
-          'Изучение типичного рабочего дня специалиста',
-          'Обзор популярных инструментов и платформ'
-        ],
-        tasks: [
+        profession: 'Frontend-разработчик',
+        match: 92,
+        salary_uz_sum: '5,000,000 - 12,000,000 сум/месяц',
+        introduction: `Профессия Frontend-разработчик отлично подходит для вас! Ваш Holland Code показывает высокие результаты в категориях Realistic и Investigative, что идеально совпадает с техническими и аналитическими требованиями профессии.`,
+        topics: [
           {
-            title: 'Базовое задание',
-            description: '1. Изучите 3 статьи о профессии. 2. Составьте список из 10 ключевых терминов. 3. Напишите краткое резюме (200 слов) о том, что делает специалист.'
+            title: 'HTML и CSS основы',
+            summary: 'Изучение структуры веб-страниц с HTML и стилизации с CSS.',
+            hours: 25,
+            examples: ['Создание простой страницы-визитки', 'Верстка блога'],
+            tasks: [{ title: 'Сверстать лендинг', description: 'Создайте простую лендинг-страницу с навигацией' }]
           },
           {
-            title: 'Продвинутое задание',
-            description: '1. Проведите интервью с практикующим специалистом. 2. Создайте mind-map профессии. 3. Подготовьте презентацию на 5 минут.'
+            title: 'JavaScript основы',
+            summary: 'Программирование интерактивности на JavaScript.',
+            hours: 30,
+            examples: ['Калькулятор', 'To-Do список'],
+            tasks: [{ title: 'Создать калькулятор', description: 'Реализуйте базовый калькулятор' }]
+          },
+          {
+            title: 'React.js',
+            summary: 'Разработка современных веб-приложений с React.',
+            hours: 40,
+            examples: ['SPA приложение', 'Интернет-магазин'],
+            tasks: [{ title: 'Pet-проект на React', description: 'Создайте приложение для управления задачами' }]
+          },
+          {
+            title: 'Git и работа в команде',
+            summary: 'Версионный контроль и совместная разработка.',
+            hours: 15,
+            examples: ['Работа с GitHub', 'Pull requests'],
+            tasks: [{ title: 'Внести вклад в open-source', description: 'Сделайте PR в открытый проект' }]
           }
         ],
-        questions: [
-          'Какие основные обязанности у специалиста?',
-          'Какие инструменты наиболее популярны в этой сфере?',
-          'В чем ключевые отличия от смежных профессий?'
-        ]
+        totalHours: 110,
+        resources: []
       },
       {
-        title: 'Технические навыки',
-        summary: 'Освоение ключевых технических компетенций. Изучение современных инструментов и технологий. Практика на реальных примерах. Развитие профессиональных навыков. Подготовка к работе над проектами.',
-        examples: [
-          'Работа с профессиональными инструментами',
-          'Создание первого учебного проекта'
-        ],
-        tasks: [
+        profession: 'UI/UX дизайнер',
+        match: 88,
+        salary_uz_sum: '4,000,000 - 10,000,000 сум/месяц',
+        introduction: `UI/UX дизайн прекрасно подходит для вашего профиля! Высокие показатели в категориях Artistic и Social указывают на творческие способности и понимание потребностей пользователей.`,
+        topics: [
           {
-            title: 'Базовое задание',
-            description: '1. Установите необходимое ПО. 2. Пройдите вводный туториал. 3. Создайте простой проект по шаблону.'
+            title: 'Основы дизайна',
+            summary: 'Изучение принципов композиции, цвета и типографики.',
+            hours: 20,
+            examples: ['Анализ популярных приложений', 'Создание мудбордов'],
+            tasks: [{ title: 'Дизайн логотипа', description: 'Создайте логотип для вымышленной компании' }]
           },
           {
-            title: 'Продвинутое задание',
-            description: '1. Создайте проект с нуля. 2. Добавьте 3 функции. 3. Протестируйте и задокументируйте код.'
+            title: 'Figma',
+            summary: 'Работа в профессиональном инструменте для дизайна интерфейсов.',
+            hours: 25,
+            examples: ['Дизайн мобильного приложения', 'Веб-дизайн'],
+            tasks: [{ title: 'Макет приложения', description: 'Создайте макет для приложения доставки еды' }]
+          },
+          {
+            title: 'UX исследования',
+            summary: 'Методы исследования пользователей и создание user flow.',
+            hours: 30,
+            examples: ['Проведение интервью', 'Создание персон'],
+            tasks: [{ title: 'User research', description: 'Проведите исследование для реального продукта' }]
+          },
+          {
+            title: 'Прототипирование',
+            summary: 'Создание интерактивных прототипов и тестирование.',
+            hours: 20,
+            examples: ['Интерактивный прототип', 'A/B тестирование'],
+            tasks: [{ title: 'Прототип в Figma', description: 'Создайте кликабельный прототип' }]
           }
         ],
-        questions: [
-          'Какие технические инструменты вы освоили?',
-          'Как вы решали возникающие проблемы?',
-          'Что было самым сложным в процессе обучения?'
-        ]
+        totalHours: 95,
+        resources: []
       },
       {
-        title: 'Работа над проектами',
-        summary: 'Применение знаний на практике. Работа с реальными кейсами. Развитие навыков планирования. Управление временем и ресурсами. Презентация результатов работы.',
-        examples: [
-          'Разработка pet-проекта для портфолио',
-          'Участие в open-source проектах'
-        ],
-        tasks: [
+        profession: 'Аналитик данных',
+        match: 85,
+        salary_uz_sum: '6,000,000 - 14,000,000 сум/месяц',
+        introduction: `Аналитика данных соответствует вашему профилю RIASEC! Сильные стороны в категориях Investigative и Conventional говорят о склонности к исследованиям и систематической работе с информацией.`,
+        topics: [
           {
-            title: 'Базовое задание',
-            description: '1. Выберите простой проект. 2. Составьте план работы на неделю. 3. Реализуйте минимальную версию.'
+            title: 'Excel и Google Sheets',
+            summary: 'Работа с таблицами, формулы и визуализация данных.',
+            hours: 20,
+            examples: ['Анализ продаж', 'Создание дашбордов'],
+            tasks: [{ title: 'Анализ данных в Excel', description: 'Проанализируйте датасет продаж' }]
           },
           {
-            title: 'Продвинутое задание',
-            description: '1. Разработайте полноценный проект. 2. Добавьте документацию. 3. Опубликуйте на GitHub и подготовьте презентацию.'
-          }
-        ],
-        questions: [
-          'Как вы планируете работу над проектом?',
-          'Какие методологии разработки вы используете?',
-          'Как вы тестируете свою работу?'
-        ]
-      },
-      {
-        title: 'Профессиональное развитие',
-        summary: 'Построение карьеры в индустрии. Networking и сообщества. Поиск первой работы или стажировки. Подготовка портфолио. Развитие soft skills.',
-        examples: [
-          'Создание профессионального профиля на LinkedIn',
-          'Участие в профессиональных мероприятиях'
-        ],
-        tasks: [
-          {
-            title: 'Базовое задание',
-            description: '1. Создайте резюме. 2. Оформите портфолио с 3 проектами. 3. Присоединитесь к 2 профессиональным сообществам.'
+            title: 'SQL',
+            summary: 'Язык запросов для работы с базами данных.',
+            hours: 30,
+            examples: ['Запросы к базе данных', 'Аггрегация данных'],
+            tasks: [{ title: 'SQL запросы', description: 'Напишите 10 сложных SQL запросов' }]
           },
           {
-            title: 'Продвинутое задание',
-            description: '1. Подготовьте case study для интервью. 2. Пройдите mock-интервью. 3. Подайте заявки на 5 позиций.'
+            title: 'Python для анализа данных',
+            summary: 'Pandas, NumPy и визуализация с Matplotlib.',
+            hours: 35,
+            examples: ['Анализ датасета с Pandas', 'Визуализация трендов'],
+            tasks: [{ title: 'Pet-проект на Python', description: 'Проанализируйте открытый датасет' }]
+          },
+          {
+            title: 'Визуализация данных',
+            summary: 'Power BI, Tableau для создания отчетов и дашбордов.',
+            hours: 25,
+            examples: ['Интерактивный дашборд', 'Презентация инсайтов'],
+            tasks: [{ title: 'Дашборд в Power BI', description: 'Создайте бизнес-дашборд' }]
           }
         ],
-        questions: [
-          'Что включить в портфолио?',
-          'Как эффективно искать работу?',
-          'Какие soft skills важны для специалиста?'
-        ]
+        totalHours: 110,
+        resources: []
       }
-    ],
-    skill_gaps: [
-      'Практический опыт работы с инструментами (самое важное)',
-      'Знание современных методологий и подходов',
-      'Навыки работы в команде и коммуникации',
-      'Понимание бизнес-процессов',
-      'Английский язык для работы с документацией'
-    ],
-    learning_plan: {
-      order: [
-        'Основы профессии',
-        'Технические навыки',
-        'Работа над проектами',
-        'Профессиональное развитие'
-      ],
-      time_estimates: {
-        'Основы профессии': '2-3 недели',
-        'Технические навыки': '6-8 недель',
-        'Работа над проектами': '8-12 недель',
-        'Профессиональное развитие': 'постоянно'
-      }
-    },
-    resources: [
-      {
-        topic: 'Основы профессии',
-        items: [
-          {
-            title: 'Введение в профессию - полный курс',
-            url: 'https://www.youtube.com/watch?v=example',
-            type: 'YouTube'
-          },
-          {
-            title: 'Карьера в IT - гайд для начинающих',
-            url: 'https://www.udemy.com/course/example',
-            type: 'Udemy'
-          }
-        ]
-      },
-      {
-        topic: 'Технические навыки',
-        items: [
-          {
-            title: 'Официальная документация',
-            url: 'https://docs.example.com',
-            type: 'Docs'
-          },
-          {
-            title: 'Практический курс для начинающих',
-            url: 'https://www.coursera.org/example',
-            type: 'Coursera'
-          }
-        ]
-      },
-      {
-        topic: 'Работа над проектами',
-        items: [
-          {
-            title: 'GitHub для начинающих',
-            url: 'https://github.com',
-            type: 'Platform'
-          },
-          {
-            title: 'Идеи для pet-проектов',
-            url: 'https://www.freecodecamp.org',
-            type: 'Resource'
-          }
-        ]
-      }
-    ],
-    motivation: `Помните, ${userName}, что обучение — это марафон, а не спринт. Ваш ${psychotype} означает, что вы можете находить уникальные подходы к решению задач. Связывайте новые знания с вашими интересами (${interests.join(', ')}), создавайте проекты, которые вам действительно интересны. Присоединяйтесь к сообществам, делитесь своим прогрессом, и не бойтесь ошибок — они лучший учитель!`
+    ]
   }
 }
