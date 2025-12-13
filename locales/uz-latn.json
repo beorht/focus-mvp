@@ -36,13 +36,8 @@
     "backButton": "Orqaga",
     "nextButton": "Keyingi",
     "finishButton": "Tugatish",
-    "basicQ1": "Sizning hozirgi darajangiz qanday?",
-    "basicQ1Options": {
-      "beginner": "Yangi boshlovchi (tajribasiz)",
-      "student": "Talaba (o'qiyapman)",
-      "junior": "Ozgina tajriba bor",
-      "experienced": "1+ yillik ish tajribasi bor"
-    },
+    "basicQ1": "Boshqa kasblarda ish tajribangiz bor edimi? Agar bo'lsa, hozirgi vaqtda qanday darajada ekanligingizni tasvirlang.",
+    "basicQ1Placeholder": "Masalan: Dasturchi bo'lib 2 yil ishladim, JavaScript va React ni o'rta darajada bilaman. Hozir Data Science yo'nalishida rivojlanmoqchiman...",
     "basicQ2": "Siz uchun ishda nima muhimroq?",
     "basicQ2Options": {
       "salary": "Yuqori ish haqi",

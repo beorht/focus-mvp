@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
 import { useThemeStore } from '@/store/useThemeStore'
 import { useTranslation } from '@/hooks/useTranslation'
+import { useLanguageStore } from '@/store/useLanguageStore'
+import QuizSection, { QuizQuestion } from '@/components/QuizSection'
+import ReflectionSection from '@/components/ReflectionSection'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 import {
   BookOpen,
   Clock,
@@ -16,9 +20,17 @@ import {
   Target,
   Lightbulb,
   Code,
-  FileText
+  FileText,
+  Languages,
+  Loader2
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+interface Quiz {
+  title: string
+  description?: string
+  questions: QuizQuestion[]
+}
 
 interface Topic {
   title: string
@@ -26,6 +38,7 @@ interface Topic {
   hours: number
   examples?: string[]
   tasks?: any[]
+  quiz?: Quiz
   completed?: boolean
 }
 
@@ -39,12 +52,15 @@ export default function LessonPage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
   const theme = useThemeStore((state) => state.theme)
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
 
   const [lessonData, setLessonData] = useState<LessonData | null>(null)
+  const [originalLessonData, setOriginalLessonData] = useState<LessonData | null>(null)
   const [selectedTopicIndex, setSelectedTopicIndex] = useState(0)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [completedTopics, setCompletedTopics] = useState<Set<number>>(new Set())
+  const [translating, setTranslating] = useState(false)
+  const [translatedLanguage, setTranslatedLanguage] = useState('ru')
 
   useEffect(() => {
     // Load lesson data from sessionStorage
@@ -57,6 +73,7 @@ export default function LessonPage() {
 
     const data = JSON.parse(savedLesson)
     setLessonData(data)
+    setOriginalLessonData(data)
     addLog('SYSTEM', `Loaded lesson: ${data.profession}`)
 
     // Load progress
@@ -65,6 +82,72 @@ export default function LessonPage() {
       setCompletedTopics(new Set(JSON.parse(savedProgress)))
     }
   }, [])
+
+  // Auto-translate when language changes
+  useEffect(() => {
+    if (!originalLessonData) return
+
+    // Skip if already in target language
+    if (language === translatedLanguage) return
+
+    // Translate content
+    translateContent(language)
+  }, [language, originalLessonData])
+
+  const translateContent = async (targetLang: string) => {
+    if (!originalLessonData) return
+
+    setTranslating(true)
+    addLog('API_REQ', `Translating to ${targetLang}`)
+
+    try {
+      const response = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: {
+            profession: originalLessonData.profession,
+            topics: originalLessonData.topics.map(t => ({
+              title: t.title,
+              summary: t.summary,
+              examples: t.examples || [],
+              tasks: t.tasks || [],
+              quiz: t.quiz || null
+            }))
+          },
+          targetLanguage: targetLang
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.translatedContent) {
+        const translatedData: LessonData = {
+          ...originalLessonData,
+          profession: result.translatedContent.profession,
+          topics: originalLessonData.topics.map((topic, idx) => ({
+            ...topic,
+            title: result.translatedContent.topics[idx]?.title || topic.title,
+            summary: result.translatedContent.topics[idx]?.summary || topic.summary,
+            examples: result.translatedContent.topics[idx]?.examples || topic.examples,
+            tasks: result.translatedContent.topics[idx]?.tasks || topic.tasks,
+            quiz: result.translatedContent.topics[idx]?.quiz || topic.quiz
+          }))
+        }
+
+        setLessonData(translatedData)
+        setTranslatedLanguage(targetLang)
+        addLog('API_RES', 'Translation successful')
+      } else {
+        addLog('ERROR', 'Translation failed')
+      }
+    } catch (error: any) {
+      addLog('ERROR', `Translation error: ${error.message}`)
+      console.error('Translation error:', error)
+    } finally {
+      setTranslating(false)
+    }
+  }
 
   const toggleTopicComplete = (index: number) => {
     const newCompleted = new Set(completedTopics)
@@ -122,17 +205,22 @@ export default function LessonPage() {
         <div className="p-6 border-b" style={{
           borderColor: theme === 'dark' ? '#2a2a2a' : '#e5e5e5'
         }}>
-          <button
-            onClick={() => router.push('/results')}
-            className={`flex items-center gap-2 mb-4 text-sm transition-colors ${
-              theme === 'dark'
-                ? 'text-gray-400 hover:text-white'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t('lesson.navigation.backToResults')}
-          </button>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => router.push('/results')}
+              className={`flex items-center gap-2 text-sm transition-colors ${
+                theme === 'dark'
+                  ? 'text-gray-400 hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t('lesson.navigation.backToResults')}
+            </button>
+
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+          </div>
 
           <h2 className={`text-lg font-bold mb-2 ${
             theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -265,20 +353,34 @@ export default function LessonPage() {
             >
               {/* Topic Header */}
               <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    theme === 'dark'
-                      ? 'bg-blue-900/30 text-blue-400'
-                      : 'bg-blue-100 text-blue-700'
-                  }`}>
-                    {t('lesson.content.topics')} {selectedTopicIndex + 1} / {lessonData.topics.length}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      theme === 'dark'
+                        ? 'bg-blue-900/30 text-blue-400'
+                        : 'bg-blue-100 text-blue-700'
+                    }`}>
+                      {t('lesson.content.topics')} {selectedTopicIndex + 1} / {lessonData.topics.length}
+                    </div>
+                    <div className={`flex items-center gap-1 text-xs ${
+                      theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
+                    }`}>
+                      <Clock className="w-3 h-3" />
+                      {currentTopic.hours}ч
+                    </div>
                   </div>
-                  <div className={`flex items-center gap-1 text-xs ${
-                    theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
-                  }`}>
-                    <Clock className="w-3 h-3" />
-                    {currentTopic.hours}ч
-                  </div>
+
+                  {/* Translation Indicator */}
+                  {translating && (
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs ${
+                      theme === 'dark'
+                        ? 'bg-indigo-900/30 text-indigo-400'
+                        : 'bg-indigo-100 text-indigo-700'
+                    }`}>
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      Перевод...
+                    </div>
+                  )}
                 </div>
 
                 <h1 className={`text-4xl font-bold mb-4 ${
@@ -356,6 +458,29 @@ export default function LessonPage() {
                   </div>
                 </div>
               )}
+
+              {/* Quiz Section */}
+              {currentTopic.quiz && (
+                <div className="mb-8">
+                  <QuizSection
+                    quiz={currentTopic.quiz}
+                    topicTitle={currentTopic.title}
+                    onComplete={(score, answers) => {
+                      addLog('USER_ACTION', `Quiz completed: ${score}/${currentTopic.quiz?.questions.length || 0}`)
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Reflection Section */}
+              <div className="mb-8">
+                <ReflectionSection
+                  topicTitle={currentTopic.title}
+                  onSave={(data) => {
+                    addLog('USER_ACTION', `Reflection saved for: ${currentTopic.title}`)
+                  }}
+                />
+              </div>
 
               {/* Mark Complete Button */}
               <div className="flex items-center justify-between pt-8 border-t" style={{

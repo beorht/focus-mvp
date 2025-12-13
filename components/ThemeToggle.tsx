@@ -31,8 +31,8 @@ export default function ThemeToggle() {
       className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all"
       style={{
         background: theme === 'dark'
-          ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-          : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+          ? 'linear-gradient(135deg, #4a6660 0%, #2d4a45 100%)'
+          : 'linear-gradient(135deg, #8eb69b 0%, #6a9d7d 100%)'
       }}
       aria-label="Toggle theme"
     >

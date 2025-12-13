@@ -13,15 +13,9 @@ const basicQuestions = [
   {
     id: 1,
     questionKey: 'test.basicQ1',
-    type: 'single',
+    type: 'text',
     category: 'basic',
-    optionsKey: 'test.basicQ1Options',
-    options: [
-      { value: 'beginner', labelKey: 'test.basicQ1Options.beginner' },
-      { value: 'student', labelKey: 'test.basicQ1Options.student' },
-      { value: 'junior', labelKey: 'test.basicQ1Options.junior' },
-      { value: 'experienced', labelKey: 'test.basicQ1Options.experienced' }
-    ]
+    placeholderKey: 'test.basicQ1Placeholder'
   },
   {
     id: 2,
@@ -51,64 +45,35 @@ const basicQuestions = [
   }
 ]
 
-// RIASEC психометрический тест (код Холланда)
+// RIASEC психометрический тест (код Холланда) - СОКРАЩЕННАЯ ВЕРСИЯ
+// Отобраны самые показательные вопросы для каждой категории
 const riasecQuestions = [
-  // Realistic (R) - вопросы 4-11
-  { id: 4, statementKey: 'test.riasecQ4', category: 'R' },
-  { id: 5, statementKey: 'test.riasecQ5', category: 'R' },
-  { id: 6, statementKey: 'test.riasecQ6', category: 'R' },
-  { id: 7, statementKey: 'test.riasecQ7', category: 'R' },
-  { id: 8, statementKey: 'test.riasecQ8', category: 'R' },
-  { id: 9, statementKey: 'test.riasecQ9', category: 'R' },
-  { id: 10, statementKey: 'test.riasecQ10', category: 'R' },
-  { id: 11, statementKey: 'test.riasecQ11', category: 'R' },
+  // Realistic (R) - 3 вопроса (практические навыки, работа руками)
+  { id: 4, statementKey: 'test.riasecQ4', category: 'R' },   // работа руками
+  { id: 6, statementKey: 'test.riasecQ6', category: 'R' },   // работа с техникой
+  { id: 7, statementKey: 'test.riasecQ7', category: 'R' },   // прикладные решения
 
-  // Investigative (I) - вопросы 12-19
-  { id: 12, statementKey: 'test.riasecQ12', category: 'I' },
-  { id: 13, statementKey: 'test.riasecQ13', category: 'I' },
-  { id: 14, statementKey: 'test.riasecQ14', category: 'I' },
-  { id: 15, statementKey: 'test.riasecQ15', category: 'I' },
-  { id: 16, statementKey: 'test.riasecQ16', category: 'I' },
-  { id: 17, statementKey: 'test.riasecQ17', category: 'I' },
-  { id: 18, statementKey: 'test.riasecQ18', category: 'I' },
-  { id: 19, statementKey: 'test.riasecQ19', category: 'I' },
+  // Investigative (I) - 3 вопроса (анализ, исследования)
+  { id: 13, statementKey: 'test.riasecQ13', category: 'I' }, // анализ данных
+  { id: 15, statementKey: 'test.riasecQ15', category: 'I' }, // логические задачи
+  { id: 16, statementKey: 'test.riasecQ16', category: 'I' }, // вопрос "почему?"
 
-  // Artistic (A) - вопросы 20-27
-  { id: 20, statementKey: 'test.riasecQ20', category: 'A' },
-  { id: 21, statementKey: 'test.riasecQ21', category: 'A' },
-  { id: 22, statementKey: 'test.riasecQ22', category: 'A' },
-  { id: 23, statementKey: 'test.riasecQ23', category: 'A' },
-  { id: 24, statementKey: 'test.riasecQ24', category: 'A' },
-  { id: 25, statementKey: 'test.riasecQ25', category: 'A' },
-  { id: 26, statementKey: 'test.riasecQ26', category: 'A' },
-  { id: 27, statementKey: 'test.riasecQ27', category: 'A' },
+  // Artistic (A) - 2 вопроса (креативность, эстетика)
+  { id: 20, statementKey: 'test.riasecQ20', category: 'A' }, // создание нового
+  { id: 22, statementKey: 'test.riasecQ22', category: 'A' }, // эстетика
 
-  // Social (S) - вопросы 28-35
-  { id: 28, statementKey: 'test.riasecQ28', category: 'S' },
-  { id: 29, statementKey: 'test.riasecQ29', category: 'S' },
-  { id: 30, statementKey: 'test.riasecQ30', category: 'S' },
-  { id: 31, statementKey: 'test.riasecQ31', category: 'S' },
-  { id: 32, statementKey: 'test.riasecQ32', category: 'S' },
-  { id: 33, statementKey: 'test.riasecQ33', category: 'S' },
-  { id: 34, statementKey: 'test.riasecQ34', category: 'S' },
-  { id: 35, statementKey: 'test.riasecQ35', category: 'S' },
+  // Social (S) - 3 вопроса (работа с людьми, помощь)
+  { id: 28, statementKey: 'test.riasecQ28', category: 'S' }, // помощь людям
+  { id: 29, statementKey: 'test.riasecQ29', category: 'S' }, // легко контактирую
+  { id: 31, statementKey: 'test.riasecQ31', category: 'S' }, // обучение других
 
-  // Enterprising (E) - вопросы 36-41
-  { id: 36, statementKey: 'test.riasecQ36', category: 'E' },
-  { id: 37, statementKey: 'test.riasecQ37', category: 'E' },
-  { id: 38, statementKey: 'test.riasecQ38', category: 'E' },
-  { id: 39, statementKey: 'test.riasecQ39', category: 'E' },
-  { id: 40, statementKey: 'test.riasecQ40', category: 'E' },
-  { id: 41, statementKey: 'test.riasecQ41', category: 'E' },
+  // Enterprising (E) - 2 вопроса (лидерство, амбиции)
+  { id: 36, statementKey: 'test.riasecQ36', category: 'E' }, // влияние, ответственность
+  { id: 40, statementKey: 'test.riasecQ40', category: 'E' }, // амбициозные цели
 
-  // Conventional (C) - вопросы 42-48
-  { id: 42, statementKey: 'test.riasecQ42', category: 'C' },
-  { id: 43, statementKey: 'test.riasecQ43', category: 'C' },
-  { id: 44, statementKey: 'test.riasecQ44', category: 'C' },
-  { id: 45, statementKey: 'test.riasecQ45', category: 'C' },
-  { id: 46, statementKey: 'test.riasecQ46', category: 'C' },
-  { id: 47, statementKey: 'test.riasecQ47', category: 'C' },
-  { id: 48, statementKey: 'test.riasecQ48', category: 'C' }
+  // Conventional (C) - 2 вопроса (организация, структура)
+  { id: 42, statementKey: 'test.riasecQ42', category: 'C' }, // порядок и структура
+  { id: 46, statementKey: 'test.riasecQ46', category: 'C' }  // систематизация
 ]
 
 const questions = [...basicQuestions, ...riasecQuestions]
@@ -152,6 +117,11 @@ export default function TestPage() {
     addLog('USER_ACTION', `RIASEC Q${questionId}: Score ${value}`)
   }
 
+  const handleTextInput = (questionId: number, value: string) => {
+    setAnswers({ ...answers, [questionId]: [value] })
+    addLog('USER_ACTION', `Text input Q${questionId}: ${value.substring(0, 50)}${value.length > 50 ? '...' : ''}`)
+  }
+
   const handleNext = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1)
@@ -172,7 +142,7 @@ export default function TestPage() {
     addLog('DATA', `Collected answers: ${Object.keys(answers).length} questions`)
 
     // Basic questions answers
-    const level = answers[1]?.[0] || 'beginner'
+    const experienceText = answers[1]?.[0] || 'Опыт не указан'
     const priority = answers[2]?.[0] || 'growth'
     const learningStyle = answers[3]?.[0] || 'mixed'
 
@@ -234,13 +204,6 @@ export default function TestPage() {
       psychotype = 'ISTJ (систематичный, надёжный)'
     }
 
-    const knowledgeLevelMap: Record<string, string> = {
-      'beginner': 'начинающий',
-      'student': 'базовый',
-      'junior': 'средний',
-      'experienced': 'продвинутый'
-    }
-
     const learningStyleMap: Record<string, string> = {
       'visual': 'визуальный',
       'practical': 'практический',
@@ -254,8 +217,8 @@ export default function TestPage() {
     sessionStorage.setItem('userAnswers', JSON.stringify({
       userName: 'Пользователь',
       interests,
-      level,
-      knowledge_level: knowledgeLevelMap[level] || 'начинающий',
+      experience: experienceText,
+      knowledge_level: 'пользовательский ответ',
       priority,
       workStyle: sortedCategories[0] === 'S' ? 'team' : sortedCategories[0] === 'E' ? 'team' : 'flexible',
       thinking: sortedCategories[0] === 'I' || sortedCategories[0] === 'R' ? 'logic' : sortedCategories[0] === 'A' ? 'emotion' : 'both',
@@ -288,19 +251,21 @@ export default function TestPage() {
         >
           <div className="flex justify-between items-center mb-2">
             <span className={`text-sm font-medium ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              theme === 'dark' ? 'text-gray-100' : 'text-white'
             }`}>
               {tf('test.progressLabel', { current: currentStep + 1, total: questions.length })}
             </span>
-            <span className="text-sm font-medium text-blue-400">
+            <span className={`text-sm font-medium ${
+              theme === 'dark' ? 'text-blue-400' : 'text-[#8eb69b]'
+            }`}>
               {Math.round(progress)}%
             </span>
           </div>
           <div className={`h-2 rounded-full overflow-hidden ${
-            theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'
+            theme === 'dark' ? 'bg-gray-800' : 'bg-[#4a6660]'
           }`}>
             <motion.div
-              className="h-full bg-gradient-to-r from-blue-600 to-purple-600"
+              className="h-full bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d]"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -317,10 +282,10 @@ export default function TestPage() {
             exit={{ opacity: 0, filter: "blur(10px)", x: -50 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="rounded-2xl shadow-lg p-8 mb-6"
-            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EADFD7' }}
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#405952' }}
           >
           <h2 className={`text-2xl font-bold mb-2 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-900'
+            theme === 'dark' ? 'text-white' : 'text-white'
           }`}>
             {isRiasecQuestion ? t(currentQuestion.statementKey) : t(currentQuestion.questionKey)}
           </h2>
@@ -331,7 +296,7 @@ export default function TestPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`mb-6 text-sm ${
-                theme === 'dark' ? 'text-white' : 'text-gray-700'
+                theme === 'dark' ? 'text-white' : 'text-white'
               }`}
             >
               {t('test.multipleChoice')}
@@ -344,7 +309,7 @@ export default function TestPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`mb-6 text-sm ${
-                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                theme === 'dark' ? 'text-gray-400' : 'text-white'
               }`}
             >
               {t('test.likertInstruction')}
@@ -356,12 +321,12 @@ export default function TestPage() {
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-2">
                 <span className={`text-xs ${
-                  theme === 'dark' ? 'text-gray-500' : 'text-gray-600'
+                  theme === 'dark' ? 'text-gray-500' : 'text-white'
                 }`}>
                   {t('test.disagree')}
                 </span>
                 <span className={`text-xs ${
-                  theme === 'dark' ? 'text-gray-500' : 'text-gray-600'
+                  theme === 'dark' ? 'text-gray-500' : 'text-white'
                 }`}>
                   {t('test.fullyAgree')}
                 </span>
@@ -380,10 +345,10 @@ export default function TestPage() {
                       onClick={() => handleLikertSelect(currentQuestion.id, value)}
                       className={`flex-1 aspect-square rounded-xl border-2 font-bold text-xl transition-all ${
                         isSelected
-                          ? 'bg-gradient-to-br from-blue-600 to-purple-600 border-transparent text-white shadow-lg'
+                          ? 'bg-gradient-to-br from-[#8eb69b] to-[#5a8f6d] border-transparent text-white shadow-lg'
                           : theme === 'dark'
                             ? 'border-gray-700 hover:border-gray-600 text-gray-400 hover:text-gray-300'
-                            : 'border-gray-300 hover:border-gray-400 text-gray-600 hover:text-gray-700'
+                            : 'border-white hover:border-[#8eb69b] text-white hover:text-[#8eb69b]'
                       }`}
                     >
                       {value}
@@ -394,7 +359,7 @@ export default function TestPage() {
               <div className="flex justify-between text-xs mt-2">
                 {['1', '2', '3', '4', '5'].map((label, idx) => (
                   <div key={idx} className={`flex-1 text-center ${
-                    theme === 'dark' ? 'text-gray-600' : 'text-gray-500'
+                    theme === 'dark' ? 'text-gray-600' : 'text-white/70'
                   }`}>
                     ({idx + 1})
                   </div>
@@ -403,8 +368,34 @@ export default function TestPage() {
             </div>
           )}
 
+          {/* Text Input */}
+          {!isRiasecQuestion && 'type' in currentQuestion && currentQuestion.type === 'text' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <textarea
+                value={answers[currentQuestion.id]?.[0] || ''}
+                onChange={(e) => handleTextInput(currentQuestion.id, e.target.value)}
+                placeholder={'placeholderKey' in currentQuestion && currentQuestion.placeholderKey ? t(currentQuestion.placeholderKey) : ''}
+                rows={5}
+                className={`w-full px-4 py-3 rounded-xl border-2 transition-all resize-none ${
+                  theme === 'dark'
+                    ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-blue-500'
+                    : 'bg-white border-[#8eb69b] text-gray-900 placeholder-gray-400 focus:border-[#6a9d7d]'
+                } focus:outline-none focus:ring-2 focus:ring-[#8eb69b]/20`}
+              />
+              <p className={`mt-2 text-xs ${
+                theme === 'dark' ? 'text-gray-500' : 'text-white/70'
+              }`}>
+                {answers[currentQuestion.id]?.[0]?.length || 0} символов
+              </p>
+            </motion.div>
+          )}
+
           {/* Standard Options */}
-          {!isRiasecQuestion && 'options' in currentQuestion && (
+          {!isRiasecQuestion && 'options' in currentQuestion && currentQuestion.options && (
             <div className="space-y-3">
               {currentQuestion.options.map((option, index) => {
                 const isSelected = answers[currentQuestion.id]?.includes(option.value)
@@ -420,20 +411,22 @@ export default function TestPage() {
                     onClick={() => handleSelect(option.value)}
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       isSelected
-                        ? theme === 'dark' ? 'bg-blue-900/20 border-blue-900' : 'bg-blue-100 border-blue-400'
-                        : theme === 'dark' ? 'border-gray-700 hover:border-gray-600' : 'border-gray-300 hover:border-gray-400'
+                        ? theme === 'dark' ? 'bg-blue-900/20 border-blue-900' : 'bg-[#6a9d7d]/30 border-[#8eb69b]'
+                        : theme === 'dark' ? 'border-gray-700 hover:border-gray-600' : 'border-white hover:border-[#8eb69b]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className={`font-medium ${
                         isSelected
-                          ? theme === 'dark' ? 'text-blue-300' : 'text-blue-700'
-                          : theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                          ? theme === 'dark' ? 'text-blue-300' : 'text-white'
+                          : theme === 'dark' ? 'text-gray-300' : 'text-white'
                       }`}>
                         {t(option.labelKey)}
                       </span>
                       {isSelected && (
-                        <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                          theme === 'dark' ? 'bg-blue-600' : 'bg-[#8eb69b]'
+                        }`}>
                           <Check className="w-4 h-4 text-white" />
                         </div>
                       )}
@@ -460,8 +453,8 @@ export default function TestPage() {
             whileTap={currentStep !== 0 ? { scale: 0.95 } : {}}
             className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${
               currentStep === 0
-                ? 'text-gray-600 cursor-not-allowed'
-                : theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'
+                ? theme === 'dark' ? 'text-gray-600 cursor-not-allowed' : 'text-white/40 cursor-not-allowed'
+                : theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-white hover:bg-[#4a6660]'
             }`}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -470,13 +463,13 @@ export default function TestPage() {
 
           <motion.button
             onClick={handleNext}
-            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(59, 130, 246, 0.3)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(142, 182, 155, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             disabled={isNextDisabled()}
             className={`flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all ${
               isNextDisabled()
-                ? theme === 'dark' ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:scale-105'
+                ? theme === 'dark' ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-[#4a6660] text-white/40 cursor-not-allowed'
+                : 'bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d] text-white hover:shadow-lg hover:scale-105'
             }`}
           >
             {currentStep === questions.length - 1 ? t('test.finishButton') : t('test.nextButton')}

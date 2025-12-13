@@ -127,11 +127,11 @@ export default function ChatAssistant() {
             setIsOpen(true)
             addLog('USER_ACTION', 'Opened chat assistant')
           }}
-          className="fixed bottom-6 right-6 md:right-[37%] w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center z-40 group"
+          className="fixed bottom-6 right-6 md:right-[37%] w-14 h-14 bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d] text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center z-40 group"
         >
           <MessageCircle className="w-6 h-6" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full" />
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#6a9d7d] rounded-full animate-ping" />
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#6a9d7d] rounded-full" />
         </button>
       )}
 
@@ -144,7 +144,7 @@ export default function ChatAssistant() {
           style={{ background: theme === 'dark' ? '#1d1d1d' : '#ffffff' }}
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
+          <div className="bg-gradient-to-r from-[#6a9d7d] to-[#4a6660] text-white p-4 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                 <MessageCircle className="w-5 h-5" />
@@ -175,7 +175,7 @@ export default function ChatAssistant() {
                 <div
                   className={`max-w-[80%] p-3 rounded-2xl ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                      ? 'bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d] text-white'
                       : theme === 'dark' ? 'bg-gray-800 text-gray-100' : 'bg-gray-200 text-gray-900'
                   }`}
                 >
@@ -218,7 +218,7 @@ export default function ChatAssistant() {
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all"
+                className="w-10 h-10 bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d] text-white rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all"
               >
                 <Send className="w-4 h-4" />
               </button>

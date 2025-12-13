@@ -24,27 +24,27 @@
   --edu-text: #000000;
 }
 
-/* Light theme */
+/* Light theme - Dark Green Theme (из скриншота) */
 [data-theme='light'] {
-  --background: #F7F6F1;
-  --foreground: #2d2d2d;
-  --container-bg: #ffffff;
-  --card-bg: #ffffff;
-  --border-color: #e5e7eb;
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --text-muted: #6b7280;
+  --background: #2d4a45;
+  --foreground: #e8f0ee;
+  --container-bg: #3d5a55;
+  --card-bg: #405952;
+  --border-color: #4a6660;
+  --text-primary: #ffffff;
+  --text-secondary: #d1e3df;
+  --text-muted: #a8c5bf;
 
-  /* Gradients for light theme - subtle pastel radial gradients */
-  --gradient-main-start: #F7F6F1;
-  --gradient-main-stop: rgba(196, 181, 253, 0.2);
-  --gradient-test-stop: rgba(196, 181, 253, 0.15);
-  --gradient-results-stop-1: rgba(167, 243, 208, 0.2);
-  --gradient-results-stop-2: rgba(191, 219, 254, 0.15);
+  /* Gradients for light theme - dark green gradients */
+  --gradient-main-start: #2d4a45;
+  --gradient-main-stop: rgba(77, 102, 97, 0.3);
+  --gradient-test-stop: rgba(93, 122, 115, 0.25);
+  --gradient-results-stop-1: rgba(93, 122, 115, 0.2);
+  --gradient-results-stop-2: rgba(77, 102, 97, 0.15);
 
   /* Educational content */
-  --edu-bg: #FAEBD7;
-  --edu-text: #1f2937;
+  --edu-bg: #354f4a;
+  --edu-text: #e8f0ee;
 }
 
 html {
