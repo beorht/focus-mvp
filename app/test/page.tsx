@@ -356,12 +356,18 @@ export default function TestPage() {
                   )
                 })}
               </div>
-              <div className="flex justify-between text-xs mt-2">
-                {['1', '2', '3', '4', '5'].map((label, idx) => (
-                  <div key={idx} className={`flex-1 text-center ${
-                    theme === 'dark' ? 'text-gray-600' : 'text-white/70'
+              <div className="flex justify-between text-sm mt-3 gap-2 font-medium">
+                {[
+                  t('test.likertScale1'),
+                  t('test.likertScale2'),
+                  t('test.likertScale3'),
+                  t('test.likertScale4'),
+                  t('test.likertScale5')
+                ].map((label, idx) => (
+                  <div key={idx} className={`flex-1 text-center leading-tight ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-white'
                   }`}>
-                    ({idx + 1})
+                    {label}
                   </div>
                 ))}
               </div>
