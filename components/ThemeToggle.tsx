@@ -28,11 +28,12 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all"
+      className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
       style={{
         background: theme === 'dark'
           ? 'linear-gradient(135deg, #4a6660 0%, #2d4a45 100%)'
-          : 'linear-gradient(135deg, #8eb69b 0%, #6a9d7d 100%)'
+          : 'linear-gradient(135deg, #83AE92 0%, #314E49 100%)',
+        transition: 'background 0.5s ease, box-shadow 0.5s ease'
       }}
       aria-label="Toggle theme"
     >

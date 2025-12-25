@@ -35,7 +35,7 @@ export default function Home() {
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6 ${
               theme === 'dark'
                 ? 'bg-blue-100 text-blue-700'
-                : 'bg-blue-200 text-blue-900'
+                : 'bg-[#F3F4F6] text-[#314E49]'
             }`}
           >
             <Sparkles className="w-4 h-4" />
@@ -60,7 +60,7 @@ export default function Home() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className={`text-xl mb-4 ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
             }`}
           >
             {t('home.tagline')}
@@ -70,7 +70,7 @@ export default function Home() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
             className={`text-lg max-w-2xl mx-auto ${
-              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-800'
             }`}
           >
             {t('home.description')}
@@ -84,18 +84,18 @@ export default function Home() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05, y: -5 }}
-            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EFF4D8' }}
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#83AE92' }}
             className={`p-6 rounded-xl shadow-sm cursor-pointer ${
-              theme === 'dark' ? 'border border-gray-800' : 'border border-gray-300'
+              theme === 'dark' ? 'border border-gray-800' : 'border border-[#6b9c7f]'
             }`}
           >
             <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
-              theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-200'
+              theme === 'dark' ? 'bg-blue-900/30' : 'bg-white/30'
             }`}>
-              <Brain className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`} />
+              <Brain className={`w-6 h-6 ${theme === 'dark' ? 'text-blue-400' : 'text-white'}`} />
             </div>
-            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('home.feature1Title')}</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.feature1Description')}</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{t('home.feature1Title')}</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-white/90'}`}>{t('home.feature1Description')}</p>
           </motion.div>
 
           <motion.div
@@ -103,18 +103,18 @@ export default function Home() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05, y: -5 }}
-            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EFF4D8' }}
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#83AE92' }}
             className={`p-6 rounded-xl shadow-sm cursor-pointer ${
-              theme === 'dark' ? 'border border-gray-800' : 'border border-gray-300'
+              theme === 'dark' ? 'border border-gray-800' : 'border border-[#6b9c7f]'
             }`}
           >
             <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
-              theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-200'
+              theme === 'dark' ? 'bg-purple-900/30' : 'bg-white/30'
             }`}>
-              <Target className={`w-6 h-6 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-700'}`} />
+              <Target className={`w-6 h-6 ${theme === 'dark' ? 'text-purple-400' : 'text-white'}`} />
             </div>
-            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('home.feature2Title')}</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.feature2Description')}</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{t('home.feature2Title')}</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-white/90'}`}>{t('home.feature2Description')}</p>
           </motion.div>
 
           <motion.div
@@ -122,18 +122,18 @@ export default function Home() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.05, y: -5 }}
-            style={{ background: theme === 'dark' ? '#1d1d1d' : '#EFF4D8' }}
+            style={{ background: theme === 'dark' ? '#1d1d1d' : '#83AE92' }}
             className={`p-6 rounded-xl shadow-sm cursor-pointer ${
-              theme === 'dark' ? 'border border-gray-800' : 'border border-gray-300'
+              theme === 'dark' ? 'border border-gray-800' : 'border border-[#6b9c7f]'
             }`}
           >
             <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
-              theme === 'dark' ? 'bg-green-900/30' : 'bg-green-200'
+              theme === 'dark' ? 'bg-green-900/30' : 'bg-white/30'
             }`}>
-              <Rocket className={`w-6 h-6 ${theme === 'dark' ? 'text-green-400' : 'text-green-700'}`} />
+              <Rocket className={`w-6 h-6 ${theme === 'dark' ? 'text-green-400' : 'text-white'}`} />
             </div>
-            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('home.feature3Title')}</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.feature3Description')}</p>
+            <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{t('home.feature3Title')}</h3>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-white/90'}`}>{t('home.feature3Description')}</p>
           </motion.div>
         </div>
 
@@ -153,24 +153,6 @@ export default function Home() {
             {t('home.startButton')}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.button>
-        </motion.div>
-
-        {/* Tech Stack Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.6, ease: "easeOut" }}
-          className="mt-16 text-center"
-        >
-          <p className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('home.poweredBy')}</p>
-          <div className={`flex flex-wrap justify-center gap-4 text-xs ${
-            theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-          }`}>
-            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>Next.js 14</span>
-            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>Gemini 2.5 Flash</span>
-            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>Tailwind CSS</span>
-            <span className={theme === 'dark' ? 'bg-gray-800 px-3 py-1 rounded-full' : 'bg-gray-200 px-3 py-1 rounded-full'}>TypeScript</span>
-          </div>
         </motion.div>
       </div>
     </div>

@@ -127,7 +127,7 @@ export default function ChatAssistant() {
             setIsOpen(true)
             addLog('USER_ACTION', 'Opened chat assistant')
           }}
-          className="fixed bottom-6 right-6 md:right-[37%] w-14 h-14 bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d] text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center z-40 group"
+          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-[#8eb69b] to-[#5a8f6d] text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center z-40 group"
         >
           <MessageCircle className="w-6 h-6" />
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#6a9d7d] rounded-full animate-ping" />
@@ -138,7 +138,7 @@ export default function ChatAssistant() {
       {/* Chat Window */}
       {isOpen && (
         <div
-          className={`fixed bottom-6 right-6 md:right-[37%] w-96 max-w-[calc(100vw-3rem)] h-[500px] rounded-2xl shadow-2xl flex flex-col z-40 border ${
+          className={`fixed bottom-6 right-6 w-96 max-w-[calc(100vw-3rem)] h-[500px] rounded-2xl shadow-2xl flex flex-col z-40 border ${
             theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
           }`}
           style={{ background: theme === 'dark' ? '#1d1d1d' : '#ffffff' }}

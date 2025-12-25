@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import LogConsole from "@/components/LogConsole";
 import ChatAssistant from "@/components/ChatAssistant";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -24,15 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <div className="flex min-h-screen">
-          {/* Main App (65-70%) */}
-          <main className="w-full md:w-[65%] overflow-y-auto">
-            {children}
-          </main>
-
-          {/* AI Terminal (30-35%) - Hidden on mobile */}
-          <LogConsole />
-        </div>
+        {/* Main App - Full Width */}
+        <main className="w-full min-h-screen overflow-y-auto">
+          {children}
+        </main>
 
         {/* Global Controls */}
         <div className="fixed top-4 right-4 flex items-center gap-3 z-50">

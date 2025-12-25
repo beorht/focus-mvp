@@ -24,31 +24,36 @@
   --edu-text: #000000;
 }
 
-/* Light theme - Dark Green Theme (из скриншота) */
+/* Light theme - Light Green Theme */
 [data-theme='light'] {
-  --background: #2d4a45;
-  --foreground: #e8f0ee;
-  --container-bg: #3d5a55;
-  --card-bg: #405952;
-  --border-color: #4a6660;
-  --text-primary: #ffffff;
-  --text-secondary: #d1e3df;
-  --text-muted: #a8c5bf;
+  --background: #EFF4D8;
+  --foreground: #1a1a1a;
+  --container-bg: #83AE92;
+  --card-bg: #83AE92;
+  --border-color: #6b9c7f;
+  --text-primary: #1a1a1a;
+  --text-secondary: #2d4a45;
+  --text-muted: #4a6660;
 
-  /* Gradients for light theme - dark green gradients */
-  --gradient-main-start: #2d4a45;
-  --gradient-main-stop: rgba(77, 102, 97, 0.3);
-  --gradient-test-stop: rgba(93, 122, 115, 0.25);
-  --gradient-results-stop-1: rgba(93, 122, 115, 0.2);
-  --gradient-results-stop-2: rgba(77, 102, 97, 0.15);
+  /* Gradients for light theme - light green gradients */
+  --gradient-main-start: #EFF4D8;
+  --gradient-main-stop: rgba(49, 78, 73, 0.5);
+  --gradient-test-stop: rgba(49, 78, 73, 0.45);
+  --gradient-results-stop-1: rgba(131, 174, 146, 0.4);
+  --gradient-results-stop-2: rgba(49, 78, 73, 0.35);
 
   /* Educational content */
-  --edu-bg: #354f4a;
-  --edu-text: #e8f0ee;
+  --edu-bg: #EFF4D8;
+  --edu-text: #1a1a1a;
 }
 
 html {
   overflow-x: hidden;
+  transition: background-color 0.5s ease;
+}
+
+html[data-theme] {
+  transition: all 0.5s ease;
 }
 
 html.lenis, html.lenis body {
@@ -66,6 +71,32 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Плавная анимация смены темы для всех элементов */
+*:not([class*="motion-"]) {
+  transition: background-color 0.5s ease,
+              color 0.5s ease,
+              border-color 0.5s ease,
+              box-shadow 0.5s ease,
+              fill 0.5s ease,
+              stroke 0.5s ease;
+}
+
+/* Исключаем transition для Framer Motion элементов */
+[data-framer-motion-id],
+[style*="transform"],
+.animate-pulse,
+.animate-slide-in {
+  transition: none !important;
+}
+
+/* Быстрые интерактивные переходы для кнопок */
+button:hover,
+button:active,
+a:hover {
+  transition: all 0.2s ease !important;
 }
 
 /* Slide-in animation from left (presentation style) */
@@ -88,6 +119,7 @@ body {
   background-color: var(--gradient-main-start);
   background-image:
     radial-gradient(ellipse 70% 60% at 50% -15%, var(--gradient-test-stop), transparent);
+  transition: background-color 0.6s ease, background-image 0.6s ease;
 }
 
 .results-background {
@@ -95,10 +127,12 @@ body {
   background-image:
     radial-gradient(ellipse 80% 70% at 50% -20%, var(--gradient-results-stop-1), transparent),
     radial-gradient(ellipse 30% 40% at 80% 100%, var(--gradient-results-stop-2), transparent);
+  transition: background-color 0.6s ease, background-image 0.6s ease;
 }
 
 .main-background {
   background-color: var(--gradient-main-start);
   background-image:
     radial-gradient(ellipse 90% 70% at 50% -25%, var(--gradient-main-stop), transparent);
+  transition: background-color 0.6s ease, background-image 0.6s ease;
 }
