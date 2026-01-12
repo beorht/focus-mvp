@@ -175,5 +175,30 @@
     "system": "СИСТЕМА",
     "userAction": "ДЕЙСТВИЕ",
     "data": "ДАННЫЕ"
+  },
+  "register": {
+    "title": "Регистрация",
+    "subtitle": "Расскажите немного о себе",
+    "firstName": "Имя",
+    "firstNamePlaceholder": "Введите ваше имя",
+    "lastName": "Фамилия",
+    "lastNamePlaceholder": "Введите вашу фамилию",
+    "age": "Возраст",
+    "agePlaceholder": "Ваш возраст",
+    "phone": "Телефон",
+    "phonePlaceholder": "+998 XX XXX-XX-XX",
+    "phoneHint": "Формат: +998 90 123-45-67",
+    "educationalInstitution": "Учебное заведение",
+    "educationalInstitutionPlaceholder": "Название вашего учебного заведения",
+    "submit": "Продолжить к тесту",
+    "submitting": "Регистрация...",
+    "errors": {
+      "nameInvalid": "Имя должно содержать только буквы (2-50 символов)",
+      "ageInvalid": "Возраст должен быть от 14 до 100 лет",
+      "phoneInvalid": "Неверный формат телефона. Используйте: +998XXXXXXXXX",
+      "institutionTooShort": "Название слишком короткое (минимум 3 символа)",
+      "duplicate_phone": "Этот номер телефона уже зарегистрирован",
+      "server_error": "Произошла ошибка. Попробуйте позже"
+    }
   }
 }

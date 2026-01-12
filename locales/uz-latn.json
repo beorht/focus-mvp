@@ -175,5 +175,30 @@
     "system": "TIZIM",
     "userAction": "HARAKAT",
     "data": "MA'LUMOTLAR"
+  },
+  "register": {
+    "title": "Ro'yxatdan o'tish",
+    "subtitle": "O'zingiz haqingizda ma'lumot bering",
+    "firstName": "Ism",
+    "firstNamePlaceholder": "Ismingizni kiriting",
+    "lastName": "Familiya",
+    "lastNamePlaceholder": "Familiyangizni kiriting",
+    "age": "Yosh",
+    "agePlaceholder": "Yoshingiz",
+    "phone": "Telefon",
+    "phonePlaceholder": "+998 XX XXX-XX-XX",
+    "phoneHint": "Format: +998 90 123-45-67",
+    "educationalInstitution": "Ta'lim muassasasi",
+    "educationalInstitutionPlaceholder": "Ta'lim muassasangiz nomi",
+    "submit": "Testga o'tish",
+    "submitting": "Ro'yxatdan o'tmoqda...",
+    "errors": {
+      "nameInvalid": "Ism faqat harflardan iborat bo'lishi kerak (2-50 belgi)",
+      "ageInvalid": "Yosh 14 dan 100 gacha bo'lishi kerak",
+      "phoneInvalid": "Noto'g'ri telefon formati. Ishlating: +998XXXXXXXXX",
+      "institutionTooShort": "Nom juda qisqa (kamida 3 belgi)",
+      "duplicate_phone": "Bu telefon raqami allaqachon ro'yxatdan o'tgan",
+      "server_error": "Xatolik yuz berdi. Keyinroq urinib ko'ring"
+    }
   }
 }

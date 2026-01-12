@@ -175,5 +175,30 @@
     "system": "ТИЗИМ",
     "userAction": "ҲАРАКАТ",
     "data": "МАЪЛУМОТЛАР"
+  },
+  "register": {
+    "title": "Рўйхатдан ўтиш",
+    "subtitle": "Ўзингиз ҳақингизда маълумот беринг",
+    "firstName": "Исм",
+    "firstNamePlaceholder": "Исмингизни киритинг",
+    "lastName": "Фамилия",
+    "lastNamePlaceholder": "Фамилиянгизни киритинг",
+    "age": "Ёш",
+    "agePlaceholder": "Ёшингиз",
+    "phone": "Телефон",
+    "phonePlaceholder": "+998 XX XXX-XX-XX",
+    "phoneHint": "Формат: +998 90 123-45-67",
+    "educationalInstitution": "Таълим муассасаси",
+    "educationalInstitutionPlaceholder": "Таълим муассасангиз номи",
+    "submit": "Тестга ўтиш",
+    "submitting": "Рўйхатдан ўтмоқда...",
+    "errors": {
+      "nameInvalid": "Исм фақат ҳарфлардан иборат бўлиши керак (2-50 белги)",
+      "ageInvalid": "Ёш 14 дан 100 гача бўлиши керак",
+      "phoneInvalid": "Нотўғри телефон формати. Ишлатинг: +998XXXXXXXXX",
+      "institutionTooShort": "Ном жуда қисқа (камида 3 белги)",
+      "duplicate_phone": "Бу телефон рақами аллақачон рўйхатдан ўтган",
+      "server_error": "Хатолик юз берди. Кейинроқ уриниб кўринг"
+    }
   }
 }
