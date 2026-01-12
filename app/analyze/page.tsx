@@ -36,18 +36,18 @@ export default function AnalyzePage() {
         }
 
         const answers = JSON.parse(answersStr)
-        addLog('SYSTEM', 'Starting algorithm-based analysis...')
+        addLog('SYSTEM', 'Starting AI-powered analysis...')
         addLog('DATA', `RIASEC scores: ${JSON.stringify(answers.riasec_percentages)}`)
 
         // Animate through stages
         for (let i = 0; i < stages.length; i++) {
           setStage(i)
-          addLog('INFO', `Stage ${i + 1}/${stages.length}`)
+          addLog('INFO', `AI analysis stage ${i + 1}/${stages.length}`)
           await new Promise(resolve => setTimeout(resolve, stages[i].duration))
         }
 
-        // Run local matching algorithm
-        addLog('SYSTEM', 'Running profession matching algorithm...')
+        // Run AI-powered profession matching
+        addLog('SYSTEM', 'AI analyzing profession matches...')
         const matchResults = matchProfessions(answers.riasec_percentages, language)
 
         addLog('DATA', `Found ${matchResults.length} matching professions`)
@@ -163,7 +163,7 @@ export default function AnalyzePage() {
           <span className={`text-sm font-medium ${
             theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
           }`}>
-            Powered by RIASEC Algorithm
+            Powered by AI Technology
           </span>
         </div>
       </div>

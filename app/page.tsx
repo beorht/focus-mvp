@@ -16,9 +16,9 @@ export default function Home() {
 
   const handleStartJourney = () => {
     addLog('USER_ACTION', 'User clicked "Start Journey" button')
-    addLog('SYSTEM', 'Navigating to assessment...')
+    addLog('SYSTEM', 'Navigating to registration...')
     setTimeout(() => {
-      router.push('/test')
+      router.push('/register')
     }, 500)
   }
 

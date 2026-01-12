@@ -71,13 +71,34 @@ export default function ResultsPage() {
     const results = JSON.parse(resultsStr)
     setData(results)
 
+    let answers = null
     if (answersStr) {
-      const answers = JSON.parse(answersStr)
+      answers = JSON.parse(answersStr)
       setUserName(answers.userName || 'Пользователь')
     }
 
     addLog('DATA', 'Rendering profession recommendations')
     addLog('DATA', `Professions count: ${results.professions?.length || 0}`)
+
+    // Save results to database (fire and forget)
+    if (answers) {
+      fetch('/api/save-results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: answers.userId,
+          userName: answers.userName,
+          riasec_scores: answers.riasec_scores,
+          riasec_percentages: answers.riasec_percentages,
+          holland_code: answers.holland_code,
+          professions: results.professions
+        }),
+      })
+        .then(() => addLog('SYSTEM', 'Results saved to database'))
+        .catch((error) => addLog('ERROR', `Failed to save results: ${error.message}`))
+    }
 
     // Cleanup function
     return () => {

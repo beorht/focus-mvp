@@ -121,9 +121,14 @@ export default function TestPage() {
     addLog('DATA', `RIASEC Percentages - R:${riasecPercentages.R}% I:${riasecPercentages.I}% A:${riasecPercentages.A}% S:${riasecPercentages.S}% E:${riasecPercentages.E}% C:${riasecPercentages.C}%`)
     addLog('DATA', `Holland Code: ${hollandCode}`)
 
+    // Get user data from registration (if exists)
+    const userDataStr = sessionStorage.getItem('userData')
+    const userData = userDataStr ? JSON.parse(userDataStr) : { userId: null, fullName: 'Пользователь' }
+
     // Store simplified data - only RIASEC data matters for matching
     sessionStorage.setItem('userAnswers', JSON.stringify({
-      userName: 'Пользователь',
+      userId: userData.userId,
+      userName: userData.fullName || 'Пользователь',
       interests,
       riasec_scores: riasecScores,
       riasec_percentages: riasecPercentages,
