@@ -4,25 +4,28 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
 import { useThemeStore } from '@/store/useThemeStore'
+import { useLanguageStore } from '@/store/useLanguageStore'
 import { useTranslation } from '@/hooks/useTranslation'
-import { Sparkles, TrendingUp, BookOpen, Clock, Target, ChevronRight } from 'lucide-react'
+import { Sparkles, TrendingUp, Target, Award, Briefcase, Star, CheckCircle2 } from 'lucide-react'
 import Lenis from 'lenis'
 import { motion } from 'framer-motion'
+import { translateCategory, translateDemand } from '@/lib/translations'
 
 interface ProfessionData {
-  profession: string
+  id: string
+  name: string
   match: number
+  matchPercentage: number
+  category: string
   salary_uz_sum: string
-  introduction: string
-  topics: {
-    title: string
-    summary: string
-    hours: number
-    examples?: string[]
-    tasks?: any[]
-  }[]
-  totalHours: number
-  resources?: any[]
+  description: string
+  requiredSkills: string[]
+  marketDemand: 'high' | 'medium' | 'low'
+  matchDetails: {
+    topStrengths: string[]
+    riasecMatch: number
+    bonusPoints: number
+  }
 }
 
 interface ResultsData {
@@ -33,6 +36,7 @@ export default function ResultsPage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
   const theme = useThemeStore((state) => state.theme)
+  const language = useLanguageStore((state) => state.language)
   const { t, tf } = useTranslation()
   const [data, setData] = useState<ResultsData | null>(null)
   const [userName, setUserName] = useState('Пользователь')
@@ -81,11 +85,16 @@ export default function ResultsPage() {
     }
   }, [])
 
-  const handleStartLearning = (profession: ProfessionData) => {
-    // Save selected profession to sessionStorage for lesson page
-    sessionStorage.setItem('selectedLesson', JSON.stringify(profession))
-    addLog('USER_ACTION', `Selected profession: ${profession.profession}`)
-    router.push('/lesson')
+  const getDemandColor = (demand: 'high' | 'medium' | 'low') => {
+    if (demand === 'high') return theme === 'dark' ? 'text-green-400' : 'text-green-700'
+    if (demand === 'medium') return theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700'
+    return theme === 'dark' ? 'text-orange-400' : 'text-orange-700'
+  }
+
+  const getDemandIcon = (demand: 'high' | 'medium' | 'low') => {
+    if (demand === 'high') return '🔥'
+    if (demand === 'medium') return '⚡'
+    return '💼'
   }
 
   if (!data) {
@@ -154,30 +163,41 @@ export default function ResultsPage() {
               {/* Profession Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
-                  {index === 0 && (
-                    <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium mb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                      <Target className="w-3 h-3" />
-                      {t('results.recommendedProfession')}
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
+                    {index === 0 && (
+                      <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                        <Target className="w-3 h-3" />
+                        {t('results.recommendedProfession')}
+                      </div>
+                    )}
+                    <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
+                      theme === 'dark' ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
+                    }`}>
+                      <Briefcase className="w-3 h-3" />
+                      {translateCategory(profession.category, language)}
                     </div>
-                  )}
+                  </div>
                   <h2 className={`text-3xl font-bold mb-2 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>
-                    {profession.profession}
+                    {profession.name}
                   </h2>
                   <p className={`leading-relaxed mt-4 ${
                     theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                   }`} style={{ lineHeight: '1.7' }}>
-                    {profession.introduction}
+                    {profession.description}
                   </p>
                 </div>
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl text-center ml-4 flex-shrink-0">
                   <div className="text-3xl font-bold">{profession.match}%</div>
                   <div className="text-xs opacity-90">{t('results.match')}</div>
+                  {profession.matchDetails.bonusPoints > 0 && (
+                    <div className="text-xs mt-1 opacity-80">+ {profession.matchDetails.bonusPoints}% IT</div>
+                  )}
                 </div>
               </div>
 
-              {/* Salary and Total Hours */}
+              {/* Salary and Market Demand */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className={`rounded-xl p-4 border ${
                   theme === 'dark'
@@ -203,73 +223,73 @@ export default function ResultsPage() {
                     : 'bg-gradient-to-r from-blue-100 to-purple-100 border-blue-400'
                 }`}>
                   <div className="flex items-center gap-2 mb-1">
-                    <Clock className={`w-5 h-5 ${
+                    <TrendingUp className={`w-5 h-5 ${
                       theme === 'dark' ? 'text-blue-400' : 'text-blue-700'
                     }`} />
                     <span className={`font-semibold text-sm ${
                       theme === 'dark' ? 'text-blue-300' : 'text-blue-800'
-                    }`}>{t('results.totalTime')}</span>
+                    }`}>{t('results.marketDemand')}</span>
                   </div>
-                  <p className={`text-xl font-bold ${
-                    theme === 'dark' ? 'text-blue-300' : 'text-blue-700'
-                  }`}>{tf('results.hours', { hours: profession.totalHours })}</p>
+                  <p className={`text-xl font-bold flex items-center gap-2 ${getDemandColor(profession.marketDemand)}`}>
+                    <span>{getDemandIcon(profession.marketDemand)}</span>
+                    {translateDemand(profession.marketDemand, language)}
+                  </p>
                 </div>
               </div>
 
-              {/* Roadmap Topics */}
+              {/* Top Strengths */}
               <div className="mb-6">
                 <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
                 }`}>
-                  <BookOpen className="w-5 h-5" />
-                  {t('results.roadmapTitle')}
+                  <Star className="w-5 h-5" />
+                  {t('results.yourStrengths')}
                 </h3>
-                <div className="space-y-3">
-                  {profession.topics.map((topic, topicIdx) => (
+                <div className="grid grid-cols-1 gap-3">
+                  {profession.matchDetails.topStrengths.map((strength, idx) => (
                     <div
-                      key={topicIdx}
-                      className={`flex items-center justify-between p-4 rounded-xl border ${
+                      key={idx}
+                      className={`flex items-center gap-3 p-3 rounded-xl border ${
                         theme === 'dark'
-                          ? 'bg-gray-800/50 border-gray-700'
-                          : 'bg-white border-gray-300'
+                          ? 'bg-gradient-to-r from-blue-900/20 to-purple-900/20 border-blue-700'
+                          : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-300'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
-                          theme === 'dark' ? 'bg-blue-600' : 'bg-blue-700'
-                        }`}>
-                          {topicIdx + 1}
-                        </div>
-                        <div>
-                          <span className={`font-medium ${
-                            theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
-                          }`}>{topic.title}</span>
-                          <p className={`text-xs mt-1 ${
-                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                          }`}>{topic.summary}</p>
-                        </div>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm bg-gradient-to-br from-blue-600 to-purple-600`}>
+                        {idx + 1}
                       </div>
-                      <span className={`font-semibold flex items-center gap-1 flex-shrink-0 ${
-                        theme === 'dark' ? 'text-blue-400' : 'text-blue-700'
-                      }`}>
-                        <Clock className="w-4 h-4" />
-                        {topic.hours}ч
-                      </span>
+                      <span className={`font-medium ${
+                        theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                      }`}>{strength}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Start Learning Button */}
-              <motion.button
-                onClick={() => handleStartLearning(profession)}
-                whileHover={{ scale: 1.02, boxShadow: "0 10px 30px rgba(59, 130, 246, 0.3)" }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
-              >
-                {t('results.startLearning')}
-                <ChevronRight className="w-5 h-5" />
-              </motion.button>
+              {/* Required Skills */}
+              <div>
+                <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  <Award className="w-5 h-5" />
+                  {t('results.requiredSkills')}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {profession.requiredSkills.map((skill, idx) => (
+                    <div
+                      key={idx}
+                      className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg border ${
+                        theme === 'dark'
+                          ? 'bg-gray-800 border-gray-700 text-gray-200'
+                          : 'bg-white border-gray-300 text-gray-800'
+                      }`}
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span className="font-medium text-sm">{skill}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>

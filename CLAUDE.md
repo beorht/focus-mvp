@@ -4,17 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**F.O.C.U.S** (Find Optimal Career Using Science) is an AI-powered career guidance platform specifically designed for the Uzbekistan job market. The application uses Gemini 2.5 Flash to analyze user interests and abilities, then generates personalized career recommendations with roadmaps tailored to the local market.
+**F.O.C.U.S** (Find Optimal Career Using Science) is an algorithm-based career guidance platform specifically designed for the Uzbekistan job market. The application uses the RIASEC (Holland Code) psychometric system to analyze user interests and abilities, then provides personalized career recommendations from 13 professions across multiple industries (IT, Medicine, Engineering, Psychology, Finance, Education, Art, Business).
 
 ### Tech Stack
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **State Management**: Zustand (with persist middleware)
-- **AI Integration**: Google Generative AI (Gemini 2.5 Flash)
+- **Matching Algorithm**: RIASEC-based cosine similarity with IT bonus
 - **Animations**: Framer Motion
 - **Smooth Scroll**: Lenis
 - **Icons**: lucide-react
+- **AI Chat** (optional): Google Generative AI (Gemini 2.5 Flash) for ChatAssistant only
 - **Process Manager**: PM2 (production deployment)
 
 ## Development Commands
@@ -47,11 +48,10 @@ npm run deploy          # Full deployment script (build + PM2)
 
 ### Application Flow
 1. **Landing Page** (`app/page.tsx`) - Hero page with "Start Journey" button
-2. **Assessment** (`app/test/page.tsx`) - 5-question career assessment form
-3. **Analysis** (`app/analyze/page.tsx`) - Animated loading while AI processes data
-4. **Results** (`app/results/page.tsx`) - Displays recommended profession, salary, and roadmap
-5. **Lesson Page** (`app/lesson/page.tsx`) - Interactive learning path with topics, quizzes, and progress tracking
-6. **Demo Page** (`app/demo/page.tsx`) - Hackathon demo page with video showcase
+2. **Assessment** (`app/test/page.tsx`) - 12-question RIASEC assessment (2 questions per category)
+3. **Analysis** (`app/analyze/page.tsx`) - Animated loading while algorithm processes data
+4. **Results** (`app/results/page.tsx`) - Displays 3-6 recommended professions with match percentages, salaries, and key information
+5. **Demo Page** (`app/demo/page.tsx`) - Hackathon demo page with video showcase
 
 ### Key Architectural Patterns
 
@@ -76,28 +76,42 @@ The app uses three Zustand stores with different persistence strategies:
 
 #### Additional Storage Layer
 - **sessionStorage**: Temporary storage for user flow data
-  - `userAnswers`: Assessment responses (used by `/analyze`)
-  - `analysisResults`: AI-generated career data (used by `/results`)
+  - `userAnswers`: Assessment responses including RIASEC scores (used by `/analyze`)
+  - `analysisResults`: Algorithm-generated profession matches (used by `/results`)
 
-#### API Routes Architecture
+#### Core Matching System
 
-Three API endpoints handle AI interactions:
+The system uses a local algorithm (no external API calls for profession matching):
 
-1. **`/api/generate`** - Main AI analysis endpoint
-   - Input: User assessment answers (interests, level, priority, workStyle)
-   - Output: Structured JSON with profession, match %, salary, roadmap, resources
-   - Returns `debugInfo` array for transparent logging
-   - Supports API key rotation (see Environment Variables section)
+1. **Profession Database** (`lib/professionsDatabase.ts`)
+   - 13 professions with RIASEC profiles
+   - Categories: IT, Medicine, Engineering, Psychology, Finance, Education, Art, Business
+   - Each profession has: name (multilingual), category, RIASEC profile, salary, description, required skills, market demand
 
-2. **`/api/chat`** - Conversational AI assistant
+2. **Matching Algorithm** (`lib/professionMatcher.ts`)
+   - Uses cosine similarity between user RIASEC profile and profession RIASEC profile
+   - Adds +5% bonus for IT professions
+   - Returns 3-6 top matching professions
+   - Selection logic:
+     - Always top 3 if large gap (>10%) between 3rd and 4th
+     - Up to 6 if 4th profession has >60% match
+     - Maximum 6 professions
+
+3. **Translation System** (`lib/translations/`)
+   - Static translations for professions, categories, RIASEC categories
+   - No AI translation for profession matching (multilingual data built-in)
+
+#### API Routes
+
+One API endpoint for AI interaction:
+
+1. **`/api/chat`** - Conversational AI assistant (OPTIONAL - uses Gemini)
    - Input: User question + optional profession context
    - Output: Contextual career advice for Uzbekistan market
    - Includes predefined Q&A for common project questions
    - Supports API key rotation
 
-3. **`/api/translate`** - Content translation endpoint
-   - Used for multi-language support
-   - Translates UI content between Russian, Uzbek Cyrillic, and Uzbek Latin
+Note: `/api/translate` still exists but is only used by chat (if needed). Profession matching uses built-in multilingual data.
 
 #### Component Organization
 
@@ -119,26 +133,31 @@ Key reusable components:
   - Switches between ru/uz-cyrl/uz-latn
   - Persists preference via useLanguageStore
 
-- **`components/QuizSection.tsx`** - Interactive quiz component
-  - Used in lesson page for knowledge checks
-  - Supports multiple question types
-
-- **`components/ReflectionSection.tsx`** - Learning reflection component
-  - Prompts users to reflect on learned material
-
 ### Data Flow Diagram
 ```
-Landing → Test Page → Analyze Page → Results Page → Lesson Page
-                ↓           ↓              ↓              ↓
-         sessionStorage  /api/generate  sessionStorage  localStorage
-                         (Gemini AI)                    (progress)
+Landing → Test Page → Analyze Page → Results Page
+                ↓           ↓              ↓
+         sessionStorage  Local Algorithm  sessionStorage
+                         (RIASEC Matching)
 ```
+
+**Algorithm Flow**:
+1. User completes 12-question RIASEC assessment (2 questions per category: R, I, A, S, E, C)
+2. Test page calculates RIASEC scores (0-10 per category) and percentages
+3. Generates Holland Code (top 3 categories, e.g., "IRA")
+4. Analyze page calls `matchProfessions()` with user's RIASEC percentages
+5. Algorithm computes cosine similarity for all 13 professions
+6. Adds +5% IT bonus
+7. Returns 3-6 top matches
+8. Results page displays professions with match%, salary, skills, strengths
 
 ## Important Implementation Notes
 
 ### Environment Variables
 
-The application supports API key rotation to work around Gemini's free tier rate limits (20 requests/day per key):
+**OPTIONAL**: Only needed if using ChatAssistant (AI chat feature)
+
+The application supports API key rotation for ChatAssistant:
 
 - **GEMINI_API_KEY**: Single API key (backward compatibility)
 - **GEMINI_API_KEYS**: Multiple API keys for rotation (recommended)
@@ -147,18 +166,27 @@ The application supports API key rotation to work around Gemini's free tier rate
   - Free tier: 20 requests/day per key
   - With 5 keys = 100 requests/day
   - Set in `.env.local` (not committed to git)
-  - Used by `/api/generate`, `/api/chat`, and `/api/translate` routes
+  - Used ONLY by `/api/chat` route (ChatAssistant)
   - See `API_KEYS_SETUP.md` for detailed instructions
+
+**Note**: Profession matching does NOT require API keys - it runs locally using the RIASEC algorithm.
 
 ### Path Aliases
 - `@/*` maps to project root (configured in `tsconfig.json`)
 - Example: `import { useLogStore } from '@/store/useLogStore'`
 
-### AI Prompt Engineering
-All API routes use structured prompts optimized for Uzbekistan market context:
-- `/api/generate`: Requires strict JSON output format, includes salary expectations for UZ market
+### Algorithm Details
+
+**RIASEC-based Matching**:
+- Uses Holland Code psychometric system (6 categories: R, I, A, S, E, C)
+- Cosine similarity formula: `similarity = (A · B) / (||A|| × ||B||)`
+- Each profession has a predefined RIASEC profile (e.g., Frontend Dev: R:70, I:80, A:40, S:20, E:30, C:40)
+- User profile calculated from 15 RIASEC questions (Likert scale 1-5)
+- IT bonus ensures slight preference for tech careers
+
+**AI Chat (Optional)**:
 - `/api/chat`: Conversational with predefined responses about the F.O.C.U.S project
-- `/api/translate`: Handles translation between Russian and Uzbek (Cyrillic/Latin)
+- Uses Gemini 2.5 Flash for contextual career advice
 
 ### Styling Patterns
 - **Dark theme**: Background `#1d1d1d`, Cards `#191919`
@@ -169,8 +197,9 @@ All API routes use structured prompts optimized for Uzbekistan market context:
 
 ### Internationalization (i18n)
 - **Supported languages**: Russian (ru), Uzbek Cyrillic (uz-cyrl), Uzbek Latin (uz-latn)
-- **Translation hook**: `hooks/useTranslation.ts` provides translation function
-- **Translation API**: `/api/translate` for dynamic content translation
+- **Translation hook**: `hooks/useTranslation.ts` provides translation function for UI strings
+- **Built-in translations**: All profession data (names, descriptions, skills) stored in multilingual format
+- **Translation system**: `lib/translations/` - static dictionaries for professions, categories, RIASEC
 - **Persistence**: Language preference stored in localStorage via `useLanguageStore`
 
 ### Production Deployment (PM2)
@@ -183,30 +212,41 @@ All API routes use structured prompts optimized for Uzbekistan market context:
 
 ## Common Development Scenarios
 
-### Adding a new question to assessment
-- Edit `questions` array in `app/test/page.tsx`
-- Update answer mapping in `handleSubmit()` function
-- Ensure compatibility with `/api/generate` prompt expectations
+### Adding a new profession
+1. Add profession to `professionsDatabase` array in `lib/professionsDatabase.ts`
+2. Define RIASEC profile (6 values: R, I, A, S, E, C)
+3. Add multilingual fields: name, description, requiredSkills
+4. Set category, salary, marketDemand
+5. No code changes needed elsewhere - algorithm automatically picks it up
 
-### Modifying AI analysis prompt
-- Edit prompt in `app/api/generate/route.ts`
-- JSON structure changes require updates in results page consumption
+### Modifying matching algorithm
+- Edit `matchProfessions()` function in `lib/professionMatcher.ts`
+- Adjust IT_BONUS value to change IT priority
+- Modify `selectTopProfessions()` to change how many professions to show
+- Update cosine similarity logic if needed
+
+### Adding a new RIASEC question
+- Add question to `riasecQuestions` array in `app/test/page.tsx`
+- Ensure it's assigned to correct category (R, I, A, S, E, or C)
+- Update `maxScore` in `handleSubmit()` if changing questions per category
+- Current: 2 questions per category, maxScore = 10
 
 ### Adding new log types
 - Update `LogType` in `store/useLogStore.ts`
 - Add color coding in `LogConsole.tsx` if needed
 
 ### Adding a new language
-- Update `Language` type in `store/useLanguageStore.ts`
-- Add language option in `LanguageSwitcher.tsx`
-- Update translation dictionaries in `hooks/useTranslation.ts`
+1. Update `Language` type in `store/useLanguageStore.ts` and `lib/translations/`
+2. Add language option in `LanguageSwitcher.tsx`
+3. Update translation dictionaries in `hooks/useTranslation.ts`
+4. Add translations to all professions in `professionsDatabase.ts`
 
 ### Adding new theme colors
 - Update theme in `useThemeStore.ts` if adding third theme option
 - Modify color classes in `ThemeToggle.tsx` and `app/globals.css`
 
 ### Deploying to production
-1. Ensure `.env.local` has production API keys
+1. (Optional) Ensure `.env.local` has API keys if using ChatAssistant
 2. Run `npm run deploy` to build and start with PM2
 3. Verify with `npm run pm2:status`
 4. Check logs with `npm run pm2:logs`
@@ -215,8 +255,9 @@ All API routes use structured prompts optimized for Uzbekistan market context:
 
 - All user-facing text uses multi-language support (Russian primary, Uzbek secondary)
 - UI uses lucide-react icons consistently
-- API routes include `debugInfo` array for transparency
 - Client components marked with `'use client'` directive
 - TypeScript strict mode enabled
 - Zustand stores use persist middleware for state that should survive page refresh
 - Session-only data (like logs) should NOT use persist middleware
+- All professions stored with multilingual data (no runtime translation needed for matching)
+- RIASEC system is the core of profession matching - preserve it when making changes

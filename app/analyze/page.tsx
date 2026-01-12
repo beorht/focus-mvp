@@ -4,13 +4,16 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLogStore } from '@/store/useLogStore'
 import { useThemeStore } from '@/store/useThemeStore'
+import { useLanguageStore } from '@/store/useLanguageStore'
 import { useTranslation } from '@/hooks/useTranslation'
 import { Brain, Sparkles, Zap, Target } from 'lucide-react'
+import { matchProfessions } from '@/lib/professionMatcher'
 
 export default function AnalyzePage() {
   const router = useRouter()
   const addLog = useLogStore((state) => state.addLog)
   const theme = useThemeStore((state) => state.theme)
+  const language = useLanguageStore((state) => state.language)
   const { t } = useTranslation()
   const [stage, setStage] = useState(0)
 
@@ -33,7 +36,8 @@ export default function AnalyzePage() {
         }
 
         const answers = JSON.parse(answersStr)
-        addLog('SYSTEM', 'Starting AI analysis...')
+        addLog('SYSTEM', 'Starting algorithm-based analysis...')
+        addLog('DATA', `RIASEC scores: ${JSON.stringify(answers.riasec_percentages)}`)
 
         // Animate through stages
         for (let i = 0; i < stages.length; i++) {
@@ -42,60 +46,44 @@ export default function AnalyzePage() {
           await new Promise(resolve => setTimeout(resolve, stages[i].duration))
         }
 
-        // Call AI API
-        const requestPayload = JSON.stringify(answers, null, 2)
-        addLog('API_REQ', `POST /api/generate\nContent-Type: application/json\n\n${requestPayload}`)
+        // Run local matching algorithm
+        addLog('SYSTEM', 'Running profession matching algorithm...')
+        const matchResults = matchProfessions(answers.riasec_percentages, language)
 
-        const response = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(answers)
-        })
+        addLog('DATA', `Found ${matchResults.length} matching professions`)
+        addLog('INFO', `Top match: ${matchResults[0].profession.name[language]} (${matchResults[0].matchPercentage}%)`)
 
-        const result = await response.json()
-
-        if (result.success) {
-          // Log debug info from API
-          result.debugInfo?.forEach((info: string) => {
-            if (info.startsWith('POST') || info.includes('Payload')) {
-              addLog('API_REQ', info)
-            } else if (info.includes('Response') || info.includes('received')) {
-              addLog('API_RES', info)
-            } else if (info.includes('ERROR')) {
-              addLog('ERROR', info)
-            } else {
-              addLog('INFO', info)
-            }
-          })
-
-          // Log professional API response with metadata
-          const apiResponse = {
-            profession: result.data.profession,
-            match_percentage: result.data.match,
-            salary_range: result.data.salary_uz_sum,
-            topics_count: result.data.topics?.length || 0,
-            resources_count: result.data.resources?.length || 0,
-            skill_gaps_count: result.data.skill_gaps?.length || 0,
-            meta: result.meta
+        // Convert match results to format expected by Results Page
+        const professions = matchResults.map(result => ({
+          id: result.profession.id,
+          name: result.profession.name[language],
+          match: result.matchPercentage,
+          matchPercentage: result.matchPercentage,
+          category: result.profession.category,
+          salary_uz_sum: result.profession.salaryUzSum,
+          description: result.profession.description[language],
+          requiredSkills: result.profession.requiredSkills[language],
+          marketDemand: result.profession.marketDemand,
+          matchDetails: {
+            topStrengths: result.matchDetails.topStrengths,
+            riasecMatch: result.matchDetails.riasecMatch,
+            bonusPoints: result.matchDetails.bonusPoints
           }
+        }))
 
-          addLog('API_RES', JSON.stringify(apiResponse))
-          addLog('SYSTEM', 'Analysis completed successfully')
+        const resultsData = { professions }
 
-          // Store results
-          sessionStorage.setItem('analysisResults', JSON.stringify(result.data))
+        // Log results summary
+        addLog('DATA', `Professions: ${professions.map(p => `${p.name} (${p.match}%)`).join(', ')}`)
+        addLog('SYSTEM', 'Analysis completed successfully')
 
-          // Navigate to results
-          setTimeout(() => {
-            router.push('/results')
-          }, 1000)
-        } else {
-          addLog('ERROR', `API Error: ${result.error}`)
-          // Still try to navigate after error
-          setTimeout(() => {
-            router.push('/results')
-          }, 2000)
-        }
+        // Store results in sessionStorage
+        sessionStorage.setItem('analysisResults', JSON.stringify(resultsData))
+
+        // Navigate to results
+        setTimeout(() => {
+          router.push('/results')
+        }, 1000)
 
       } catch (error: any) {
         addLog('ERROR', `Analysis failed: ${error.message}`)
@@ -175,7 +163,7 @@ export default function AnalyzePage() {
           <span className={`text-sm font-medium ${
             theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
           }`}>
-            Powered by Gemini 2.5 Flash
+            Powered by RIASEC Algorithm
           </span>
         </div>
       </div>
