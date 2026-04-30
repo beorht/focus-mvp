@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model User {
@@ -16,8 +16,25 @@ model User {
   age                    Int
   phone                  String   @unique
   educationalInstitution String
+  testResults            TestResult[]
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
   @@map("users")
+}
+
+model TestResult {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  riasecScores        Json     // { R, I, A, S, E, C }
+  riasecPercentages   Json     // { R%, I%, A%, S%, E%, C% }
+  hollandCode         String   // e.g., "IRA"
+  professions         Json     // Array of matched professions
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("test_results")
 }

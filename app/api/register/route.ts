@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { Pool } from 'pg'
 
-// Путь к файлу с данными
-const DATA_DIR = path.join(process.cwd(), 'data')
-const USERS_FILE = path.join(DATA_DIR, 'users.json')
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+})
 
 // Валидация телефона (Узбекистан: +998XXXXXXXXX)
 const validatePhone = (phone: string): string | null => {
@@ -16,47 +15,12 @@ const validatePhone = (phone: string): string | null => {
   return null
 }
 
-// Валидация имени/фамилии (Кириллица + латиница)
-const validateName = (name: string): string | null => {
-  if (!/^[A-Za-zА-Яа-яЁёЎўҚқҒғҲҳ\s'-]{2,50}$/.test(name)) {
-    return 'nameInvalid'
-  }
-  return null
-}
-
 // Валидация возраста
 const validateAge = (age: number): string | null => {
   if (age < 14 || age > 100) {
     return 'ageInvalid'
   }
   return null
-}
-
-// Инициализация файла данных
-async function ensureDataFile() {
-  try {
-    await fs.access(DATA_DIR)
-  } catch {
-    await fs.mkdir(DATA_DIR, { recursive: true })
-  }
-
-  try {
-    await fs.access(USERS_FILE)
-  } catch {
-    await fs.writeFile(USERS_FILE, JSON.stringify([]), 'utf-8')
-  }
-}
-
-// Чтение данных из файла
-async function readUsers() {
-  await ensureDataFile()
-  const data = await fs.readFile(USERS_FILE, 'utf-8')
-  return JSON.parse(data)
-}
-
-// Запись данных в файл
-async function writeUsers(users: any[]) {
-  await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8')
 }
 
 export async function POST(request: NextRequest) {
@@ -102,42 +66,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Читаем существующих пользователей
-    const users = await readUsers()
+    // Нормализация номера телефона
+    const normalizedPhone = phone.replace(/[^\d+]/g, '')
 
     // Проверка на дубликат телефона
-    const duplicatePhone = users.find((u: any) => u.phone === phone.replace(/[^\d+]/g, ''))
-    if (duplicatePhone) {
+    const existingUser = await pool.query(
+      'SELECT id FROM users WHERE phone = $1',
+      [normalizedPhone]
+    )
+
+    if (existingUser.rows.length > 0) {
       return NextResponse.json(
         { success: false, error: 'duplicate_phone' },
         { status: 409 }
       )
     }
 
-    // Создать нового пользователя
+    // Разделить полное имя на имя и фамилию
+    const nameParts = fullName.trim().split(/\s+/)
+    const firstName = nameParts[0]
+    const lastName = nameParts.slice(1).join(' ') || nameParts[0]
+
+    // Создать нового пользователя в БД
     const userId = uuidv4()
-    const newUser = {
-      id: userId,
-      timestamp: new Date().toISOString(),
-      fullName: fullName.trim(),
-      age: parseInt(age),
-      phone: phone.replace(/[^\d+]/g, ''),
-      educationalInstitution: educationalInstitution.trim(),
-      gradeOrCourse: gradeOrCourse.trim(),
-    }
-
-    // Добавить нового пользователя в массив
-    users.push(newUser)
-
-    // Сохранить в файл
-    await writeUsers(users)
+    await pool.query(
+      'INSERT INTO users (id, "firstName", "lastName", age, phone, "educationalInstitution", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())',
+      [userId, firstName, lastName, parseInt(age), normalizedPhone, educationalInstitution.trim()]
+    )
 
     return NextResponse.json(
       {
         success: true,
         data: {
-          userId: newUser.id,
-          fullName: newUser.fullName,
+          userId,
+          fullName: `${firstName} ${lastName}`,
         },
         message: 'Регистрация успешна!',
       },
@@ -152,16 +114,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Опционально: GET endpoint для получения всех пользователей (для админа)
+// GET endpoint для получения всех пользователей (для админа)
 export async function GET(request: NextRequest) {
   try {
-    const users = await readUsers()
+    const result = await pool.query('SELECT id, "firstName", "lastName", age, phone, "educationalInstitution", "createdAt", "updatedAt" FROM users')
 
     return NextResponse.json(
       {
         success: true,
-        count: users.length,
-        users: users
+        count: result.rows.length,
+        users: result.rows
       },
       { status: 200 }
     )

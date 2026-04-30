@@ -1,37 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
-
-// Путь к файлу с результатами
-const DATA_DIR = path.join(process.cwd(), 'data')
-const RESULTS_FILE = path.join(DATA_DIR, 'test-results.json')
-
-// Инициализация файла данных
-async function ensureDataFile() {
-  try {
-    await fs.access(DATA_DIR)
-  } catch {
-    await fs.mkdir(DATA_DIR, { recursive: true })
-  }
-
-  try {
-    await fs.access(RESULTS_FILE)
-  } catch {
-    await fs.writeFile(RESULTS_FILE, JSON.stringify([]), 'utf-8')
-  }
-}
-
-// Чтение результатов из файла
-async function readResults() {
-  await ensureDataFile()
-  const data = await fs.readFile(RESULTS_FILE, 'utf-8')
-  return JSON.parse(data)
-}
-
-// Запись результатов в файл
-async function writeResults(results: any[]) {
-  await fs.writeFile(RESULTS_FILE, JSON.stringify(results, null, 2), 'utf-8')
-}
+import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,40 +7,54 @@ export async function POST(request: NextRequest) {
     const {
       userId,
       userName,
-      riasec_scores,
-      riasec_percentages,
-      holland_code,
+      riasecScores,
+      riasecPercentages,
+      hollandCode,
       professions
     } = body
 
-    // Читаем существующие результаты
-    const results = await readResults()
-
-    // Создать новую запись результатов
-    const newResult = {
-      userId: userId || 'anonymous',
-      userName: userName || 'Пользователь',
-      timestamp: new Date().toISOString(),
-      riasec_scores,
-      riasec_percentages,
-      holland_code,
-      professions: professions.map((p: any) => ({
-        name: p.name,
-        match: p.match,
-        category: p.category
-      }))
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: 'userId_required' },
+        { status: 400 }
+      )
     }
 
-    // Добавить новый результат в массив
-    results.push(newResult)
+    // Проверить, существует ли пользователь
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    })
 
-    // Сохранить в файл
-    await writeResults(results)
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'user_not_found' },
+        { status: 404 }
+      )
+    }
+
+    // Создать новую запись результата теста
+    const testResult = await prisma.testResult.create({
+      data: {
+        userId,
+        riasecScores,
+        riasecPercentages,
+        hollandCode,
+        professions: professions.map((p: any) => ({
+          name: p.name,
+          match: p.match,
+          matchPercentage: p.matchPercentage,
+          category: p.category
+        }))
+      }
+    })
 
     return NextResponse.json(
       {
         success: true,
         message: 'Результаты сохранены успешно',
+        data: {
+          testResultId: testResult.id
+        }
       },
       { status: 201 }
     )
@@ -85,19 +67,49 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Опционально: GET endpoint для получения всех результатов (для админа)
+// GET endpoint для получения результатов пользователя
 export async function GET(request: NextRequest) {
   try {
-    const results = await readResults()
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get('userId')
 
-    return NextResponse.json(
-      {
-        success: true,
-        count: results.length,
-        results: results
-      },
-      { status: 200 }
-    )
+    if (userId) {
+      // Получить результаты конкретного пользователя
+      const results = await prisma.testResult.findMany({
+        where: { userId }
+      })
+
+      return NextResponse.json(
+        {
+          success: true,
+          count: results.length,
+          results
+        },
+        { status: 200 }
+      )
+    } else {
+      // Получить все результаты (для админа)
+      const results = await prisma.testResult.findMany({
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+              phone: true
+            }
+          }
+        }
+      })
+
+      return NextResponse.json(
+        {
+          success: true,
+          count: results.length,
+          results
+        },
+        { status: 200 }
+      )
+    }
   } catch (error: any) {
     console.error('Get results error:', error)
     return NextResponse.json(

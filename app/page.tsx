@@ -24,8 +24,33 @@ export default function Home() {
 
   return (
     <div className="min-h-screen main-background">
+      {/* Created By Section */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="pt-6 pb-2"
+      >
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className={`text-sm font-medium ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              Created By
+            </span>
+            <Image
+              src="/images/synergy-full-logo.png"
+              alt="Synergy Hub Academy Logo"
+              width={200}
+              height={40}
+              className="h-auto"
+            />
+          </div>
+        </div>
+      </motion.div>
+
       {/* Hero Section */}
-      <div className="container mx-auto px-6 py-20">
+      <div className="container mx-auto px-6 pt-4 pb-10">
         {/* Header */}
         <div className="mb-16 text-center">
           <motion.div
